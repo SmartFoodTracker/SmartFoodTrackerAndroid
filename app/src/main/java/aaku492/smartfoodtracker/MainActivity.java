@@ -1,10 +1,13 @@
 package aaku492.smartfoodtracker;
 
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-public class MainActivity extends FragmentActivity {
+/**
+ * Created by Udey Rishi (udeyrishi) on 2017-01-28.
+ * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
+ */
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
