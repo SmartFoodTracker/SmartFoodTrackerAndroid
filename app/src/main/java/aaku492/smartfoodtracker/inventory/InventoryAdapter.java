@@ -13,15 +13,17 @@ import java.util.List;
 class InventoryAdapter extends RecyclerView.Adapter<InventoryItemView.InventoryItemViewHolder> {
 
     private final List<InventoryItem> inventoryItems;
+    private final Delegate delegate;
 
-    public InventoryAdapter(List<InventoryItem> inventoryItems) {
+    public InventoryAdapter(List<InventoryItem> inventoryItems, Delegate delegate) {
         this.inventoryItems = inventoryItems;
+        this.delegate = delegate;
     }
 
     @Override
     public InventoryItemView.InventoryItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new InventoryItemView.InventoryItemViewHolder(
-                InventoryItemView.inflate(LayoutInflater.from(parent.getContext()), parent));
+                InventoryItemView.inflate(LayoutInflater.from(parent.getContext()), parent, delegate));
     }
 
     @Override
@@ -32,5 +34,8 @@ class InventoryAdapter extends RecyclerView.Adapter<InventoryItemView.InventoryI
     @Override
     public int getItemCount() {
         return inventoryItems.size();
+    }
+
+    public interface Delegate extends InventoryItemView.Delegate {
     }
 }

@@ -2,29 +2,45 @@ package aaku492.smartfoodtracker.inventory;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Udey Rishi (udeyrishi) on 2017-01-28.
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
  */
-public class InventoryFragment extends Fragment implements InventoryFragmentView.Delegate {
+public class InventoryFragment extends Fragment implements InventoryAdapter.Delegate {
+    private static final String LOG_TAG = InventoryFragment.class.getName();
+
+    private ArrayList<InventoryItem> mockInventory;
+    private InventoryAdapter inventoryAdapter;
 
     @Override
     public InventoryFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return InventoryFragmentView.inflate(inflater, container, this);
+        // TODO: replace with actual data
+        this.mockInventory = new ArrayList<>();
+        mockInventory.add(new InventoryItem("Apples", "0"));
+        mockInventory.add(new InventoryItem("Yogurt", "1"));
+        this.inventoryAdapter = new InventoryAdapter(mockInventory, this);
+        return InventoryFragmentView.inflate(inflater, container, inventoryAdapter);
     }
 
     @Override
-    public RecyclerView.Adapter<? extends InventoryItemView.InventoryItemViewHolder> createAdapter() {
-        List<InventoryItem> mockInventory = new ArrayList<>();
-        mockInventory.add(new InventoryItem("Apples"));
-        mockInventory.add(new InventoryItem("Yogurt"));
-        return new InventoryAdapter(mockInventory);
+    public void onCheckedChanged(InventoryItem item, boolean isChecked) {
+        if (!isChecked) {
+            Log.e(LOG_TAG, "Un-checking shouldn't be allowed right now. Wtf happened?!");
+            return;
+        }
+
+        int index = mockInventory.indexOf(item);
+        if (index < 0) {
+            Log.e(LOG_TAG, "Checked inventory item not found in the backing model list.");
+            return;
+        }
+        mockInventory.remove(index);
+        inventoryAdapter.notifyItemRemoved(index);
     }
 }

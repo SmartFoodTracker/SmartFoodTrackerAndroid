@@ -22,14 +22,12 @@ public class InventoryFragmentView extends LinearLayout {
     @BindView(R.id.inventory_list)
     protected RecyclerView inventoryList;
 
-    public static InventoryFragmentView inflate(LayoutInflater inflater, ViewGroup container, Delegate delegate) {
+    public static InventoryFragmentView inflate(LayoutInflater inflater,
+                                                ViewGroup container,
+                                                RecyclerView.Adapter<? extends InventoryItemView.InventoryItemViewHolder> adapter) {
         InventoryFragmentView view = ViewUtils.inflate(R.layout.fragment_inventory, inflater, container);
-        view.setDelegate(delegate);
+        view.inventoryList.setAdapter(adapter);
         return view;
-    }
-
-    private void setDelegate(Delegate delegate) {
-        inventoryList.setAdapter(delegate.createAdapter());
     }
 
     // Mandatory constructor
@@ -45,9 +43,5 @@ public class InventoryFragmentView extends LinearLayout {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         inventoryList.setLayoutManager(layoutManager);
-    }
-
-    public interface Delegate {
-        RecyclerView.Adapter<? extends InventoryItemView.InventoryItemViewHolder> createAdapter();
     }
 }

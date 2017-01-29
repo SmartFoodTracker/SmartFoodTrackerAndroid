@@ -6,12 +6,18 @@ package aaku492.smartfoodtracker.inventory;
  */
 public class InventoryItem {
     private final String title;
+    private final String id;
 
-    public InventoryItem(String title) {
+    public InventoryItem(String title, String id) {
         this.title = title;
+        this.id = id;
     }
 
     public String getTitle() {
         return title;
+    }
+
+    public String getId() {
+        return id;
     }
 }
