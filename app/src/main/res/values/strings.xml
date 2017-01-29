@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Smart Food Tracker</string>
+    <string name="inventory_fragment_title">Inventory</string>
 </resources>

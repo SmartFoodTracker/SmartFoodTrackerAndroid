@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import aaku492.smartfoodtracker.MainActivity;
+import aaku492.smartfoodtracker.R;
+
 /**
  * Created by Udey Rishi (udeyrishi) on 2017-01-28.
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
@@ -21,10 +24,18 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.Dele
     @Override
     public InventoryFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // TODO: replace with actual data
-        this.mockInventory = new ArrayList<>();
+        mockInventory = new ArrayList<>();
         mockInventory.add(new InventoryItem("Apples", "0"));
         mockInventory.add(new InventoryItem("Yogurt", "1"));
-        this.inventoryAdapter = new InventoryAdapter(mockInventory, this);
+
+        inventoryAdapter = new InventoryAdapter(mockInventory, this);
+
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).setTitle(getString(R.string.inventory_fragment_title));
+        } else {
+            Log.e(LOG_TAG, "The container activity is not MainActivity. Don't know how to set the title.");
+        }
+
         return InventoryFragmentView.inflate(inflater, container, inventoryAdapter);
     }
 
