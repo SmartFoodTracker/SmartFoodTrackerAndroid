@@ -24,6 +24,9 @@ public class InventoryItemView extends CardView {
     @BindView(R.id.item_title)
     protected TextView itemTitle;
 
+    @BindView(R.id.item_quantity)
+    protected TextView itemQuantity;
+
     @BindView(R.id.item_checkbox)
     protected CheckBox itemCheckbox;
     
@@ -65,6 +68,13 @@ public class InventoryItemView extends CardView {
                 delegate.onCheckedChanged(item, isChecked);
             }
         });
+
+        if (item.getQuantity() == null) {
+            itemQuantity.setVisibility(GONE);
+        } else {
+            itemQuantity.setText(getContext().getString(R.string.item_quantity_formatter, item.getQuantity(), item.getUnits()));
+            itemQuantity.setVisibility(VISIBLE);
+        }
     }
 
     public void setDelegate(Delegate delegate) {
