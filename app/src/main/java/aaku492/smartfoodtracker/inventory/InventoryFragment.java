@@ -7,9 +7,14 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import aaku492.smartfoodtracker.MainActivity;
 import aaku492.smartfoodtracker.R;
+import aaku492.smartfoodtracker.common.ViewUtils;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Udey Rishi (udeyrishi) on 2017-01-28.
@@ -18,40 +23,72 @@ import aaku492.smartfoodtracker.R;
 public class InventoryFragment extends Fragment implements InventoryAdapter.Delegate {
     private static final String LOG_TAG = InventoryFragment.class.getName();
 
-    private ArrayList<InventoryItem> mockInventory;
+    private ArrayList<InventoryItem> inventory;
     private InventoryAdapter inventoryAdapter;
 
     @Override
     public InventoryFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: replace with actual data
-        mockInventory = new ArrayList<>();
-        mockInventory.add(new InventoryItem("Apples", "0"));
-        mockInventory.add(new InventoryItem("Yogurt", "1"));
+        inventory = new ArrayList<>();
+        inventoryAdapter = new InventoryAdapter(inventory, this);
 
-        inventoryAdapter = new InventoryAdapter(mockInventory, this);
+        getMainActivity().setTitle(getString(R.string.inventory_fragment_title));
 
-        if (getActivity() instanceof MainActivity) {
-            ((MainActivity) getActivity()).setTitle(getString(R.string.inventory_fragment_title));
-        } else {
-            Log.e(LOG_TAG, "The container activity is not MainActivity. Don't know how to set the title.");
-        }
+        InventoryFragmentView view = InventoryFragmentView.inflate(inflater, container, inventoryAdapter);
+        fetchInventory();
+        return view;
+    }
 
-        return InventoryFragmentView.inflate(inflater, container, inventoryAdapter);
+    private void fetchInventory() {
+        getMainActivity().getApp().getDataProvider().getInventory(getMainActivity().getApp().getCurrentDeviceId())
+                .enqueue(new Callback<List<InventoryItem>>() {
+                    @Override
+                    public void onResponse(Call<List<InventoryItem>> call, final Response<List<InventoryItem>> response) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                inventory.clear();
+                                inventory.addAll(response.body());
+                                inventoryAdapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<InventoryItem>> call, Throwable t) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.e(LOG_TAG, getString(R.string.inventory_fetch_error));
+                                ViewUtils.showMessage(getString(R.string.inventory_fetch_error), getView());
+                            }
+                        });
+                    }
+                });
     }
 
     @Override
     public void onCheckedChanged(InventoryItem item, boolean isChecked) {
         if (!isChecked) {
             Log.e(LOG_TAG, "Un-checking shouldn't be allowed right now. Wtf happened?!");
+            ViewUtils.showMessage(getString(R.string.generic_error), getView());
             return;
         }
 
-        int index = mockInventory.indexOf(item);
+        int index = inventory.indexOf(item);
         if (index < 0) {
             Log.e(LOG_TAG, "Checked inventory item not found in the backing model list.");
+            ViewUtils.showMessage(getString(R.string.generic_error), getView());
             return;
         }
-        mockInventory.remove(index);
+        inventory.remove(index);
         inventoryAdapter.notifyItemRemoved(index);
+    }
+
+    private MainActivity getMainActivity() {
+        if (super.getActivity() instanceof MainActivity) {
+            return (MainActivity) super.getActivity();
+        }
+
+        throw new IllegalStateException("The container activity should be " + MainActivity.class.getName());
     }
 }

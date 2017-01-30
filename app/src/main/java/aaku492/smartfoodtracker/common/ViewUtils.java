@@ -1,6 +1,8 @@
-package aaku492.smartfoodtracker;
+package aaku492.smartfoodtracker.common;
 
 import android.support.annotation.LayoutRes;
+import android.support.design.widget.BaseTransientBottomBar;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,5 +16,9 @@ public class ViewUtils {
     public static <T extends View> T inflate(@LayoutRes int layoutId, LayoutInflater inflater, ViewGroup container) {
         //noinspection unchecked
         return (T) inflater.inflate(layoutId, container, false);
+    }
+
+    public static void showMessage(String message, View container) {
+        Snackbar.make(container, message, BaseTransientBottomBar.LENGTH_LONG).show();
     }
 }

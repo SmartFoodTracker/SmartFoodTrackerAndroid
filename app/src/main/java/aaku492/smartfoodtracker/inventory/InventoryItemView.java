@@ -11,7 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import aaku492.smartfoodtracker.R;
-import aaku492.smartfoodtracker.ViewUtils;
+import aaku492.smartfoodtracker.common.ViewUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import aaku492.smartfoodtracker.R;
-import aaku492.smartfoodtracker.ViewUtils;
+import aaku492.smartfoodtracker.common.ViewUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

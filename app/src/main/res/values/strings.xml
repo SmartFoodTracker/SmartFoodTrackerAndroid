@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Smart Food Tracker</string>
     <string name="inventory_fragment_title">Inventory</string>
+    <string name="generic_error">Something went wrong.</string>
+    <string name="backend_api_url">http://food-fit.herokuapp.com</string>
+    <string name="inventory_fetch_error">Failed to fetch the inventory.</string>
 </resources>

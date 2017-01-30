@@ -25,4 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle(title);
     }
+
+    public App getApp() {
+        return (App) super.getApplication();
+    }
 }
