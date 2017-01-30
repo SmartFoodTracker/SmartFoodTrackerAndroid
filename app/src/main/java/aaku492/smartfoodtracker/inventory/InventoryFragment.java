@@ -12,7 +12,6 @@ import java.util.NoSuchElementException;
 
 import aaku492.smartfoodtracker.MainActivity;
 import aaku492.smartfoodtracker.R;
-import aaku492.smartfoodtracker.common.ViewUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,7 +31,8 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.Dele
 
         getMainActivity().setTitle(getString(R.string.inventory_fragment_title));
 
-        InventoryFragmentView view = InventoryFragmentView.inflate(inflater, container, inventoryAdapter, this);
+        InventoryFragmentView view = InventoryFragmentView.inflate(inflater, container, this);
+        view.render(inventoryAdapter);
         fetchInventory(view);
         return view;
     }
@@ -51,26 +51,28 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.Dele
                     @Override
                     public void onFailure(Call<List<InventoryItem>> call, Throwable t) {
                         Log.e(LOG_TAG, getString(R.string.inventory_fetch_error));
-                        ViewUtils.showMessage(getString(R.string.inventory_fetch_error), view);
+                        //noinspection ConstantConditions
+                        getView().showMessage(getString(R.string.inventory_fetch_error));
                         view.setRefreshing(false);
                     }
                 });
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onCheckedChanged(InventoryItem item, boolean isChecked) {
         if (!isChecked) {
             Log.e(LOG_TAG, "Un-checking shouldn't be allowed right now. Wtf happened?!");
-            ViewUtils.showMessage(getString(R.string.generic_error), getView());
+            getView().showMessage(getString(R.string.generic_error));
             return;
         }
 
         try {
             inventoryAdapter.remove(item);
-            ViewUtils.showMessage(getString(R.string.item_consumed_message_formatter, item.getTitle()), getView());
+            getView().showMessage(getString(R.string.item_consumed_message_formatter, item.getTitle()));
         } catch (NoSuchElementException e) {
             Log.e(LOG_TAG, e.toString());
-            ViewUtils.showMessage(getString(R.string.generic_error), getView());
+            getView().showMessage(getString(R.string.generic_error));
         }
     }
 
@@ -84,6 +86,17 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.Dele
 
     @Override
     public void onRefresh() {
-        fetchInventory((InventoryFragmentView) getView());
+        fetchInventory(getView());
+    }
+
+    @Override
+    public void addItem() {
+        //noinspection ConstantConditions
+        getView().showMessage("Coming soon!");
+    }
+
+    @Override
+    public InventoryFragmentView getView() {
+        return (InventoryFragmentView) super.getView();
     }
 }
