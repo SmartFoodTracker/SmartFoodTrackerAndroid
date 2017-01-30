@@ -5,4 +5,5 @@
     <string name="backend_api_url">http://food-fit.herokuapp.com</string>
     <string name="inventory_fetch_error">Failed to fetch the inventory.</string>
     <string name="item_quantity_formatter" formatted="false">%1$d %2$s</string>
+    <string name="item_consumed_message_formatter" formatted="false">%1$s consumed.</string>
 </resources>

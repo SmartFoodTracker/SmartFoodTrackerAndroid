@@ -19,6 +19,6 @@ public class ViewUtils {
     }
 
     public static void showMessage(String message, View container) {
-        Snackbar.make(container, message, BaseTransientBottomBar.LENGTH_LONG).show();
+        Snackbar.make(container, message, BaseTransientBottomBar.LENGTH_SHORT).show();
     }
 }

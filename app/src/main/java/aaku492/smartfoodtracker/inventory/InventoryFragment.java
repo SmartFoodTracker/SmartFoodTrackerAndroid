@@ -67,6 +67,7 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.Dele
 
         try {
             inventoryAdapter.remove(item);
+            ViewUtils.showMessage(getString(R.string.item_consumed_message_formatter, item.getTitle()), getView());
         } catch (NoSuchElementException e) {
             Log.e(LOG_TAG, e.toString());
             ViewUtils.showMessage(getString(R.string.generic_error), getView());
