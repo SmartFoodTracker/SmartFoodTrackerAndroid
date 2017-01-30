@@ -1,6 +1,7 @@
 package aaku492.smartfoodtracker.inventory;
 
 import android.content.Context;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -22,12 +23,26 @@ public class InventoryFragmentView extends LinearLayout {
     @BindView(R.id.inventory_list)
     protected RecyclerView inventoryList;
 
+    @BindView(R.id.swipe_container)
+    protected SwipeRefreshLayout swipeContainer;
+
     public static InventoryFragmentView inflate(LayoutInflater inflater,
                                                 ViewGroup container,
-                                                RecyclerView.Adapter<? extends InventoryItemView.InventoryItemViewHolder> adapter) {
+                                                RecyclerView.Adapter<? extends InventoryItemView.InventoryItemViewHolder> adapter,
+                                                Delegate delegate) {
         InventoryFragmentView view = ViewUtils.inflate(R.layout.fragment_inventory, inflater, container);
         view.inventoryList.setAdapter(adapter);
+        view.setDelegate(delegate);
         return view;
+    }
+
+    private void setDelegate(final Delegate delegate) {
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                delegate.onRefresh();
+            }
+        });
     }
 
     // Mandatory constructor
@@ -43,5 +58,18 @@ public class InventoryFragmentView extends LinearLayout {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         inventoryList.setLayoutManager(layoutManager);
+
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_dark,
+                android.R.color.holo_red_dark,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_green_dark);
+    }
+
+    public void setRefreshing(boolean isRefreshing) {
+        swipeContainer.setRefreshing(isRefreshing);
+    }
+
+    public interface Delegate {
+        void onRefresh();
     }
 }
