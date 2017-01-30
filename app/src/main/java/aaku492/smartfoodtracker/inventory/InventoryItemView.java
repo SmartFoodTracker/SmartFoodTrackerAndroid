@@ -54,9 +54,17 @@ public class InventoryItemView extends CardView {
         });
     }
 
-    public void render(InventoryItem item) {
+    public void render(final InventoryItem item) {
         this.item = item;
         itemTitle.setText(item.getTitle());
+        itemCheckbox.setOnCheckedChangeListener(null);
+        itemCheckbox.setChecked(false);
+        itemCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                delegate.onCheckedChanged(item, isChecked);
+            }
+        });
     }
 
     public void setDelegate(Delegate delegate) {
