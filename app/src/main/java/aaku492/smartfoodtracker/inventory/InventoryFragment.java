@@ -12,6 +12,7 @@ import java.util.NoSuchElementException;
 
 import aaku492.smartfoodtracker.MainActivity;
 import aaku492.smartfoodtracker.R;
+import aaku492.smartfoodtracker.common.DataProvider;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,7 +40,7 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.Dele
 
     private void fetchInventory(final InventoryFragmentView view) {
         view.setRefreshing(true);
-        getMainActivity().getApp().getDataProvider().getInventory(getMainActivity().getApp().getCurrentDeviceId())
+        getDataProvider().getInventory(getCurrentDeviceId())
                 .enqueue(new Callback<List<InventoryItem>>() {
                     @Override
                     public void onResponse(Call<List<InventoryItem>> call, final Response<List<InventoryItem>> response) {
@@ -58,9 +59,17 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.Dele
                 });
     }
 
+    private String getCurrentDeviceId() {
+        return getMainActivity().getApp().getCurrentDeviceId();
+    }
+
+    private DataProvider getDataProvider() {
+        return getMainActivity().getApp().getDataProvider();
+    }
+
     @SuppressWarnings("ConstantConditions")
     @Override
-    public void onCheckedChanged(InventoryItem item, boolean isChecked) {
+    public void onCheckedChanged(final InventoryItem item, boolean isChecked) {
         if (!isChecked) {
             Log.e(LOG_TAG, "Un-checking shouldn't be allowed right now. Wtf happened?!");
             getView().showMessage(getString(R.string.generic_error));
@@ -68,8 +77,23 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.Dele
         }
 
         try {
-            inventoryAdapter.remove(item);
-            getView().showMessage(getString(R.string.item_consumed_message_formatter, item.getTitle()));
+            getDataProvider().deleteItem(getCurrentDeviceId(), item.getId())
+                    .enqueue(new Callback<List<InventoryItem>>() {
+                        @Override
+                        public void onResponse(Call<List<InventoryItem>> call, Response<List<InventoryItem>> response) {
+                            inventoryAdapter.clear();
+                            inventoryAdapter.addAll(response.body());
+                            getView().showMessage(getString(R.string.item_consumed_message_formatter, item.getTitle()));
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<InventoryItem>> call, Throwable t) {
+                            inventoryAdapter.remove(item);
+                            inventoryAdapter.add(item);
+                            Log.e(LOG_TAG, "Failed to delete the item.");
+                            getView().showMessage("Failed to delete the item.");
+                        }
+                    });
         } catch (NoSuchElementException e) {
             Log.e(LOG_TAG, e.toString());
             getView().showMessage(getString(R.string.generic_error));

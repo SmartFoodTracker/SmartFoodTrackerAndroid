@@ -10,6 +10,7 @@ import java.io.IOException;
 import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -34,16 +35,19 @@ public class NetworkManager<T> {
         Interceptor rewriteCacheControlInterceptor = new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
-                Response originalResponse = chain.proceed(chain.request());
-                if (isOnline(context)) {
-                    return originalResponse.newBuilder()
-                            .header("Cache-Control", "public, max-age=" + maxAgeOnline)
-                            .build();
-                } else {
-                    return originalResponse.newBuilder()
-                            .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStaleOffline)
-                            .build();
+                Request request = chain.request();
+                Response originalResponse = chain.proceed(request);
+
+                if (!request.method().equals("GET")) {
+                    // Only attempt caching on GET requests
+                    return originalResponse;
                 }
+
+                return originalResponse.newBuilder()
+                        .header("Cache-Control", isOnline(context) ? "public, max-age=" + maxAgeOnline :
+                                                                     "public, only-if-cached, max-stale=" + maxStaleOffline
+                        )
+                        .build();
             }
         };
 

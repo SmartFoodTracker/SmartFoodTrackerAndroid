@@ -47,6 +47,11 @@ class InventoryAdapter extends RecyclerView.Adapter<InventoryItemView.InventoryI
         notifyDataSetChanged();
     }
 
+    public void add(InventoryItem item) {
+        inventoryItems.add(item);
+        notifyItemInserted(inventoryItems.size() - 1);
+    }
+
     public void remove(InventoryItem item) {
         int index = inventoryItems.indexOf(item);
         if (index < 0) {

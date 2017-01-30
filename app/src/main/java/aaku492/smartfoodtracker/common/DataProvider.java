@@ -4,6 +4,7 @@ import java.util.List;
 
 import aaku492.smartfoodtracker.inventory.InventoryItem;
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Path;
@@ -16,4 +17,7 @@ public interface DataProvider {
     @Headers("Cache-Control: public, max-age=640000, s-maxage=640000 , max-stale=2419200")
     @GET("{deviceId}/inventory")
     Call<List<InventoryItem>> getInventory(@Path("deviceId") String deviceId);
+
+    @DELETE("{deviceId}/inventory/{itemId}")
+    Call<List<InventoryItem>> deleteItem(@Path("deviceId") String deviceId, @Path("itemId") String itemId);
 }

@@ -96,6 +96,8 @@ public class InventoryFragmentView extends RelativeLayout {
     }
 
     public void showMessage(String message) {
+        // Need to specify either the coordinator layout (or any of its children) here, so that
+        // the snack bar can push up these children (like the FAB).
         ViewUtils.showMessage(message, rootView);
     }
 
