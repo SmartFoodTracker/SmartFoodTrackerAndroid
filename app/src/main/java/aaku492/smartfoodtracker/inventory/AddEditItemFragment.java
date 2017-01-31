@@ -1,5 +1,6 @@
 package aaku492.smartfoodtracker.inventory;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -28,7 +29,7 @@ public class AddEditItemFragment extends SFTFragment {
     public static FragmentInitInfo getFragmentInitInfo(@Nullable String itemId) {
         Bundle args = new Bundle();
         args.putString(ITEM_ID, itemId);
-        return new FragmentInitInfo(AddEditItemFragment.class, args);
+        return new FragmentInitInfo(true, AddEditItemFragment.class, args);
     }
 
     @Override
@@ -82,5 +83,17 @@ public class AddEditItemFragment extends SFTFragment {
                         getContainerActivity().popFragment(FragmentContainerActivity.RESULT_ERROR);
                     }
                 });
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        getContainerActivity().popFragment(Activity.RESULT_CANCELED);
+        return true;
+    }
+
+    @Override
+    public boolean onAcceptPressed() {
+        getContainerActivity().popFragment(Activity.RESULT_OK);
+        return true;
     }
 }

@@ -44,4 +44,14 @@ public class SFTFragment extends Fragment {
         Log.w(LOG_TAG, "Unhandled status result code: " + resultCode);
         return false;
     }
+
+    public boolean onBackPressed() {
+        Log.w(LOG_TAG, "Unhandled onBackPressed.");
+        return false;
+    }
+
+    public boolean onAcceptPressed() {
+        Log.w(LOG_TAG, "Unhandled onAcceptPressed.");
+        return false;
+    }
 }

@@ -20,4 +20,5 @@
     </string-array>
     <string name="item_expiry_date_formatter" formatted="false">Expiry (%1$s)</string>
     <string name="item_fetch_error">Failed to fetch item for editing.</string>
+    <string name="accept">Accept</string>
 </resources>

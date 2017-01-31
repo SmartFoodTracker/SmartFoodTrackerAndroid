@@ -11,12 +11,14 @@ import android.support.annotation.Nullable;
 public class FragmentInitInfo {
     @NonNull private final String name;
     @Nullable private final Bundle argsBundle;
+    private final boolean isModal;
 
-    public FragmentInitInfo(@NonNull Class<? extends SFTFragment> _class) {
-        this(_class, null);
+    public FragmentInitInfo(boolean isModal, @NonNull Class<? extends SFTFragment> _class) {
+        this(isModal, _class, null);
     }
 
-    public FragmentInitInfo(@NonNull Class<? extends SFTFragment> _class, @Nullable Bundle argsBundle) {
+    public FragmentInitInfo(boolean isModal, @NonNull Class<? extends SFTFragment> _class, @Nullable Bundle argsBundle) {
+        this.isModal = isModal;
         this.name = _class.getName();
         this.argsBundle = argsBundle;
     }
@@ -29,5 +31,9 @@ public class FragmentInitInfo {
     @NonNull
     public String getName() {
         return name;
+    }
+
+    public boolean isModal() {
+        return isModal;
     }
 }

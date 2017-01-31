@@ -27,7 +27,7 @@ public class InventoryFragment extends SFTFragment implements InventoryAdapter.D
     private InventoryAdapter inventoryAdapter;
 
     public static FragmentInitInfo getFragmentInitInfo() {
-        return new FragmentInitInfo(InventoryFragment.class);
+        return new FragmentInitInfo(false, InventoryFragment.class);
     }
 
     @Override
