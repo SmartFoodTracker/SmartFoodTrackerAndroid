@@ -4,9 +4,13 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.File;
 import java.io.IOException;
 
+import aaku492.smartfoodtracker.R;
 import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -59,10 +63,14 @@ public class NetworkManager<T> {
                 .cache(cache)
                 .build();
 
+        Gson gson = new GsonBuilder()
+                .setDateFormat(context.getString(R.string.date_time_format))
+                .create();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
         dataProvider = retrofit.create(dataProviderClass);
