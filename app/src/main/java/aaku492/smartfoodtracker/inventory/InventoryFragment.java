@@ -44,17 +44,25 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.Dele
                 .enqueue(new Callback<List<InventoryItem>>() {
                     @Override
                     public void onResponse(Call<List<InventoryItem>> call, final Response<List<InventoryItem>> response) {
-                        inventoryAdapter.clear();
-                        inventoryAdapter.addAll(response.body());
+                        if (response.isSuccessful()) {
+                            inventoryAdapter.clear();
+                            inventoryAdapter.addAll(response.body());
+                        } else {
+                            onFailure("Got back error response: " + response.code());
+                        }
                         view.setRefreshing(false);
                     }
 
                     @Override
                     public void onFailure(Call<List<InventoryItem>> call, Throwable t) {
-                        Log.e(LOG_TAG, getString(R.string.inventory_fetch_error));
+                        onFailure("Exception:\n" + t.toString());
+                        view.setRefreshing(false);
+                    }
+
+                    private void onFailure(String logReason) {
+                        Log.e(LOG_TAG, getString(R.string.inventory_fetch_error) + " " + logReason);
                         //noinspection ConstantConditions
                         getView().showMessage(getString(R.string.inventory_fetch_error));
-                        view.setRefreshing(false);
                     }
                 });
     }
@@ -81,17 +89,25 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.Dele
                     .enqueue(new Callback<List<InventoryItem>>() {
                         @Override
                         public void onResponse(Call<List<InventoryItem>> call, Response<List<InventoryItem>> response) {
-                            inventoryAdapter.clear();
-                            inventoryAdapter.addAll(response.body());
-                            getView().showMessage(getString(R.string.item_consumed_message_formatter, item.getTitle()));
+                            if (response.isSuccessful()) {
+                                inventoryAdapter.clear();
+                                inventoryAdapter.addAll(response.body());
+                                getView().showMessage(getString(R.string.item_consumed_message_formatter, item.getTitle()));
+                            } else {
+                                onFailure("Got back error response: " + response.code());
+                            }
                         }
 
                         @Override
                         public void onFailure(Call<List<InventoryItem>> call, Throwable t) {
+                            onFailure("Exception:\n" + t.toString());
+                        }
+
+                        private void onFailure(String logReason) {
                             inventoryAdapter.remove(item);
                             inventoryAdapter.add(item);
-                            Log.e(LOG_TAG, "Failed to delete the item.");
-                            getView().showMessage("Failed to delete the item.");
+                            Log.e(LOG_TAG, getString(R.string.item_delete_failure) + " " + logReason);
+                            getView().showMessage(getString(R.string.item_delete_failure));
                         }
                     });
         } catch (NoSuchElementException e) {
