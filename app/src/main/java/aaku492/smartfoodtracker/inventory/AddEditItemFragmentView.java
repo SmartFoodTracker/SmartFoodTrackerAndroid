@@ -4,8 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,6 +22,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import aaku492.smartfoodtracker.R;
+import aaku492.smartfoodtracker.common.Field;
 import aaku492.smartfoodtracker.common.ViewUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,17 +35,14 @@ public class AddEditItemFragmentView extends LinearLayout {
     @BindView(R.id.item_quantity_units)
     protected AppCompatSpinner units;
 
-    @BindView(R.id.item_expiry_date_wrapper)
-    protected TextInputLayout expiryDateWrapper;
-
     @BindView(R.id.item_title)
-    protected TextInputEditText title;
+    protected Field title;
 
     @BindView(R.id.item_quantity)
-    protected TextInputEditText quantity;
+    protected Field quantity;
 
     @BindView(R.id.item_expiry_date)
-    protected TextInputEditText expiryDate;
+    protected Field expiryDate;
 
     private ProgressDialog dialog = null;
 
@@ -70,7 +66,7 @@ public class AddEditItemFragmentView extends LinearLayout {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         units.setAdapter(adapter);
 
-        expiryDateWrapper.setHint(getContext().getString(R.string.item_expiry_date_formatter, getContext().getString(R.string.date_format)));
+        expiryDate.setHint(getContext().getString(R.string.item_expiry_date_formatter, getContext().getString(R.string.date_format)));
     }
 
     private void renderTitle(@Nullable String title) {
