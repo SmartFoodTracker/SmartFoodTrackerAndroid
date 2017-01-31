@@ -16,6 +16,8 @@ public class FragmentContainerActivity extends AppCompatActivity {
     private static final String LOG_TAG = FragmentContainerActivity.class.getName();
     private static final String FRAGMENT_NAME = "fragment_name";
     private static final String FRAGMENT_BUNDLE_ARG = "fragment_bundle_arg";
+    private static final int ACTIVITY_STATUS_REQ_CODE = 0;
+    public static final int RESULT_ERROR = 1010101;
 
     public static Intent createIntent(Context creatingContext, FragmentInitInfo fragmentInitInfo) {
         Intent intent = new Intent(creatingContext, FragmentContainerActivity.class);
@@ -31,15 +33,17 @@ public class FragmentContainerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
 
+        if (savedInstanceState == null) {
+            Intent intent = getIntent();
+            String fragmentName = intent.getStringExtra(FRAGMENT_NAME);
 
-        Intent intent = getIntent();
-        String fragmentName = intent.getStringExtra(FRAGMENT_NAME);
-
-        SFTFragment fragment = createFragment(fragmentName);
-        if (intent.hasExtra(FRAGMENT_BUNDLE_ARG)) {
-            fragment.setArguments(intent.getBundleExtra(FRAGMENT_BUNDLE_ARG));
+            SFTFragment fragment = createFragment(fragmentName);
+            if (intent.hasExtra(FRAGMENT_BUNDLE_ARG)) {
+                fragment.setArguments(intent.getBundleExtra(FRAGMENT_BUNDLE_ARG));
+            }
+            getSupportFragmentManager().beginTransaction().add(R.id.activity_fragment_root, fragment, fragmentName).commit();
         }
-        getSupportFragmentManager().beginTransaction().add(R.id.activity_fragment_root, fragment, fragmentName).commit();
+        // else, orientation change. No need to re-recreate the fragment
     }
 
     @NonNull
@@ -75,6 +79,26 @@ public class FragmentContainerActivity extends AppCompatActivity {
     }
 
     public void pushFragment(FragmentInitInfo fragmentInitInfo) {
-        startActivity(createIntent(this, fragmentInitInfo));
+        startActivityForResult(createIntent(this, fragmentInitInfo), ACTIVITY_STATUS_REQ_CODE);
+    }
+
+    public void popFragment(int resultCode) {
+        Intent returnIntent = new Intent();
+        setResult(resultCode, returnIntent);
+        finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        SFTFragment fragment = (SFTFragment) getSupportFragmentManager().findFragmentById(R.id.activity_fragment_root);
+        switch (requestCode) {
+            case ACTIVITY_STATUS_REQ_CODE:
+                if (!fragment.handleStatusResult(resultCode)) {
+                    super.onActivityResult(requestCode, resultCode, data);
+                }
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }

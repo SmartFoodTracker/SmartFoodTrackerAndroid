@@ -1,6 +1,6 @@
 package aaku492.smartfoodtracker;
 
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -10,19 +10,19 @@ import android.support.annotation.Nullable;
  */
 public class FragmentInitInfo {
     @NonNull private final String name;
-    @Nullable private final Intent argsBundle;
+    @Nullable private final Bundle argsBundle;
 
     public FragmentInitInfo(@NonNull Class<? extends SFTFragment> _class) {
         this(_class, null);
     }
 
-    public FragmentInitInfo(@NonNull Class<? extends SFTFragment> _class, @Nullable Intent argsBundle) {
+    public FragmentInitInfo(@NonNull Class<? extends SFTFragment> _class, @Nullable Bundle argsBundle) {
         this.name = _class.getName();
         this.argsBundle = argsBundle;
     }
 
     @Nullable
-    public Intent getArgsBundle() {
+    public Bundle getArgsBundle() {
         return argsBundle;
     }
 

@@ -3,6 +3,7 @@ package aaku492.smartfoodtracker;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import aaku492.smartfoodtracker.common.DataProvider;
 
@@ -11,6 +12,8 @@ import aaku492.smartfoodtracker.common.DataProvider;
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
  */
 public class SFTFragment extends Fragment {
+
+    private static final String LOG_TAG = SFTFragment.class.getName();
 
     @CallSuper
     @Override
@@ -31,5 +34,14 @@ public class SFTFragment extends Fragment {
 
     protected FragmentContainerActivity getContainerActivity() {
         return (FragmentContainerActivity) getActivity();
+    }
+
+    protected void pushFragment(FragmentInitInfo fragmentInitInfo) {
+        getContainerActivity().pushFragment(fragmentInitInfo);
+    }
+
+    public boolean handleStatusResult(int resultCode) {
+        Log.w(LOG_TAG, "Unhandled status result code: " + resultCode);
+        return false;
     }
 }

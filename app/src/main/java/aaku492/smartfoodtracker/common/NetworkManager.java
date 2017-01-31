@@ -64,7 +64,7 @@ public class NetworkManager<T> {
                 .build();
 
         Gson gson = new GsonBuilder()
-                .setDateFormat(context.getString(R.string.date_time_format))
+                .setDateFormat(context.getString(R.string.date_format))
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()

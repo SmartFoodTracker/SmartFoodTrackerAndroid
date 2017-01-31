@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import aaku492.smartfoodtracker.FragmentContainerActivity;
 import aaku492.smartfoodtracker.FragmentInitInfo;
 import aaku492.smartfoodtracker.R;
 import aaku492.smartfoodtracker.SFTFragment;
@@ -37,11 +38,11 @@ public class InventoryFragment extends SFTFragment implements InventoryAdapter.D
 
         InventoryFragmentView view = InventoryFragmentView.inflate(inflater, container, this);
         view.render(inventoryAdapter);
-        fetchInventory(view);
+        fetchInventoryAndRender(view);
         return view;
     }
 
-    private void fetchInventory(final InventoryFragmentView view) {
+    private void fetchInventoryAndRender(final InventoryFragmentView view) {
         view.setRefreshing(true);
         getDataProvider().getInventory(getCurrentDeviceId())
                 .enqueue(new Callback<List<InventoryItem>>() {
@@ -115,17 +116,32 @@ public class InventoryFragment extends SFTFragment implements InventoryAdapter.D
 
     @Override
     public void onRefresh() {
-        fetchInventory(getView());
+        fetchInventoryAndRender(getView());
     }
 
     @Override
     public void addItem() {
         //noinspection ConstantConditions
-        getView().showMessage("Coming soon!");
+        pushFragment(AddEditItemFragment.getFragmentInitInfo(null));
     }
 
     @Override
     public InventoryFragmentView getView() {
         return (InventoryFragmentView) super.getView();
+    }
+
+    @Override
+    public boolean handleStatusResult(int resultCode) {
+        switch (resultCode) {
+            case FragmentContainerActivity.RESULT_OK:
+            case FragmentContainerActivity.RESULT_CANCELED:
+                return true;
+            case FragmentContainerActivity.RESULT_ERROR:
+                //noinspection ConstantConditions
+                getView().showMessage(getString(R.string.item_fetch_error));
+                return true;
+            default:
+                return super.handleStatusResult(resultCode);
+        }
     }
 }

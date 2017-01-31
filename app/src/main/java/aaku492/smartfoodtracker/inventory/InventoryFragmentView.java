@@ -69,7 +69,7 @@ public class InventoryFragmentView extends RelativeLayout {
     }
 
     @Override
-    public void onFinishInflate() {
+    protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
 

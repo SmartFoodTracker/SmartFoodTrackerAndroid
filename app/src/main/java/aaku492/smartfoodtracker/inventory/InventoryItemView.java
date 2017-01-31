@@ -45,7 +45,7 @@ public class InventoryItemView extends CardView {
     }
 
     @Override
-    public void onFinishInflate() {
+    protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
     }

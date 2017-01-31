@@ -20,4 +20,8 @@ public interface DataProvider {
 
     @DELETE("{deviceId}/inventory/{itemId}")
     Call<List<InventoryItem>> deleteItem(@Path("deviceId") String deviceId, @Path("itemId") String itemId);
+
+    @Headers("Cache-Control: public, max-age=640000, s-maxage=640000 , max-stale=2419200")
+    @GET("{deviceId}/inventory/{itemId}")
+    Call<InventoryItem> getItem(@Path("deviceId") String deviceId, @Path("itemId") String itemId);
 }
