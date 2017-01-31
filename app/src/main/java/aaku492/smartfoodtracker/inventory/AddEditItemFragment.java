@@ -7,10 +7,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import aaku492.smartfoodtracker.FragmentContainerActivity;
 import aaku492.smartfoodtracker.FragmentInitInfo;
 import aaku492.smartfoodtracker.R;
 import aaku492.smartfoodtracker.SFTFragment;
+import aaku492.smartfoodtracker.common.ViewUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,7 +48,8 @@ public class AddEditItemFragment extends SFTFragment {
             fetchItemAndRender(getArguments().getString(ITEM_ID), view);
             getContainerActivity().setTitle(getString(R.string.edit_item));
         } else {
-            item = new InventoryItem(null, null, null, null, null, null);
+            String defaultUnit = getContext().getResources().getStringArray(R.array.item_quantity_units_options)[0];
+            item = new InventoryItem(null, null, null, defaultUnit, null, null);
             view.render(item);
             getContainerActivity().setTitle(getString(R.string.add_item));
         }
@@ -91,9 +95,43 @@ public class AddEditItemFragment extends SFTFragment {
         return true;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public boolean onAcceptPressed() {
-        getContainerActivity().popFragment(Activity.RESULT_OK);
+        ViewUtils.closeKeyboard(getContainerActivity());
+        ((AddEditItemFragmentView)getView()).setLoading(true);
+        getDataProvider().addItem(getCurrentDeviceId(), item)
+                .enqueue(new Callback<List<InventoryItem>>() {
+                    @Override
+                    public void onResponse(Call<List<InventoryItem>> call, Response<List<InventoryItem>> response) {
+                        ((AddEditItemFragmentView)getView()).setLoading(false);
+                        if (response.isSuccessful()) {
+                            getContainerActivity().popFragment(FragmentContainerActivity.RESULT_OK);
+                        } else {
+                            onFailure("Got back error response: " + response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<InventoryItem>> call, Throwable t) {
+                        ((AddEditItemFragmentView)getView()).setLoading(false);
+                        onFailure("Exception:\n" + t.toString());
+                    }
+
+                    private void onFailure(String logMessage) {
+                        if (isEditingItem()) {
+                            ((AddEditItemFragmentView)getView()).showMessage(getString(R.string.item_edit_error));
+                            Log.e(LOG_TAG, getString(R.string.item_edit_error) + " " + logMessage);
+                        } else {
+                            ((AddEditItemFragmentView)getView()).showMessage(getString(R.string.item_add_error));
+                            Log.e(LOG_TAG, getString(R.string.item_add_error) + " " + logMessage);
+                        }
+                    }
+                });
         return true;
+    }
+
+    private boolean isEditingItem() {
+        return item.getId() != null;
     }
 }

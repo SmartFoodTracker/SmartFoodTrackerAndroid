@@ -1,9 +1,7 @@
 package aaku492.smartfoodtracker.inventory;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -81,9 +79,6 @@ public class InventoryFragmentView extends RelativeLayout {
                 android.R.color.holo_red_dark,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_green_dark);
-
-        ColorStateList rippleColor = ContextCompat.getColorStateList(getContext(), R.color.fab_ripple_color);
-        addButton.setBackgroundTintList(rippleColor);
     }
 
     public void setRefreshing(boolean isRefreshing) {

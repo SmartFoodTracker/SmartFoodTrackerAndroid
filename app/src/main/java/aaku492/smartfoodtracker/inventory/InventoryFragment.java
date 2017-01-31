@@ -130,14 +130,17 @@ public class InventoryFragment extends SFTFragment implements InventoryAdapter.D
         return (InventoryFragmentView) super.getView();
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public boolean handleStatusResult(int resultCode) {
         switch (resultCode) {
             case FragmentContainerActivity.RESULT_OK:
+                getView().showMessage(getString(R.string.item_added));
+                return true;
             case FragmentContainerActivity.RESULT_CANCELED:
+                getView().showMessage(getString(R.string.item_add_cancelled));
                 return true;
             case FragmentContainerActivity.RESULT_ERROR:
-                //noinspection ConstantConditions
                 getView().showMessage(getString(R.string.item_fetch_error));
                 return true;
             default:

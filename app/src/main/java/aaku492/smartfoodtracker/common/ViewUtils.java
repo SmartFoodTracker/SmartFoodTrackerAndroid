@@ -5,9 +5,11 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.LayoutRes;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import aaku492.smartfoodtracker.R;
 
@@ -37,5 +39,13 @@ public class ViewUtils {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setContentView(R.layout.progress_dialog);
         return dialog;
+    }
+
+    public static void closeKeyboard(AppCompatActivity activity) {
+        View view = activity.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }

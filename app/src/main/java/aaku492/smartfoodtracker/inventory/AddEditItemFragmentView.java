@@ -47,6 +47,7 @@ public class AddEditItemFragmentView extends LinearLayout {
 
     @BindView(R.id.item_expiry_date)
     protected TextInputEditText expiryDate;
+
     private ProgressDialog dialog = null;
 
     public AddEditItemFragmentView(Context context, AttributeSet attrs) {
@@ -114,7 +115,7 @@ public class AddEditItemFragmentView extends LinearLayout {
                 item.setTitle(s.toString());
             }
         });
-        
+
         quantity.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -181,5 +182,9 @@ public class AddEditItemFragmentView extends LinearLayout {
             dialog = null;
         }
 
+    }
+
+    public void showMessage(String message) {
+        ViewUtils.showMessage(message, this);
     }
 }

@@ -130,6 +130,13 @@ public class FragmentContainerActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        if (!isModal || !getCurrentFragment().onBackPressed()) {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (isModal) {
             switch (item.getItemId()) {
