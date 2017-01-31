@@ -48,13 +48,6 @@ public class InventoryItemView extends CardView {
     public void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
-
-        itemCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                delegate.onCheckedChanged(item, isChecked);
-            }
-        });
     }
 
     public void render(final InventoryItem item) {
@@ -77,8 +70,14 @@ public class InventoryItemView extends CardView {
         }
     }
 
-    public void setDelegate(Delegate delegate) {
+    public void setDelegate(final Delegate delegate) {
         this.delegate = delegate;
+        itemCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                delegate.onCheckedChanged(item, isChecked);
+            }
+        });
     }
 
     public static class InventoryItemViewHolder extends RecyclerView.ViewHolder {
