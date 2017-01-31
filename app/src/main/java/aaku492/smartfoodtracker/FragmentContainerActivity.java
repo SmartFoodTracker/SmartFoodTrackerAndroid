@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -36,7 +35,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String fragmentName = intent.getStringExtra(FRAGMENT_NAME);
 
-        Fragment fragment = createFragment(fragmentName);
+        SFTFragment fragment = createFragment(fragmentName);
         if (intent.hasExtra(FRAGMENT_BUNDLE_ARG)) {
             fragment.setArguments(intent.getBundleExtra(FRAGMENT_BUNDLE_ARG));
         }
@@ -44,14 +43,14 @@ public class FragmentContainerActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private static Fragment createFragment(String fragmentName) {
-        Fragment fragment;
+    private static SFTFragment createFragment(String fragmentName) {
+        SFTFragment fragment;
         try {
             Object o = Class.forName(fragmentName).newInstance();
-            if (!(o instanceof Fragment)) {
+            if (!(o instanceof SFTFragment)) {
                 throw new ClassCastException("The fragment name should be a Fragment object: " + fragmentName);
             }
-            fragment = (Fragment)o;
+            fragment = (SFTFragment) o;
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Don't have access to create class " + fragmentName, e);
         } catch (InstantiationException e) {

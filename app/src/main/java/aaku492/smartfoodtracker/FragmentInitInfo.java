@@ -3,7 +3,6 @@ package aaku492.smartfoodtracker;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 
 /**
  * Created by Udey Rishi (udeyrishi) on 2017-01-30.
@@ -13,11 +12,11 @@ public class FragmentInitInfo {
     @NonNull private final String name;
     @Nullable private final Intent argsBundle;
 
-    public FragmentInitInfo(@NonNull Class<? extends Fragment> _class) {
+    public FragmentInitInfo(@NonNull Class<? extends SFTFragment> _class) {
         this(_class, null);
     }
 
-    public FragmentInitInfo(@NonNull Class<? extends Fragment> _class, @Nullable Intent argsBundle) {
+    public FragmentInitInfo(@NonNull Class<? extends SFTFragment> _class, @Nullable Intent argsBundle) {
         this.name = _class.getName();
         this.argsBundle = argsBundle;
     }

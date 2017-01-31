@@ -1,7 +1,6 @@
 package aaku492.smartfoodtracker.inventory;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -10,10 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import aaku492.smartfoodtracker.FragmentContainerActivity;
 import aaku492.smartfoodtracker.FragmentInitInfo;
 import aaku492.smartfoodtracker.R;
-import aaku492.smartfoodtracker.common.DataProvider;
+import aaku492.smartfoodtracker.SFTFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,7 +20,7 @@ import retrofit2.Response;
  * Created by Udey Rishi (udeyrishi) on 2017-01-28.
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
  */
-public class InventoryFragment extends Fragment implements InventoryAdapter.Delegate, InventoryFragmentView.Delegate {
+public class InventoryFragment extends SFTFragment implements InventoryAdapter.Delegate, InventoryFragmentView.Delegate {
     private static final String LOG_TAG = InventoryFragment.class.getName();
 
     private InventoryAdapter inventoryAdapter;
@@ -72,14 +70,6 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.Dele
                 });
     }
 
-    private String getCurrentDeviceId() {
-        return getContainerActivity().getApp().getCurrentDeviceId();
-    }
-
-    private DataProvider getDataProvider() {
-        return getContainerActivity().getApp().getDataProvider();
-    }
-
     @SuppressWarnings("ConstantConditions")
     @Override
     public void onCheckedChanged(final InventoryItem item, boolean isChecked) {
@@ -121,14 +111,6 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.Dele
             Log.e(LOG_TAG, e.toString());
             getView().showMessage(getString(R.string.generic_error));
         }
-    }
-
-    private FragmentContainerActivity getContainerActivity() {
-        if (super.getActivity() instanceof FragmentContainerActivity) {
-            return (FragmentContainerActivity) super.getActivity();
-        }
-
-        throw new IllegalStateException("The container activity should be " + FragmentContainerActivity.class.getName());
     }
 
     @Override
