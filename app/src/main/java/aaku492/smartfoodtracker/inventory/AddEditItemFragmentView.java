@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,30 +96,14 @@ public class AddEditItemFragmentView extends LinearLayout {
         renderExpiryDate(item.getExpiryDate());
         renderUnits(item.getUnits());
 
-        title.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
+        title.addTextChangedListener(new Field.AfterTextChangedWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
                 item.setTitle(s.toString());
             }
         });
 
-        quantity.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
+        quantity.addTextChangedListener(new Field.AfterTextChangedWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().equals("")) {
@@ -146,28 +129,27 @@ public class AddEditItemFragmentView extends LinearLayout {
             }
         });
 
-        expiryDate.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
+        expiryDate.addTextChangedListener(new Field.AfterTextChangedWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().equals("")) {
                     item.setExpiryDate(null);
                 } else {
                     try {
-                        item.setExpiryDate(new SimpleDateFormat(getContext().getString(R.string.date_format), Locale.getDefault()).parse(s.toString()));
+                        item.setExpiryDate(parseDate(s.toString()));
                     } catch (ParseException e) {
                         // Inconsistent format, wait for completion
                     }
                 }
             }
         });
+    }
+
+    private Date parseDate(String text) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat(getContext().getString(R.string.date_format), Locale.getDefault());
+        format.setLenient(false);
+        text = text.replaceAll(getContext().getString(R.string.date_format_lenient_sep), getContext().getString(R.string.date_format_sep));
+        return format.parse(text);
     }
 
     public void setLoading(boolean isLoading) {
@@ -182,5 +164,49 @@ public class AddEditItemFragmentView extends LinearLayout {
 
     public void showMessage(String message) {
         ViewUtils.showMessage(message, this);
+    }
+
+    public boolean validateInput() {
+        boolean titleValid = title.validate(new Field.TextValidator() {
+            @Override
+            public boolean isValid(CharSequence text) {
+                return text != null && !text.toString().equals("");
+            }
+        }, getContext().getString(R.string.item_title_invalid_error));
+
+        boolean quantityValid = quantity.validate(new Field.TextValidator() {
+            @Override
+            public boolean isValid(CharSequence text) {
+                if (text == null || text.toString().equals("")) {
+                    return false;
+                }
+
+                try {
+                    //noinspection ResultOfMethodCallIgnored
+                    Double.parseDouble(text.toString());
+                    return true;
+                } catch (NumberFormatException e) {
+                    return false;
+                }
+            }
+        }, getContext().getString(R.string.item_quantity_invalid_error));
+
+        boolean expiryDateValid = expiryDate.validate(new Field.TextValidator() {
+            @Override
+            public boolean isValid(CharSequence text) {
+                if (text == null || text.toString().equals("")) {
+                    return false;
+                }
+
+                try {
+                    parseDate(text.toString());
+                    return true;
+                } catch (ParseException e) {
+                    return false;
+                }
+            }
+        }, getContext().getString(R.string.item_expiry_invalid_error));
+
+        return titleValid && quantityValid && expiryDateValid;
     }
 }

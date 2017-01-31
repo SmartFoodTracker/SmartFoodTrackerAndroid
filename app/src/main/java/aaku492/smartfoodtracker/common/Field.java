@@ -82,4 +82,32 @@ public class Field extends RelativeLayout {
     public void addTextChangedListener(TextWatcher textWatcher) {
         editText.addTextChangedListener(textWatcher);
     }
+
+    public boolean validate(TextValidator validator, CharSequence errorMessage) {
+        if (validator.isValid(editText.getText())) {
+            errorView.setVisibility(INVISIBLE);
+            return true;
+        } else {
+            errorView.setText(errorMessage);
+            errorView.setVisibility(VISIBLE);
+            return false;
+        }
+    }
+
+
+    public abstract static class AfterTextChangedWatcher implements TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+    }
+
+    public interface TextValidator {
+        boolean isValid(CharSequence text);
+    }
 }

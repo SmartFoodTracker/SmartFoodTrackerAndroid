@@ -98,6 +98,10 @@ public class AddEditItemFragment extends SFTFragment {
     @SuppressWarnings("ConstantConditions")
     @Override
     public boolean onAcceptPressed() {
+        if (!((AddEditItemFragmentView)getView()).validateInput()) {
+            return true;
+        }
+
         ViewUtils.closeKeyboard(getContainerActivity());
         ((AddEditItemFragmentView)getView()).setLoading(true);
         getDataProvider().addItem(getCurrentDeviceId(), item)

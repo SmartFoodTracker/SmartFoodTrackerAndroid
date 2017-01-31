@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Smart Food Tracker</string>
     <string name="date_format">yyyy-MM-dd</string>
+    <string name="date_format_sep">-</string>
+    <string name="date_format_lenient_sep">/</string>
     <string name="inventory_fragment_title">Inventory</string>
     <string name="generic_error">Something went wrong.</string>
     <string name="backend_api_url">http://food-fit.herokuapp.com</string>
@@ -25,4 +27,7 @@
     <string name="item_added">Item added.</string>
     <string name="item_add_error">Failed to create item.</string>
     <string name="item_edit_error">Failed to edit item.</string>
+    <string name="item_quantity_invalid_error">Quantity must be a valid number.</string>
+    <string name="item_title_invalid_error">Title must be present.</string>
+    <string name="item_expiry_invalid_error">Expiry date must be a valid date.</string>
 </resources>
