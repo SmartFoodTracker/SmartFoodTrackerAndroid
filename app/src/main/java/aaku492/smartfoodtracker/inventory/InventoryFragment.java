@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import aaku492.smartfoodtracker.MainActivity;
+import aaku492.smartfoodtracker.FragmentContainerActivity;
+import aaku492.smartfoodtracker.FragmentInitInfo;
 import aaku492.smartfoodtracker.R;
 import aaku492.smartfoodtracker.common.DataProvider;
 import retrofit2.Call;
@@ -26,11 +27,15 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.Dele
 
     private InventoryAdapter inventoryAdapter;
 
+    public static FragmentInitInfo getFragmentInitInfo() {
+        return new FragmentInitInfo(InventoryFragment.class);
+    }
+
     @Override
     public InventoryFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         inventoryAdapter = new InventoryAdapter(new ArrayList<InventoryItem>(), this);
 
-        getMainActivity().setTitle(getString(R.string.inventory_fragment_title));
+        getContainerActivity().setTitle(getString(R.string.inventory_fragment_title));
 
         InventoryFragmentView view = InventoryFragmentView.inflate(inflater, container, this);
         view.render(inventoryAdapter);
@@ -68,11 +73,11 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.Dele
     }
 
     private String getCurrentDeviceId() {
-        return getMainActivity().getApp().getCurrentDeviceId();
+        return getContainerActivity().getApp().getCurrentDeviceId();
     }
 
     private DataProvider getDataProvider() {
-        return getMainActivity().getApp().getDataProvider();
+        return getContainerActivity().getApp().getDataProvider();
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -85,6 +90,9 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.Dele
         }
 
         try {
+            // Remove from the UI, but add it back if the request fails
+            inventoryAdapter.remove(item);
+
             getDataProvider().deleteItem(getCurrentDeviceId(), item.getId())
                     .enqueue(new Callback<List<InventoryItem>>() {
                         @Override
@@ -104,7 +112,6 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.Dele
                         }
 
                         private void onFailure(String logReason) {
-                            inventoryAdapter.remove(item);
                             inventoryAdapter.add(item);
                             Log.e(LOG_TAG, getString(R.string.item_delete_failure) + " " + logReason);
                             getView().showMessage(getString(R.string.item_delete_failure));
@@ -116,12 +123,12 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.Dele
         }
     }
 
-    private MainActivity getMainActivity() {
-        if (super.getActivity() instanceof MainActivity) {
-            return (MainActivity) super.getActivity();
+    private FragmentContainerActivity getContainerActivity() {
+        if (super.getActivity() instanceof FragmentContainerActivity) {
+            return (FragmentContainerActivity) super.getActivity();
         }
 
-        throw new IllegalStateException("The container activity should be " + MainActivity.class.getName());
+        throw new IllegalStateException("The container activity should be " + FragmentContainerActivity.class.getName());
     }
 
     @Override
