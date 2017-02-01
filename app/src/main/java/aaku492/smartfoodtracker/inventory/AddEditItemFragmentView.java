@@ -7,9 +7,11 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -49,8 +51,23 @@ public class AddEditItemFragmentView extends LinearLayout {
         super(context, attrs);
     }
 
-    public static AddEditItemFragmentView inflate(LayoutInflater inflater, ViewGroup container) {
-        return ViewUtils.inflate(R.layout.fragment_add_edit_item, inflater, container);
+    public static AddEditItemFragmentView inflate(LayoutInflater inflater, ViewGroup container, Delegate delegate) {
+        AddEditItemFragmentView view = ViewUtils.inflate(R.layout.fragment_add_edit_item, inflater, container);
+        view.setDelegate(delegate);
+        return view;
+    }
+
+    private void setDelegate(final Delegate delegate) {
+        expiryDate.setOnEditorActionListener(new Field.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(Field field, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    delegate.onFormCompleted();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -208,5 +225,9 @@ public class AddEditItemFragmentView extends LinearLayout {
         }, getContext().getString(R.string.item_expiry_invalid_error));
 
         return titleValid && quantityValid && expiryDateValid;
+    }
+
+    public interface Delegate {
+        void onFormCompleted();
     }
 }

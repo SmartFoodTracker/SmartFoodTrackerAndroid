@@ -5,6 +5,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -78,6 +79,13 @@ public class InventoryItemView extends CardView {
                 delegate.onCheckedChanged(item, isChecked);
             }
         });
+
+        this.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delegate.onItemSelected(item);
+            }
+        });
     }
 
     public static class InventoryItemViewHolder extends RecyclerView.ViewHolder {
@@ -88,5 +96,6 @@ public class InventoryItemView extends CardView {
 
     public interface Delegate {
         void onCheckedChanged(InventoryItem item, boolean isChecked);
+        void onItemSelected(InventoryItem item);
     }
 }

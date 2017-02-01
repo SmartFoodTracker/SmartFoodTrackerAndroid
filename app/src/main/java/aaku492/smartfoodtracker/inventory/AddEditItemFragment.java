@@ -22,7 +22,7 @@ import retrofit2.Response;
  * Created by Udey Rishi (udeyrishi) on 2017-01-30.
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
  */
-public class AddEditItemFragment extends SFTFragment {
+public class AddEditItemFragment extends SFTFragment implements AddEditItemFragmentView.Delegate {
     private static final String ITEM_ID = "item_id";
     private static final String ITEM = "item";
     private static final String LOG_TAG = AddEditItemFragment.class.getName();
@@ -37,17 +37,20 @@ public class AddEditItemFragment extends SFTFragment {
 
     @Override
     public AddEditItemFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final AddEditItemFragmentView view = AddEditItemFragmentView.inflate(inflater, container);
+        final AddEditItemFragmentView view = AddEditItemFragmentView.inflate(inflater, container, this);
 
         if (savedInstanceState != null && savedInstanceState.getSerializable(ITEM) != null) {
+            // Left the screen and coming back. Could be either creating or editing, so check the item.id
             item = (InventoryItem) savedInstanceState.getSerializable(ITEM);
             //noinspection ConstantConditions
             view.render(item);
-            getContainerActivity().setTitle(getString(R.string.edit_item));
+            getContainerActivity().setTitle(getString(isEditingItem() ? R.string.edit_item : R.string.add_item));
         } else if (getArguments() != null && getArguments().getString(ITEM_ID) != null) {
+            // Editing an existing item
             fetchItemAndRender(getArguments().getString(ITEM_ID), view);
             getContainerActivity().setTitle(getString(R.string.edit_item));
         } else {
+            // Creating new item
             String defaultUnit = getContext().getResources().getStringArray(R.array.item_quantity_units_options)[0];
             item = new InventoryItem(null, null, null, defaultUnit, null, null);
             view.render(item);
@@ -105,38 +108,53 @@ public class AddEditItemFragment extends SFTFragment {
 
         ViewUtils.closeKeyboard(getContainerActivity());
         ((AddEditItemFragmentView)getView()).setLoading(true);
-        getDataProvider().addItem(getCurrentDeviceId(), item)
-                .enqueue(new Callback<List<InventoryItem>>() {
-                    @Override
-                    public void onResponse(Call<List<InventoryItem>> call, Response<List<InventoryItem>> response) {
-                        ((AddEditItemFragmentView)getView()).setLoading(false);
-                        if (response.isSuccessful()) {
-                            getContainerActivity().popFragment(FragmentContainerActivity.RESULT_OK);
-                        } else {
-                            onFailure("Got back error response: " + response.code());
-                        }
-                    }
 
-                    @Override
-                    public void onFailure(Call<List<InventoryItem>> call, Throwable t) {
-                        ((AddEditItemFragmentView)getView()).setLoading(false);
-                        onFailure("Exception:\n" + t.toString());
-                    }
+        Callback<List<InventoryItem>> callback = new Callback<List<InventoryItem>>() {
+            @Override
+            public void onResponse(Call<List<InventoryItem>> call, Response<List<InventoryItem>> response) {
+                ((AddEditItemFragmentView)getView()).setLoading(false);
+                if (response.isSuccessful()) {
+                    getContainerActivity().popFragment(FragmentContainerActivity.RESULT_OK);
+                } else {
+                    onFailure("Got back error response: " + response.code());
+                }
+            }
 
-                    private void onFailure(String logMessage) {
-                        if (isEditingItem()) {
-                            ((AddEditItemFragmentView)getView()).showMessage(getString(R.string.item_edit_error));
-                            Log.e(LOG_TAG, getString(R.string.item_edit_error) + " " + logMessage);
-                        } else {
-                            ((AddEditItemFragmentView)getView()).showMessage(getString(R.string.item_add_error));
-                            Log.e(LOG_TAG, getString(R.string.item_add_error) + " " + logMessage);
-                        }
-                    }
-                });
+            @Override
+            public void onFailure(Call<List<InventoryItem>> call, Throwable t) {
+                ((AddEditItemFragmentView)getView()).setLoading(false);
+                onFailure("Exception:\n" + t.toString());
+            }
+
+            private void onFailure(String logMessage) {
+                if (isEditingItem()) {
+                    ((AddEditItemFragmentView)getView()).showMessage(getString(R.string.item_edit_error));
+                    Log.e(LOG_TAG, getString(R.string.item_edit_error) + " " + logMessage);
+                } else {
+                    ((AddEditItemFragmentView)getView()).showMessage(getString(R.string.item_add_error));
+                    Log.e(LOG_TAG, getString(R.string.item_add_error) + " " + logMessage);
+                }
+            }
+        };
+
+        if (isEditingItem()) {
+            getDataProvider().editItem(getCurrentDeviceId(), item.getId(), item)
+                    .enqueue(callback);
+        } else {
+            getDataProvider().addItem(getCurrentDeviceId(), item)
+                    .enqueue(callback);
+        }
+
         return true;
     }
 
     private boolean isEditingItem() {
         return item.getId() != null;
+    }
+
+    @Override
+    public void onFormCompleted() {
+        // Only send the results when the modal accept button is pressed
+        ViewUtils.closeKeyboard(getContainerActivity());
     }
 }

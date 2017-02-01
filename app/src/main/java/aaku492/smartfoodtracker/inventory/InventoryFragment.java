@@ -23,8 +23,10 @@ import retrofit2.Response;
  */
 public class InventoryFragment extends SFTFragment implements InventoryAdapter.Delegate, InventoryFragmentView.Delegate {
     private static final String LOG_TAG = InventoryFragment.class.getName();
-
+    private static final String IS_EDITING = "is_editing";
     private InventoryAdapter inventoryAdapter;
+
+    private Boolean isEditing = null;
 
     public static FragmentInitInfo getFragmentInitInfo() {
         return new FragmentInitInfo(false, InventoryFragment.class);
@@ -39,7 +41,15 @@ public class InventoryFragment extends SFTFragment implements InventoryAdapter.D
         InventoryFragmentView view = InventoryFragmentView.inflate(inflater, container, this);
         view.render(inventoryAdapter);
         fetchInventoryAndRender(view);
+
+        isEditing = savedInstanceState == null ? null : savedInstanceState.getBoolean(IS_EDITING);
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
+        bundle.putBoolean(IS_EDITING, isEditing);
     }
 
     private void fetchInventoryAndRender(final InventoryFragmentView view) {
@@ -115,12 +125,25 @@ public class InventoryFragment extends SFTFragment implements InventoryAdapter.D
     }
 
     @Override
+    public void onItemSelected(InventoryItem item) {
+        if (isEditing != null) {
+            throw new IllegalStateException("isEditing value should've been consumed.");
+        }
+        isEditing = true;
+        pushFragment(AddEditItemFragment.getFragmentInitInfo(item.getId()));
+    }
+
+    @Override
     public void onRefresh() {
         fetchInventoryAndRender(getView());
     }
 
     @Override
     public void addItem() {
+        if (isEditing != null) {
+            throw new IllegalStateException("isEditing value should've been consumed.");
+        }
+        isEditing = false;
         //noinspection ConstantConditions
         pushFragment(AddEditItemFragment.getFragmentInitInfo(null));
     }
@@ -135,13 +158,19 @@ public class InventoryFragment extends SFTFragment implements InventoryAdapter.D
     public boolean handleStatusResult(int resultCode) {
         switch (resultCode) {
             case FragmentContainerActivity.RESULT_OK:
-                getView().showMessage(getString(R.string.item_added));
+                getView().showMessage(getString(isEditing ? R.string.item_edited : R.string.item_added));
+                isEditing = null;
                 return true;
             case FragmentContainerActivity.RESULT_CANCELED:
-                getView().showMessage(getString(R.string.item_add_cancelled));
+                getView().showMessage(getString(isEditing ? R.string.item_edit_cancelled : R.string.item_add_cancelled));
+                isEditing = null;
                 return true;
             case FragmentContainerActivity.RESULT_ERROR:
+                if (!isEditing) {
+                    throw new IllegalStateException("RESULT_ERROR not expected when creating new item.");
+                }
                 getView().showMessage(getString(R.string.item_fetch_error));
+                isEditing = null;
                 return true;
             default:
                 return super.handleStatusResult(resultCode);

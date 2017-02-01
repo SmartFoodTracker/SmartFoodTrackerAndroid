@@ -23,7 +23,9 @@
     <string name="item_expiry_date_formatter" formatted="false">Expiry (%1$s)</string>
     <string name="item_fetch_error">Failed to fetch item for editing.</string>
     <string name="accept">Accept</string>
+    <string name="item_edit_cancelled">Item editing cancelled.</string>
     <string name="item_add_cancelled">Item creation cancelled.</string>
+    <string name="item_edited">Item edited.</string>
     <string name="item_added">Item added.</string>
     <string name="item_add_error">Failed to create item.</string>
     <string name="item_edit_error">Failed to edit item.</string>

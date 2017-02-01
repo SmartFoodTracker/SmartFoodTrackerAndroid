@@ -7,7 +7,9 @@ import android.support.design.widget.TextInputLayout;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -52,16 +54,19 @@ public class Field extends RelativeLayout {
         int[] set = {
                 android.R.attr.hint,
                 android.R.attr.inputType,
-                android.R.attr.text
+                android.R.attr.text,
+                android.R.attr.imeOptions
         };
         TypedArray a = getContext().obtainStyledAttributes(attrs, set);
 
         String hint = a.getString(0);
         int inputType = a.getInt(1, InputType.TYPE_NULL);
         String text = a.getString(2);
+        int imeOptions = a.getInt(3, EditorInfo.TYPE_NULL);
         editText.setInputType(inputType);
         setHint(hint);
         setText(text);
+        setImeOptions(imeOptions);
 
         a.recycle();
     }
@@ -79,6 +84,10 @@ public class Field extends RelativeLayout {
         layout.setHint(hint);
     }
 
+    public void setImeOptions(int imeOptions) {
+        editText.setImeOptions(imeOptions);
+    }
+
     public void addTextChangedListener(TextWatcher textWatcher) {
         editText.addTextChangedListener(textWatcher);
     }
@@ -92,6 +101,20 @@ public class Field extends RelativeLayout {
             errorView.setVisibility(VISIBLE);
             return false;
         }
+    }
+
+    public void setOnEditorActionListener(final OnEditorActionListener listener) {
+        if (listener == null) {
+            editText.setOnEditorActionListener(null);
+            return;
+        }
+
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                return listener.onEditorAction(Field.this, actionId, event);
+            }
+        });
     }
 
 
@@ -109,5 +132,9 @@ public class Field extends RelativeLayout {
 
     public interface TextValidator {
         boolean isValid(CharSequence text);
+    }
+
+    public interface OnEditorActionListener {
+        boolean onEditorAction(Field field, int actionId, KeyEvent event);
     }
 }

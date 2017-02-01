@@ -29,4 +29,7 @@ public interface DataProvider {
 
     @PUT("{deviceId}/inventory")
     Call<List<InventoryItem>> addItem(@Path("deviceId") String deviceId, @Body InventoryItem item);
+
+    @PUT("{deviceId}/inventory/{itemId}")
+    Call<List<InventoryItem>> editItem(@Path("deviceId") String deviceId, @Path("itemId") String itemId, @Body InventoryItem item);
 }
