@@ -57,6 +57,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
         bundle.putBoolean(IS_MODAL, this.isModal);
     }
 

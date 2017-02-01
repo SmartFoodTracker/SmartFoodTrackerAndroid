@@ -59,6 +59,7 @@ public class AddEditItemFragment extends SFTFragment {
 
     @Override
     public void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
         bundle.putSerializable(ITEM, item);
     }
 
