@@ -1,5 +1,7 @@
 package aaku492.smartfoodtracker.inventory;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -8,11 +10,22 @@ import java.util.Date;
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
  */
 public class InventoryItem implements Serializable {
+    @SerializedName("title")
     private String title;
+
+    @SerializedName("_id")
     private String id;
+
+    @SerializedName("quantity")
     private Double quantity;
+
+    @SerializedName("units")
     private String units;
+
+    @SerializedName("dateAdded")
     private Date dateAdded;
+
+    @SerializedName("expiryDate")
     private Date expiryDate;
 
     public InventoryItem(String title, String id, Double quantity, String units, Date dateAdded, Date expiryDate) {

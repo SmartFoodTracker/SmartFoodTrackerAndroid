@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Smart Food Tracker</string>
+    <string name="date_format_backend_api">yyyy-MM-dd\'T\'HH:mm:ss\'Z\'</string>
     <string name="date_format">yyyy-MM-dd</string>
     <string name="date_format_sep">-</string>
     <string name="date_format_lenient_sep">/</string>
@@ -7,7 +8,7 @@
     <string name="generic_error">Something went wrong.</string>
     <string name="backend_api_url">http://food-fit.herokuapp.com</string>
     <string name="inventory_fetch_error">Failed to fetch the inventory.</string>
-    <string name="item_quantity_formatter" formatted="false">%1$d %2$s</string>
+    <string name="item_quantity_formatter" formatted="false">%1$.2f %2$s</string>
     <string name="item_consumed_message_formatter" formatted="false">%1$s consumed.</string>
     <string name="item_delete_failure">"Failed to delete the item."</string>
     <string name="add_item">Add item</string>
@@ -18,7 +19,7 @@
         <item>kg</item>
         <item>lb</item>
         <item>l</item>
-        <item>#</item>
+        <item>whole</item>
     </string-array>
     <string name="item_expiry_date_formatter" formatted="false">Expiry (%1$s)</string>
     <string name="item_fetch_error">Failed to fetch item for editing.</string>

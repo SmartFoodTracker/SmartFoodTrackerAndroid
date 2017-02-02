@@ -7,15 +7,8 @@ import android.net.NetworkInfo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.File;
-import java.io.IOException;
-
 import aaku492.smartfoodtracker.R;
-import okhttp3.Cache;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -36,35 +29,37 @@ public class NetworkManager<T> {
         // Source: http://stackoverflow.com/questions/23429046/can-retrofit-with-okhttp-use-cache-data-when-offline
         // This looks like magic to me; not sure how this works. Make sure the @Headers in DataProvider are correct
         // for this caching to work.
-        Interceptor rewriteCacheControlInterceptor = new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Request request = chain.request();
-                Response originalResponse = chain.proceed(request);
 
-                if (!request.method().equals("GET")) {
-                    // Only attempt caching on GET requests
-                    return originalResponse;
-                }
+        // This doesn't work. See: https://github.com/SmartFoodTracker/SmartFoodTrackerAndroid/issues/2
+//        Interceptor rewriteCacheControlInterceptor = new Interceptor() {
+//            @Override
+//            public Response intercept(Chain chain) throws IOException {
+//                Request request = chain.request();
+//                Response originalResponse = chain.proceed(request);
+//
+//                if (!request.method().equals("GET")) {
+//                    // Only attempt caching on GET requests
+//                    return originalResponse;
+//                }
+//
+//                return originalResponse.newBuilder()
+//                        .header("Cache-Control", isOnline(context) ? "public, max-age=" + maxAgeOnline :
+//                                                                     "public, only-if-cached, max-stale=" + maxStaleOffline
+//                        )
+//                        .build();
+//            }
+//        };
 
-                return originalResponse.newBuilder()
-                        .header("Cache-Control", isOnline(context) ? "public, max-age=" + maxAgeOnline :
-                                                                     "public, only-if-cached, max-stale=" + maxStaleOffline
-                        )
-                        .build();
-            }
-        };
-
-        File httpCacheDirectory = new File(context.getCacheDir(), cacheDir);
-        Cache cache = new Cache(httpCacheDirectory, cacheSizeBytes);
+//        File httpCacheDirectory = new File(context.getCacheDir(), cacheDir);
+//        Cache cache = new Cache(httpCacheDirectory, cacheSizeBytes);
 
         OkHttpClient client = new OkHttpClient.Builder()
-                .addNetworkInterceptor(rewriteCacheControlInterceptor)
-                .cache(cache)
+//                .addInterceptor(rewriteCacheControlInterceptor)
+//                .cache(cache)
                 .build();
 
         Gson gson = new GsonBuilder()
-                .setDateFormat(context.getString(R.string.date_format))
+                .setDateFormat(context.getString(R.string.date_format_backend_api))
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()

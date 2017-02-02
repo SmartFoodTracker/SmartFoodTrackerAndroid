@@ -42,14 +42,14 @@ public class InventoryFragment extends SFTFragment implements InventoryAdapter.D
         view.render(inventoryAdapter);
         fetchInventoryAndRender(view);
 
-        isEditing = savedInstanceState == null ? null : savedInstanceState.getBoolean(IS_EDITING);
+        isEditing = savedInstanceState == null ? null : (Boolean) savedInstanceState.getSerializable(IS_EDITING);
         return view;
     }
 
     @Override
     public void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
-        bundle.putBoolean(IS_EDITING, isEditing);
+        bundle.putSerializable(IS_EDITING, isEditing);
     }
 
     private void fetchInventoryAndRender(final InventoryFragmentView view) {
