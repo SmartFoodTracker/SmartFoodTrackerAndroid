@@ -93,10 +93,10 @@ public class AddEditItemFragmentView extends LinearLayout {
         this.quantity.setText(quantity == null ? "0.0" : quantity.toString());
     }
 
-    private void renderExpiryDate(@Nullable Date date) {
-        this.expiryDate.setText(date == null ?
+    private void renderExpiryDate(@Nullable Long expiryTime) {
+        this.expiryDate.setText(expiryTime == null ?
                 "" :
-                new SimpleDateFormat(getContext().getString(R.string.date_format), Locale.getDefault()).format(date));
+                new SimpleDateFormat(getContext().getString(R.string.date_format), Locale.getDefault()).format(new Date(expiryTime)));
     }
 
     private void renderUnits(@Nullable String units) {
@@ -110,7 +110,7 @@ public class AddEditItemFragmentView extends LinearLayout {
     public void render(@NonNull final InventoryItem item) {
         renderTitle(item.getTitle());
         renderQuantity(item.getQuantity());
-        renderExpiryDate(item.getExpiryDate());
+        renderExpiryDate(item.getExpiryTime());
         renderUnits(item.getUnits());
 
         title.addTextChangedListener(new Field.AfterTextChangedWatcher() {
@@ -153,7 +153,7 @@ public class AddEditItemFragmentView extends LinearLayout {
                     item.setExpiryDate(null);
                 } else {
                     try {
-                        item.setExpiryDate(parseDate(s.toString()));
+                        item.setExpiryDate(parseDate(s.toString()).getTime());
                     } catch (ParseException e) {
                         // Inconsistent format, wait for completion
                     }

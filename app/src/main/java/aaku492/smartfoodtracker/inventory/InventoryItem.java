@@ -3,7 +3,6 @@ package aaku492.smartfoodtracker.inventory;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Created by Udey Rishi (udeyrishi) on 2017-01-28.
@@ -22,19 +21,19 @@ public class InventoryItem implements Serializable {
     @SerializedName("units")
     private String units;
 
-    @SerializedName("dateAdded")
-    private Date dateAdded;
+    @SerializedName("timeAdded")
+    private Long timeAdded;
 
-    @SerializedName("expiryDate")
-    private Date expiryDate;
+    @SerializedName("expiryTime")
+    private Long expiryTime;
 
-    public InventoryItem(String title, String id, Double quantity, String units, Date dateAdded, Date expiryDate) {
+    public InventoryItem(String title, String id, Double quantity, String units, Long timeAdded, Long expiryTime) {
         this.title = title;
         this.id = id;
         this.quantity = quantity;
         this.units = units;
-        this.dateAdded = dateAdded;
-        this.expiryDate = expiryDate;
+        this.timeAdded = timeAdded;
+        this.expiryTime = expiryTime;
     }
 
     public String getTitle() {
@@ -69,19 +68,19 @@ public class InventoryItem implements Serializable {
         this.units = units;
     }
 
-    public Date getDateAdded() {
-        return dateAdded;
+    public Long getTimeAdded() {
+        return timeAdded;
     }
 
-    public void setDateAdded(Date dateAdded) {
-        this.dateAdded = dateAdded;
+    public void setTimeAdded(Long timeAdded) {
+        this.timeAdded = timeAdded;
     }
 
-    public Date getExpiryDate() {
-        return expiryDate;
+    public Long getExpiryTime() {
+        return expiryTime;
     }
 
-    public void setExpiryDate(Date expiryDate) {
-        this.expiryDate = expiryDate;
+    public void setExpiryDate(Long expiryTime) {
+        this.expiryTime = expiryTime;
     }
 }
