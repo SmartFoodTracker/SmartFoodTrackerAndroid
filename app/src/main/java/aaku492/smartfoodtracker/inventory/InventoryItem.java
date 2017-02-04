@@ -102,17 +102,12 @@ public class InventoryItem implements Serializable {
         }
 
         public static Unit getFromBackingData(String backingDataString) {
-            if (WholeNumbers.backingDataString.equals(backingDataString)) {
-                return WholeNumbers;
-            } else if (Kilograms.backingDataString.equals(backingDataString)) {
-                return Kilograms;
-            } else if (Pounds.backingDataString.equals(backingDataString)) {
-                return Pounds;
-            } else if (Litres.backingDataString.equals(backingDataString)) {
-                return Litres;
-            } else {
-                throw new IllegalArgumentException("The backingDataString does not match any known values: " + backingDataString);
+            for (Unit u : Unit.values()) {
+                if (u.backingDataString.equals(backingDataString)) {
+                    return u;
+                }
             }
+            throw new IllegalArgumentException("The backingDataString does not match any known values: " + backingDataString);
         }
     }
 }
