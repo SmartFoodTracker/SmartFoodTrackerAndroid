@@ -15,12 +15,15 @@
     <string name="edit_item">Edit item</string>
     <string name="item_name">Name</string>
     <string name="item_quantity">Quantity</string>
+
+    <!--Make sure that you update InventoryItem.Units enum too if you change this array-->
     <string-array name="item_quantity_units_options">
-        <item>kg</item>
-        <item>lb</item>
-        <item>l</item>
-        <item>whole</item>
+        <item>#</item> <!--Units.WholeNumbers-->
+        <item>kg</item> <!--Units.Kilograms-->
+        <item>lb</item> <!--Units.Pounds-->
+        <item>l</item> <!--Units.Litres-->
     </string-array>
+
     <string name="item_expiry_date_formatter" formatted="false">Expiry (%1$s)</string>
     <string name="item_fetch_error">Failed to fetch item for editing.</string>
     <string name="accept">Accept</string>

@@ -4,6 +4,7 @@ import android.app.Application;
 
 import aaku492.smartfoodtracker.common.DataProvider;
 import aaku492.smartfoodtracker.common.NetworkManager;
+import aaku492.smartfoodtracker.inventory.InventoryItem;
 
 /**
  * Created by Udey Rishi (udeyrishi) on 2017-01-29.
@@ -20,6 +21,11 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (getResources().getStringArray(R.array.item_quantity_units_options).length != InventoryItem.Unit.values().length) {
+            throw new IllegalStateException("The enum InventoryItem.Unit and the string array resource item_quantity_units_options" +
+            " need to have a 1-1 ordered correspondence.");
+        }
+
         this.dataProvider = new NetworkManager<>(
                 getApplicationContext(),
                 CACHE_SIZE_BYTES,

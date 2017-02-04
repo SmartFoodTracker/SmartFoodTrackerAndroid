@@ -19,7 +19,7 @@ public class InventoryItem implements Serializable {
     private Double quantity;
 
     @SerializedName("units")
-    private String units;
+    private Unit units;
 
     @SerializedName("timeAdded")
     private Long timeAdded;
@@ -27,7 +27,7 @@ public class InventoryItem implements Serializable {
     @SerializedName("expiryTime")
     private Long expiryTime;
 
-    public InventoryItem(String title, String id, Double quantity, String units, Long timeAdded, Long expiryTime) {
+    public InventoryItem(String title, String id, Double quantity, Unit units, Long timeAdded, Long expiryTime) {
         this.title = title;
         this.id = id;
         this.quantity = quantity;
@@ -60,11 +60,11 @@ public class InventoryItem implements Serializable {
         this.quantity = quantity;
     }
 
-    public String getUnits() {
+    public Unit getUnits() {
         return units;
     }
 
-    public void setUnits(String units) {
+    public void setUnits(Unit units) {
         this.units = units;
     }
 
@@ -82,5 +82,37 @@ public class InventoryItem implements Serializable {
 
     public void setExpiryDate(Long expiryTime) {
         this.expiryTime = expiryTime;
+    }
+
+    public enum Unit {
+        // The sequence of these strongly typed enum values should align with R.array.item_quantity_units_options string representations
+        WholeNumbers("whole"),
+        Kilograms("kg"),
+        Pounds("lb"),
+        Litres("l");
+
+        private final String backingDataString;
+
+        Unit(String backingDataString) {
+            this.backingDataString = backingDataString;
+        }
+
+        public String getBackingDataString() {
+            return backingDataString;
+        }
+
+        public static Unit getFromBackingData(String backingDataString) {
+            if (WholeNumbers.backingDataString.equals(backingDataString)) {
+                return WholeNumbers;
+            } else if (Kilograms.backingDataString.equals(backingDataString)) {
+                return Kilograms;
+            } else if (Pounds.backingDataString.equals(backingDataString)) {
+                return Pounds;
+            } else if (Litres.backingDataString.equals(backingDataString)) {
+                return Litres;
+            } else {
+                throw new IllegalArgumentException("The backingDataString does not match any known values: " + backingDataString);
+            }
+        }
     }
 }

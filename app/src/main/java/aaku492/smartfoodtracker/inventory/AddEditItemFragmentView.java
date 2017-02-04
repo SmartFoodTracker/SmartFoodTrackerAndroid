@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
@@ -99,12 +98,8 @@ public class AddEditItemFragmentView extends LinearLayout {
                 new SimpleDateFormat(getContext().getString(R.string.date_format), Locale.getDefault()).format(new Date(expiryTime)));
     }
 
-    private void renderUnits(@Nullable String units) {
-        this.units.setSelection(units == null ?
-                        0 :
-                        Arrays.asList(getContext().getResources().getStringArray(R.array.item_quantity_units_options)).indexOf(units),
-                false);
-
+    private void renderUnits(InventoryItem.Unit unit) {
+        this.units.setSelection(unit == null ? 0 : unit.ordinal(), false);
     }
 
     public void render(@NonNull final InventoryItem item) {
@@ -138,7 +133,7 @@ public class AddEditItemFragmentView extends LinearLayout {
         units.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                item.setUnits(getContext().getResources().getStringArray(R.array.item_quantity_units_options)[position]);
+                item.setUnits(InventoryItem.Unit.values()[position]);
             }
 
             @Override

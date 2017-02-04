@@ -66,7 +66,8 @@ public class InventoryItemView extends CardView {
         if (item.getQuantity() == null) {
             itemQuantity.setVisibility(GONE);
         } else {
-            itemQuantity.setText(getContext().getString(R.string.item_quantity_formatter, item.getQuantity(), item.getUnits()));
+            String displayUnits = getContext().getResources().getStringArray(R.array.item_quantity_units_options)[item.getUnits().ordinal()];
+            itemQuantity.setText(getContext().getString(R.string.item_quantity_formatter, item.getQuantity(), displayUnits));
             itemQuantity.setVisibility(VISIBLE);
         }
     }

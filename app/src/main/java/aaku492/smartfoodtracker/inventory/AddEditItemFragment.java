@@ -51,8 +51,7 @@ public class AddEditItemFragment extends SFTFragment implements AddEditItemFragm
             getContainerActivity().setTitle(getString(R.string.edit_item));
         } else {
             // Creating new item
-            String defaultUnit = getContext().getResources().getStringArray(R.array.item_quantity_units_options)[0];
-            item = new InventoryItem(null, null, null, defaultUnit, null, null);
+            item = new InventoryItem(null, null, null, InventoryItem.Unit.values()[0], null, null);
             view.render(item);
             getContainerActivity().setTitle(getString(R.string.add_item));
         }
