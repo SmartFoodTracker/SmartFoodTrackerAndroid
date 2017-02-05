@@ -43,7 +43,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
             Intent intent = getIntent();
             String fragmentName = intent.getStringExtra(FRAGMENT_NAME);
 
-            SFTFragment fragment = createFragment(fragmentName);
+            FITFragment fragment = createFragment(fragmentName);
             if (intent.hasExtra(FRAGMENT_BUNDLE_ARG)) {
                 fragment.setArguments(intent.getBundleExtra(FRAGMENT_BUNDLE_ARG));
             }
@@ -62,14 +62,14 @@ public class FragmentContainerActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private static SFTFragment createFragment(String fragmentName) {
-        SFTFragment fragment;
+    private static FITFragment createFragment(String fragmentName) {
+        FITFragment fragment;
         try {
             Object o = Class.forName(fragmentName).newInstance();
-            if (!(o instanceof SFTFragment)) {
+            if (!(o instanceof FITFragment)) {
                 throw new ClassCastException("The fragment name should be a Fragment object: " + fragmentName);
             }
-            fragment = (SFTFragment) o;
+            fragment = (FITFragment) o;
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Don't have access to create class " + fragmentName, e);
         } catch (InstantiationException e) {
@@ -114,8 +114,8 @@ public class FragmentContainerActivity extends AppCompatActivity {
         }
     }
 
-    private SFTFragment getCurrentFragment() {
-        return (SFTFragment) getSupportFragmentManager().findFragmentById(R.id.activity_fragment_root);
+    private FITFragment getCurrentFragment() {
+        return (FITFragment) getSupportFragmentManager().findFragmentById(R.id.activity_fragment_root);
     }
 
     @Override

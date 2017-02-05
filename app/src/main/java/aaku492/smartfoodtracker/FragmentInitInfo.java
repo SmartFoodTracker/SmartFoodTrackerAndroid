@@ -13,11 +13,11 @@ public class FragmentInitInfo {
     @Nullable private final Bundle argsBundle;
     private final boolean isModal;
 
-    public FragmentInitInfo(boolean isModal, @NonNull Class<? extends SFTFragment> _class) {
+    public FragmentInitInfo(boolean isModal, @NonNull Class<? extends FITFragment> _class) {
         this(isModal, _class, null);
     }
 
-    public FragmentInitInfo(boolean isModal, @NonNull Class<? extends SFTFragment> _class, @Nullable Bundle argsBundle) {
+    public FragmentInitInfo(boolean isModal, @NonNull Class<? extends FITFragment> _class, @Nullable Bundle argsBundle) {
         this.isModal = isModal;
         this.name = _class.getName();
         this.argsBundle = argsBundle;

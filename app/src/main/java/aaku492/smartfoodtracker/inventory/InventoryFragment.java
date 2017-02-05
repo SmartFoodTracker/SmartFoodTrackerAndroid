@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 import aaku492.smartfoodtracker.FragmentContainerActivity;
 import aaku492.smartfoodtracker.FragmentInitInfo;
 import aaku492.smartfoodtracker.R;
-import aaku492.smartfoodtracker.SFTFragment;
+import aaku492.smartfoodtracker.FITFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -21,7 +21,7 @@ import retrofit2.Response;
  * Created by Udey Rishi (udeyrishi) on 2017-01-28.
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
  */
-public class InventoryFragment extends SFTFragment implements InventoryAdapter.Delegate, InventoryFragmentView.Delegate {
+public class InventoryFragment extends FITFragment implements InventoryAdapter.Delegate, InventoryFragmentView.Delegate {
     private static final String LOG_TAG = InventoryFragment.class.getName();
     private static final String IS_EDITING = "is_editing";
     private InventoryAdapter inventoryAdapter;

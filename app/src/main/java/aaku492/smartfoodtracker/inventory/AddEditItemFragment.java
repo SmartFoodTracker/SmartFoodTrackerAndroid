@@ -12,7 +12,7 @@ import java.util.List;
 import aaku492.smartfoodtracker.FragmentContainerActivity;
 import aaku492.smartfoodtracker.FragmentInitInfo;
 import aaku492.smartfoodtracker.R;
-import aaku492.smartfoodtracker.SFTFragment;
+import aaku492.smartfoodtracker.FITFragment;
 import aaku492.smartfoodtracker.common.ViewUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,7 +22,7 @@ import retrofit2.Response;
  * Created by Udey Rishi (udeyrishi) on 2017-01-30.
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
  */
-public class AddEditItemFragment extends SFTFragment implements AddEditItemFragmentView.Delegate {
+public class AddEditItemFragment extends FITFragment implements AddEditItemFragmentView.Delegate {
     private static final String ITEM_ID = "item_id";
     private static final String ITEM = "item";
     private static final String LOG_TAG = AddEditItemFragment.class.getName();
