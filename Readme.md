@@ -10,7 +10,8 @@ When you first open the project, Android Studio will install all the Gradle depe
 
 ###Code organization
 The general MVC architecture of the app is as follows. The "X" is a placeholder for the major action a screen does:
-<insert the UML here>
+
+![androidclientumlclassdiagram](https://cloud.githubusercontent.com/assets/4692593/22669259/09b40b0e-ec81-11e6-9aca-1d950663d9e7.png)
 
 `aaku492.smartfoodtracker`
 
