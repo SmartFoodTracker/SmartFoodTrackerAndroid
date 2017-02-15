@@ -36,7 +36,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment);
+        setContentView(R.layout.activity_fragment_container);
 
         if (savedInstanceState == null || getCurrentFragment() == null) {
             // current fragment can be null if the activity was destroyed because the device ran out of memory.
