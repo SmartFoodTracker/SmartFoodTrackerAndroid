@@ -51,7 +51,7 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
             getContainerActivity().setTitle(getString(R.string.edit_item));
         } else {
             // Creating new item
-            item = new InventoryItem(null, null, null, InventoryItem.Unit.values()[0], null, null);
+            item = new InventoryItem(null, null, 0.0, InventoryItem.Unit.values()[0], null, null);
             view.render(item);
             getContainerActivity().setTitle(getString(R.string.add_item));
         }
