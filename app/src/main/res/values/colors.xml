@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="fab_color_normal">@color/colorAccent</color>
     <color name="fab_color_pressed">#F30053</color>
+    <color name="white">#FFFFFFFF</color>
 </resources>

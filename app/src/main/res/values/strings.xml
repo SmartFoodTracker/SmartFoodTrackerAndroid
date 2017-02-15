@@ -36,4 +36,5 @@
     <string name="item_quantity_invalid_error">Quantity must be a valid number.</string>
     <string name="item_title_invalid_error">Title must be present.</string>
     <string name="item_expiry_invalid_error">Expiry date must be a valid date.</string>
+    <string name="recipes_fragment_title">Recipes</string>
 </resources>
