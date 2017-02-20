@@ -182,12 +182,8 @@ public class InventoryFragment extends FITFragment implements InventoryAdapter.D
     }
 
     @Override
-    public boolean onNavigationBarSelectionChanged(int itemId) {
-        if (itemId == R.id.action_inventory) {
-            // already here, just scroll up
-            getView().scrollToTop();
-            return true;
-        }
-        return false;
+    public void refresh() {
+        getView().scrollToTop();
+        onRefresh();
     }
 }

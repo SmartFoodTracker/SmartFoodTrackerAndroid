@@ -23,12 +23,4 @@ public class RecipesHomeFragment extends FITFragment {
         getContainerActivity().setTitle(R.string.recipes_fragment_title);
         return RecipesHomeFragmentView.inflate(inflater, container);
     }
-
-    @Override
-    public boolean onNavigationBarSelectionChanged(int itemId) {
-        if (itemId == R.id.action_recipes) {
-            return true;
-        }
-        return false;
-    }
 }

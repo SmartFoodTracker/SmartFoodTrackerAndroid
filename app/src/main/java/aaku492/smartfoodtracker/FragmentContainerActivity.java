@@ -4,14 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import aaku492.smartfoodtracker.inventory.InventoryFragment;
+import aaku492.smartfoodtracker.recipes.RecipesHomeFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -48,49 +51,62 @@ public class FragmentContainerActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (getCurrentFragment().onNavigationBarSelectionChanged(item.getItemId())) {
-                    // The current fragment was in the "family" of fragments managed by the tab corresponding
-                    // to this menu item. It took care of everything.
-                    return true;
-                }
-                // Else, it made sure that the activity stack is collapsed to just 1 item, the main screen,
-                // that can now be killed.
-                switch (item.getItemId()) {
-                    case R.id.action_inventory:
-                        startActivity(createIntent(FragmentContainerActivity.this, InventoryFragment.getFragmentInitInfo()));
-                        finish();
-                        return true;
-                    case R.id.action_recipes:
-                        Toast.makeText(FragmentContainerActivity.this, "Coming soon!", Toast.LENGTH_LONG).show();
-                        return true;
-                    case R.id.action_settings:
-                        Toast.makeText(FragmentContainerActivity.this, "Coming soon!", Toast.LENGTH_LONG).show();
-                        return true;
-                    default:
-                        Log.e(LOG_TAG, "Unknown bottom nav menu item with id: " + item.getItemId());
-                        return false;
-
-                }
-            }
-        });
-
         if (savedInstanceState == null || getCurrentFragment() == null) {
             // current fragment can be null if the activity was destroyed because the device ran out of memory.
-            Intent intent = getIntent();
-            String fragmentName = intent.getStringExtra(FRAGMENT_NAME);
-
-            FITFragment fragment = createFragment(fragmentName);
-            if (intent.hasExtra(FRAGMENT_BUNDLE_ARG)) {
-                fragment.setArguments(intent.getBundleExtra(FRAGMENT_BUNDLE_ARG));
-            }
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_view, fragment, fragmentName).commit();
-            this.isModal = intent.getBooleanExtra(IS_MODAL, false);
+            loadFragment(getIntent().getStringExtra(FRAGMENT_NAME),
+                    getIntent().getBooleanExtra(IS_MODAL, false),
+                    getIntent().hasExtra(FRAGMENT_BUNDLE_ARG) ? getIntent().getBundleExtra(FRAGMENT_BUNDLE_ARG) : null);
         } else {
             // else, orientation change. No need to re-recreate the fragment. The fragment should've saved it's bundle.
             this.isModal = savedInstanceState.getBoolean(IS_MODAL);
+        }
+
+        if (this.isModal) {
+            bottomNavigationView.setEnabled(false);
+            bottomNavigationView.setVisibility(View.GONE);
+        } else {
+            bottomNavigationView.setEnabled(true);
+            bottomNavigationView.setVisibility(View.VISIBLE);
+            bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    FragmentInitInfo nextFragment;
+                    switch (item.getItemId()) {
+                        case R.id.action_inventory:
+                            nextFragment = InventoryFragment.getFragmentInitInfo();
+                            break;
+                        case R.id.action_recipes:
+                            nextFragment = RecipesHomeFragment.getFragmentInitInfo();
+                            break;
+                        case R.id.action_settings:
+                            Toast.makeText(FragmentContainerActivity.this, "Coming soon!", Toast.LENGTH_LONG).show();
+                            return true;
+                        default:
+                            Log.e(LOG_TAG, "Unknown bottom nav menu item with id: " + item.getItemId());
+                            return false;
+
+                    }
+
+                    if (nextFragment.getName().equals(getCurrentFragment().getClass().getName())) {
+                        getCurrentFragment().refresh();
+                    } else {
+                        loadFragment(nextFragment.getName(), nextFragment.isModal(), nextFragment.getArgsBundle());
+                    }
+                    return true;
+                }
+            });
+        }
+    }
+
+    private void loadFragment(String fragmentName, boolean isModal, @Nullable Bundle args) {
+        FITFragment fragment = createFragment(fragmentName);
+        if (args != null) {
+            fragment.setArguments(args);
+        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view, fragment, fragmentName).commit();
+        if (this.isModal != isModal) {
+            this.isModal = isModal;
+            invalidateOptionsMenu();
         }
     }
 

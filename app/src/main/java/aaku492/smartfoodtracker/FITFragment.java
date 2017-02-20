@@ -11,7 +11,7 @@ import aaku492.smartfoodtracker.common.DataProvider;
  * Created by Udey Rishi (udeyrishi) on 2017-01-30.
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
  */
-public abstract class FITFragment extends Fragment {
+public class FITFragment extends Fragment {
 
     private static final String LOG_TAG = FITFragment.class.getName();
 
@@ -55,5 +55,7 @@ public abstract class FITFragment extends Fragment {
         return false;
     }
 
-    public abstract boolean onNavigationBarSelectionChanged(int itemId);
+    public void refresh() {
+        Log.w(LOG_TAG, "Unhandled refresh.");
+    }
 }
