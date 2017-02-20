@@ -24,7 +24,7 @@ public class InventoryItem implements Serializable {
     @SerializedName("timeAdded")
     private Long timeAdded;
 
-    @SerializedName("expiryTime")
+    @SerializedName("timeExpired")
     private Long expiryTime;
 
     public InventoryItem(String title, String id, Double quantity, Unit units, Long timeAdded, Long expiryTime) {
