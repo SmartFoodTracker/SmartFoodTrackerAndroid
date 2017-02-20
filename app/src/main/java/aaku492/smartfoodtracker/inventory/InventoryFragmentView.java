@@ -96,6 +96,10 @@ public class InventoryFragmentView extends RelativeLayout {
         ViewUtils.showMessage(message, rootView);
     }
 
+    public void scrollToTop() {
+        inventoryList.scrollToPosition(0);
+    }
+
     public interface Delegate {
         void onRefresh();
         void addItem();

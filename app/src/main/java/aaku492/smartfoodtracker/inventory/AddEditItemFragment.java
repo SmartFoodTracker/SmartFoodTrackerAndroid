@@ -156,4 +156,19 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
         // Only send the results when the modal accept button is pressed
         ViewUtils.closeKeyboard(getContainerActivity());
     }
+
+    @Override
+    public boolean onNavigationBarSelectionChanged(int itemId) {
+        // Cancel the modal
+        onBackPressed();
+
+        if (itemId == R.id.action_inventory) {
+            // Cancelling the modal is all that's needed
+            return true;
+        }
+
+        // The activity stack now just contains 1 activity. The parent super controller will
+        // handle from here.
+        return false;
+    }
 }

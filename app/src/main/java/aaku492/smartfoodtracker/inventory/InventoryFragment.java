@@ -1,6 +1,7 @@
 package aaku492.smartfoodtracker.inventory;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -81,7 +82,6 @@ public class InventoryFragment extends FITFragment implements InventoryAdapter.D
                 });
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public void onCheckedChanged(final InventoryItem item, boolean isChecked) {
         if (!isChecked) {
@@ -148,8 +148,12 @@ public class InventoryFragment extends FITFragment implements InventoryAdapter.D
         pushFragment(AddEditItemFragment.getFragmentInitInfo(null));
     }
 
+    @NonNull
     @Override
     public InventoryFragmentView getView() {
+        if (super.getView() == null) {
+            throw new IllegalStateException("The view was not available when requested: " + InventoryFragment.class.getName());
+        }
         return (InventoryFragmentView) super.getView();
     }
 
@@ -175,5 +179,15 @@ public class InventoryFragment extends FITFragment implements InventoryAdapter.D
             default:
                 return super.handleStatusResult(resultCode);
         }
+    }
+
+    @Override
+    public boolean onNavigationBarSelectionChanged(int itemId) {
+        if (itemId == R.id.action_inventory) {
+            // already here, just scroll up
+            getView().scrollToTop();
+            return true;
+        }
+        return false;
     }
 }

@@ -4,17 +4,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import aaku492.smartfoodtracker.inventory.InventoryFragment;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by Udey Rishi (udeyrishi) on 2017-01-30.
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
  */
 public class FragmentContainerActivity extends AppCompatActivity {
-
     private static final String LOG_TAG = FragmentContainerActivity.class.getName();
     private static final String FRAGMENT_NAME = "fragment_name";
     private static final String FRAGMENT_BUNDLE_ARG = "fragment_bundle_arg";
@@ -22,6 +27,9 @@ public class FragmentContainerActivity extends AppCompatActivity {
     private static final int ACTIVITY_STATUS_REQ_CODE = 0;
     public static final int RESULT_ERROR = 1010101;
     private boolean isModal;
+
+    @BindView(R.id.bottom_navigation)
+    protected BottomNavigationView bottomNavigationView;
 
     public static Intent createIntent(Context creatingContext, FragmentInitInfo fragmentInitInfo) {
         Intent intent = new Intent(creatingContext, FragmentContainerActivity.class);
@@ -38,6 +46,37 @@ public class FragmentContainerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_container);
 
+        ButterKnife.bind(this);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (getCurrentFragment().onNavigationBarSelectionChanged(item.getItemId())) {
+                    // The current fragment was in the "family" of fragments managed by the tab corresponding
+                    // to this menu item. It took care of everything.
+                    return true;
+                }
+                // Else, it made sure that the activity stack is collapsed to just 1 item, the main screen,
+                // that can now be killed.
+                switch (item.getItemId()) {
+                    case R.id.action_inventory:
+                        startActivity(createIntent(FragmentContainerActivity.this, InventoryFragment.getFragmentInitInfo()));
+                        finish();
+                        return true;
+                    case R.id.action_recipes:
+                        Toast.makeText(FragmentContainerActivity.this, "Coming soon!", Toast.LENGTH_LONG).show();
+                        return true;
+                    case R.id.action_settings:
+                        Toast.makeText(FragmentContainerActivity.this, "Coming soon!", Toast.LENGTH_LONG).show();
+                        return true;
+                    default:
+                        Log.e(LOG_TAG, "Unknown bottom nav menu item with id: " + item.getItemId());
+                        return false;
+
+                }
+            }
+        });
+
         if (savedInstanceState == null || getCurrentFragment() == null) {
             // current fragment can be null if the activity was destroyed because the device ran out of memory.
             Intent intent = getIntent();
@@ -47,7 +86,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
             if (intent.hasExtra(FRAGMENT_BUNDLE_ARG)) {
                 fragment.setArguments(intent.getBundleExtra(FRAGMENT_BUNDLE_ARG));
             }
-            getSupportFragmentManager().beginTransaction().add(R.id.activity_fragment_root, fragment, fragmentName).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_view, fragment, fragmentName).commit();
             this.isModal = intent.getBooleanExtra(IS_MODAL, false);
         } else {
             // else, orientation change. No need to re-recreate the fragment. The fragment should've saved it's bundle.
@@ -115,7 +154,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
     }
 
     private FITFragment getCurrentFragment() {
-        return (FITFragment) getSupportFragmentManager().findFragmentById(R.id.activity_fragment_root);
+        return (FITFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
     }
 
     @Override
