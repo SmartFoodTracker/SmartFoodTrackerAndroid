@@ -119,15 +119,6 @@ public class FragmentContainerActivity extends AppCompatActivity {
         return fragment;
     }
 
-    public void setTitle(String title) {
-        if (getSupportActionBar() == null) {
-            Log.e(LOG_TAG, "You messed up! Action bar should've been present. Unable to set title to: " + title);
-            return;
-        }
-
-        getSupportActionBar().setTitle(title);
-    }
-
     public App getApp() {
         return (App) super.getApplication();
     }

@@ -37,7 +37,7 @@ public class InventoryFragment extends FITFragment implements InventoryAdapter.D
     public InventoryFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         inventoryAdapter = new InventoryAdapter(new ArrayList<InventoryItem>(), this);
 
-        getContainerActivity().setTitle(getString(R.string.inventory_fragment_title));
+        getContainerActivity().setTitle(R.string.inventory_fragment_title);
 
         InventoryFragmentView view = InventoryFragmentView.inflate(inflater, container, this);
         view.render(inventoryAdapter);
