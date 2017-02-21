@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<aaku492.smartfoodtracker.recipes.RecipeCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/recipe_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+</aaku492.smartfoodtracker.recipes.RecipeCardView>

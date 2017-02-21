@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import aaku492.smartfoodtracker.FITFragment;
 import aaku492.smartfoodtracker.FragmentInitInfo;
 import aaku492.smartfoodtracker.R;
@@ -14,6 +16,8 @@ import aaku492.smartfoodtracker.R;
  */
 public class RecipesHomeFragment extends FITFragment {
 
+    private RecipesHomeAdapter adapter;
+
     public static FragmentInitInfo getFragmentInitInfo() {
         return new FragmentInitInfo(false, RecipesHomeFragment.class);
     }
@@ -21,6 +25,13 @@ public class RecipesHomeFragment extends FITFragment {
     @Override
     public RecipesHomeFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getContainerActivity().setTitle(R.string.recipes_fragment_title);
-        return RecipesHomeFragmentView.inflate(inflater, container);
+
+        ArrayList<Recipe> mockRecipes = new ArrayList<>();
+        mockRecipes.add(new Recipe("a title", null, null));
+        mockRecipes.add(new Recipe("another title", null, null));
+        adapter = new RecipesHomeAdapter(mockRecipes);
+        RecipesHomeFragmentView view = RecipesHomeFragmentView.inflate(inflater, container);
+        view.render(adapter);
+        return view;
     }
 }
