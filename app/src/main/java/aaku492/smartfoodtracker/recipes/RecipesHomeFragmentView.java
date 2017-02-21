@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
  */
 public class RecipesHomeFragmentView extends RelativeLayout {
+    private static final int NUM_COLS = 2;
     @BindView(R.id.recipes_card_container)
     protected RecyclerView recipesCardContainer;
 
@@ -57,7 +58,7 @@ public class RecipesHomeFragmentView extends RelativeLayout {
         super.onFinishInflate();
         ButterKnife.bind(this);
 
-        recipesCardContainer.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        recipesCardContainer.setLayoutManager(new StaggeredGridLayoutManager(NUM_COLS, StaggeredGridLayoutManager.VERTICAL));
         recipesCardContainer.addOnScrollListener(new AutoRefreshingOnScrollListener());
 
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_dark,

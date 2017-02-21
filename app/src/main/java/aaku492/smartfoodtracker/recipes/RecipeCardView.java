@@ -7,7 +7,10 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import aaku492.smartfoodtracker.R;
 import aaku492.smartfoodtracker.common.ViewUtils;
@@ -19,6 +22,10 @@ import butterknife.ButterKnife;
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
  */
 public class RecipeCardView extends CardView {
+
+    @BindView(R.id.recipe_thumbnail)
+    protected ImageView thumbnail;
+
     @BindView(R.id.recipe_title)
     protected TextView recipeTitle;
 
@@ -38,6 +45,11 @@ public class RecipeCardView extends CardView {
 
     public void render(RecipeResponse.Recipe recipe) {
         recipeTitle.setText(recipe.getTitle());
+        Glide.with(getContext())
+                .load(recipe.getImageUrl())
+                .centerCrop()
+                .placeholder(R.drawable.ic_recipes)
+                .into(thumbnail);
     }
 
     public static class RecipeCardViewHolder extends RecyclerView.ViewHolder {

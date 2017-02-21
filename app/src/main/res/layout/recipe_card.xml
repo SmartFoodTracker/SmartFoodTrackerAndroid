@@ -9,8 +9,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageView
+            android:id="@+id/recipe_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/recipe_card_image_height"/>
+
         <TextView
             android:id="@+id/recipe_title"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:layout_margin="@dimen/recipe_card_title_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </LinearLayout>
