@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import aaku492.smartfoodtracker.R;
+import aaku492.smartfoodtracker.common.Debouncer;
 import aaku492.smartfoodtracker.common.ViewUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,13 +58,8 @@ public class RecipesHomeFragmentView extends RelativeLayout {
         ButterKnife.bind(this);
 
         recipesCardContainer.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        recipesCardContainer.addOnScrollListener(new RecipesHomeOnScrollListener((StaggeredGridLayoutManager) recipesCardContainer.getLayoutManager()) {
-            @Override
-            public void onLoadMore() {
-                setRefreshing(true);
-                delegate.onLoadMore();
-            }
-        });
+        recipesCardContainer.addOnScrollListener(new AutoRefreshingOnScrollListener());
+
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_dark,
                 android.R.color.holo_red_dark,
                 android.R.color.holo_orange_light,
@@ -87,5 +83,41 @@ public class RecipesHomeFragmentView extends RelativeLayout {
     public interface Delegate {
         void onLoadMore();
         void onRefresh();
+    }
+
+    private class AutoRefreshingOnScrollListener extends RecyclerView.OnScrollListener {
+        private static final int LOAD_EXTRA = 5;
+        private static final long DEBOUNCE_DELAY_MILLISECONDS = 50;
+        private Debouncer debouncer = new Debouncer(new Runnable() {
+            @Override
+            public void run() {
+                RecipesHomeFragmentView.this.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        setRefreshing(true);
+                        delegate.onLoadMore();
+                    }
+                });
+            }
+        }, DEBOUNCE_DELAY_MILLISECONDS);
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            if (dy < 0) {
+                return;
+            }
+
+            StaggeredGridLayoutManager layoutManager = (StaggeredGridLayoutManager) recipesCardContainer.getLayoutManager();
+            int[] visibleItems = layoutManager.findLastVisibleItemPositions(null);
+            if (visibleItems[visibleItems.length - 1] + LOAD_EXTRA >= layoutManager.getItemCount()) {
+
+                if (debouncer.finished()) {
+                    debouncer.start();
+                } else {
+                    debouncer.bounce();
+                }
+            }
+        }
     }
 }
