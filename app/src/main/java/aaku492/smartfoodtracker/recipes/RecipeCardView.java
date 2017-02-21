@@ -36,7 +36,7 @@ public class RecipeCardView extends CardView {
         ButterKnife.bind(this);
     }
 
-    public void render(Recipe recipe) {
+    public void render(RecipeResponse.Recipe recipe) {
         recipeTitle.setText(recipe.getTitle());
     }
 

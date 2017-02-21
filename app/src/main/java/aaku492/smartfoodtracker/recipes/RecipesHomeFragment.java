@@ -26,10 +26,13 @@ public class RecipesHomeFragment extends FITFragment {
     public RecipesHomeFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getContainerActivity().setTitle(R.string.recipes_fragment_title);
 
-        ArrayList<Recipe> mockRecipes = new ArrayList<>();
-        mockRecipes.add(new Recipe("a title", null, null));
-        mockRecipes.add(new Recipe("another title", null, null));
-        adapter = new RecipesHomeAdapter(mockRecipes);
+
+        ArrayList<RecipeResponse.Recipe> mockRecipes = new ArrayList<>();
+        mockRecipes.add(new RecipeResponse.Recipe("a title", null, null));
+        mockRecipes.add(new RecipeResponse.Recipe("another title", null, null));
+        RecipeResponse mockResponse = new RecipeResponse(0, 1, mockRecipes);
+
+        adapter = new RecipesHomeAdapter(mockResponse);
         RecipesHomeFragmentView view = RecipesHomeFragmentView.inflate(inflater, container);
         view.render(adapter);
         return view;
