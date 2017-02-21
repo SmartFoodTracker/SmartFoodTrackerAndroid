@@ -20,13 +20,20 @@ import butterknife.ButterKnife;
 public class RecipesHomeFragmentView extends RelativeLayout {
     @BindView(R.id.recipes_card_container)
     protected RecyclerView recipesCardContainer;
+    private Delegate delegate;
 
     public RecipesHomeFragmentView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public static RecipesHomeFragmentView inflate(LayoutInflater inflater, ViewGroup container) {
-        return ViewUtils.inflate(R.layout.fragment_recipes_home, inflater, container);
+    public static RecipesHomeFragmentView inflate(LayoutInflater inflater, ViewGroup container, Delegate delegate) {
+        RecipesHomeFragmentView view = ViewUtils.inflate(R.layout.fragment_recipes_home, inflater, container);
+        view.setDelegate(delegate);
+        return view;
+    }
+
+    private void setDelegate(Delegate delegate) {
+        this.delegate = delegate;
     }
 
     @Override
@@ -40,5 +47,17 @@ public class RecipesHomeFragmentView extends RelativeLayout {
     public void render(RecipesHomeAdapter adapter) {
         recipesCardContainer.setAdapter(adapter);
         recipesCardContainer.addItemDecoration(new RecipesHomeAdapter.SpacesItemDecoration((int) getContext().getResources().getDimension(R.dimen.recipe_card_margin)));
+        recipesCardContainer.addOnScrollListener(new RecipesHomeOnScrollListener((StaggeredGridLayoutManager) recipesCardContainer.getLayoutManager()) {
+            @Override
+            public void onLoadMore(int currentPage) {
+                // setrefreshing(true)
+                delegate.onLoadMore(currentPage);
+                // TODO: delegate should call setRefreshing(false)
+            }
+        });
+    }
+
+    public interface Delegate {
+        void onLoadMore(int currentPage);
     }
 }

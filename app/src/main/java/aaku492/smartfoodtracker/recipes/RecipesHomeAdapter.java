@@ -7,15 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 /**
  * Created by Udey Rishi (udeyrishi) on 2017-02-20.
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
  */
 public class RecipesHomeAdapter extends RecyclerView.Adapter<RecipeCardView.RecipeCardViewHolder> {
 
-    private final RecipeResponse recipes;
+    private final ArrayList<RecipeResponse.Recipe> recipes;
 
-    public RecipesHomeAdapter(RecipeResponse recipes) {
+    public RecipesHomeAdapter(ArrayList<RecipeResponse.Recipe> recipes) {
         this.recipes = recipes;
     }
 
@@ -26,12 +28,12 @@ public class RecipesHomeAdapter extends RecyclerView.Adapter<RecipeCardView.Reci
 
     @Override
     public void onBindViewHolder(RecipeCardView.RecipeCardViewHolder holder, int position) {
-        ((RecipeCardView) holder.itemView).render(recipes.getRecipes().get(position));
+        ((RecipeCardView) holder.itemView).render(recipes.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return recipes.getRecipes().size();
+        return recipes.size();
     }
 
     // Source: http://stackoverflow.com/a/32190325/3817211
