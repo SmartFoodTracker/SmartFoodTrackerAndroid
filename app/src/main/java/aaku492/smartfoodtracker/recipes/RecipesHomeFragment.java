@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import aaku492.smartfoodtracker.FITFragment;
 import aaku492.smartfoodtracker.FragmentInitInfo;
 import aaku492.smartfoodtracker.R;
+import aaku492.smartfoodtracker.common.SimpleErrorHandlingCallback;
+import retrofit2.Response;
 
 /**
  * Created by Udey Rishi (udeyrishi) on 2017-02-19.
@@ -17,7 +19,8 @@ import aaku492.smartfoodtracker.R;
 public class RecipesHomeFragment extends FITFragment implements RecipesHomeFragmentView.Delegate {
 
     private RecipesHomeAdapter adapter;
-    private ArrayList<RecipeResponse.Recipe> mockRecipes;
+    private int totalPages;
+    private int currentPageNumber = 0;
 
     public static FragmentInitInfo getFragmentInitInfo() {
         return new FragmentInitInfo(false, RecipesHomeFragment.class);
@@ -25,46 +28,41 @@ public class RecipesHomeFragment extends FITFragment implements RecipesHomeFragm
 
     @Override
     public RecipesHomeFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getContainerActivity().setTitle(R.string.recipes_fragment_title);
-
-
-        mockRecipes = new ArrayList<>();
-        for (int i = 0; i < 10; ++i) {
-            mockRecipes.add(new RecipeResponse.Recipe("title " + i, null, null));
-        }
-
-        adapter = new RecipesHomeAdapter(mockRecipes);
+        adapter = new RecipesHomeAdapter(new ArrayList<RecipeResponse.Recipe>());
         RecipesHomeFragmentView view = RecipesHomeFragmentView.inflate(inflater, container, this);
         view.render(adapter);
+
+        getContainerActivity().setTitle(R.string.recipes_fragment_title);
+
+        fetchRecipes();
         return view;
     }
 
-    @Override
-    public void onLoadMore(final int currentPage) {
-        if (currentPage >= 5) {
-            return;
-        }
-
-        // mock stuff
-        new Thread(new Runnable() {
+    private void fetchRecipes() {
+        // TODO: view.setRefreshing(true)
+        getDataProvider().getSuggestedRecipes(getUserId(), currentPageNumber).enqueue(new SimpleErrorHandlingCallback<RecipeResponse>() {
             @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-                for (int i = 0; i < 10; ++i) {
-                    mockRecipes.add(new RecipeResponse.Recipe("title " + (currentPage * 10 + i), null, null));
-                }
-                getContainerActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.notifyItemRangeInserted(mockRecipes.size() - 10, 10);
-                    }
-                });
+            protected void onFailure(String errorDescription) {
+                // TODO: view.setRefreshing(false)
+                //noinspection ConstantConditions
+                ((RecipesHomeFragmentView)getView()).showMessage(getString(R.string.recipes_fetch_error));
             }
-        }).start();
+
+            @Override
+            protected void onSuccessfulResponse(Response<RecipeResponse> response) {
+                totalPages = response.body().getTotalPages();
+                currentPageNumber = response.body().getPageNumber();
+                adapter.addAll(response.body().getRecipes());
+                // TODO: view.setRefreshing(false)
+            }
+        });
+    }
+
+    @Override
+    public void onLoadMore() {
+        if (currentPageNumber < totalPages - 1) {
+            ++currentPageNumber;
+            fetchRecipes();
+        }
     }
 }

@@ -14,7 +14,6 @@ public abstract class RecipesHomeOnScrollListener extends RecyclerView.OnScrollL
     private boolean loading = true;
     private int previousTotal;
     private static final int visibleThreshold = 5;
-    private int currentPage = 0;
 
     public RecipesHomeOnScrollListener(StaggeredGridLayoutManager layoutManager) {
         this.layoutManager = layoutManager;
@@ -37,9 +36,9 @@ public abstract class RecipesHomeOnScrollListener extends RecyclerView.OnScrollL
 
         if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItems[firstVisibleItems.length - 1] + visibleThreshold)) {
             loading = true;
-            onLoadMore(++currentPage);
+            onLoadMore();
         }
     }
 
-    public abstract void onLoadMore(int currentPage);
+    public abstract void onLoadMore();
 }

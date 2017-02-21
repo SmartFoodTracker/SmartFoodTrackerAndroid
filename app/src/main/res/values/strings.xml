@@ -38,4 +38,5 @@
     <string name="item_expiry_invalid_error">Expiry date must be a valid date.</string>
     <string name="recipes_fragment_title">Recipes</string>
     <string name="settings_fragment_title">Settings</string>
+    <string name="recipes_fetch_error">Failed to fetch the recipes.</string>
 </resources>

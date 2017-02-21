@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Udey Rishi (udeyrishi) on 2017-02-20.
@@ -34,6 +35,11 @@ public class RecipesHomeAdapter extends RecyclerView.Adapter<RecipeCardView.Reci
     @Override
     public int getItemCount() {
         return recipes.size();
+    }
+
+    public void addAll(List<RecipeResponse.Recipe> recipes) {
+        this.recipes.addAll(recipes);
+        notifyDataSetChanged();
     }
 
     // Source: http://stackoverflow.com/a/32190325/3817211

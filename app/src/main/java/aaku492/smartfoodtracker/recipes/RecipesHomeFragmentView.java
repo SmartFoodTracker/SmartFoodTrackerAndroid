@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
@@ -20,6 +21,10 @@ import butterknife.ButterKnife;
 public class RecipesHomeFragmentView extends RelativeLayout {
     @BindView(R.id.recipes_card_container)
     protected RecyclerView recipesCardContainer;
+
+    @BindView(R.id.recipes_home_root)
+    protected View rootView;
+
     private Delegate delegate;
 
     public RecipesHomeFragmentView(Context context, AttributeSet attrs) {
@@ -49,15 +54,19 @@ public class RecipesHomeFragmentView extends RelativeLayout {
         recipesCardContainer.addItemDecoration(new RecipesHomeAdapter.SpacesItemDecoration((int) getContext().getResources().getDimension(R.dimen.recipe_card_margin)));
         recipesCardContainer.addOnScrollListener(new RecipesHomeOnScrollListener((StaggeredGridLayoutManager) recipesCardContainer.getLayoutManager()) {
             @Override
-            public void onLoadMore(int currentPage) {
-                // setrefreshing(true)
-                delegate.onLoadMore(currentPage);
+            public void onLoadMore() {
+                // TODO: setRefreshing(true)
+                delegate.onLoadMore();
                 // TODO: delegate should call setRefreshing(false)
             }
         });
     }
 
+    public void showMessage(String message) {
+        ViewUtils.showMessage(message, rootView);
+    }
+
     public interface Delegate {
-        void onLoadMore(int currentPage);
+        void onLoadMore();
     }
 }
