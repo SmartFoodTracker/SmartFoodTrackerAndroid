@@ -21,7 +21,7 @@ public class RecipesHomeFragment extends FITFragment implements RecipesHomeFragm
 
     private RecipesHomeAdapter adapter;
     private int totalPages;
-    private int currentPageNumber = 0;
+    private int currentPageNumber = 1;
 
     public static FragmentInitInfo getFragmentInitInfo() {
         return new FragmentInitInfo(false, RecipesHomeFragment.class);
@@ -71,7 +71,7 @@ public class RecipesHomeFragment extends FITFragment implements RecipesHomeFragm
 
     @Override
     public void onLoadMore() {
-        if (currentPageNumber < totalPages - 1) {
+        if (currentPageNumber < totalPages) {
             ++currentPageNumber;
             fetchRecipes(getView(), false);
         }
@@ -79,7 +79,7 @@ public class RecipesHomeFragment extends FITFragment implements RecipesHomeFragm
 
     @Override
     public void onRefresh() {
-        currentPageNumber = 0;
+        currentPageNumber = 1;
         fetchRecipes(getView(), true);
     }
 }
