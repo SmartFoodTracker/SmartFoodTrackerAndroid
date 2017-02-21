@@ -10,22 +10,12 @@ import android.support.annotation.Nullable;
  */
 public class FragmentInitInfo {
     @NonNull private final String name;
-    @Nullable private final Bundle argsBundle;
-    private final boolean isModal;
+    @Nullable private Bundle argsBundle = null;
+    private boolean isModal = false;
+    private boolean isDetailsScreen = false;
 
-    public FragmentInitInfo(boolean isModal, @NonNull Class<? extends FITFragment> _class) {
-        this(isModal, _class, null);
-    }
-
-    public FragmentInitInfo(boolean isModal, @NonNull Class<? extends FITFragment> _class, @Nullable Bundle argsBundle) {
-        this.isModal = isModal;
+    public FragmentInitInfo(@NonNull Class<? extends FITFragment> _class) {
         this.name = _class.getName();
-        this.argsBundle = argsBundle;
-    }
-
-    @Nullable
-    public Bundle getArgsBundle() {
-        return argsBundle;
     }
 
     @NonNull
@@ -33,7 +23,31 @@ public class FragmentInitInfo {
         return name;
     }
 
-    public boolean isModal() {
+    public FragmentInitInfo setIsModal(boolean isModal) {
+        this.isModal = isModal;
+        return this;
+    }
+
+    public boolean getIsModal() {
         return isModal;
+    }
+
+    public FragmentInitInfo setArgs(@Nullable Bundle args) {
+        this.argsBundle = args;
+        return this;
+    }
+
+    @Nullable
+    public Bundle getArgs() {
+        return argsBundle;
+    }
+
+    public FragmentInitInfo setIsDetailsScreen(boolean isDetailsScreen) {
+        this.isDetailsScreen = isDetailsScreen;
+        return this;
+    }
+
+    public boolean getIsDetailsScreen() {
+        return isDetailsScreen;
     }
 }

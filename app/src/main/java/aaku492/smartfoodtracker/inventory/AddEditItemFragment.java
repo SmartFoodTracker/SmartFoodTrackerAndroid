@@ -32,7 +32,10 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
     public static FragmentInitInfo getFragmentInitInfo(@Nullable String itemId) {
         Bundle args = new Bundle();
         args.putString(ITEM_ID, itemId);
-        return new FragmentInitInfo(true, AddEditItemFragment.class, args);
+        return new FragmentInitInfo(AddEditItemFragment.class)
+                .setIsModal(true)
+                .setIsDetailsScreen(false)
+                .setArgs(args);
     }
 
     @Override
@@ -73,7 +76,7 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
                     protected void onFailure(String errorDescription) {
                         view.setLoading(false);
                         Log.e(LOG_TAG, getString(R.string.item_fetch_error) + " " + errorDescription);
-                        getContainerActivity().popFragment(FragmentContainerActivity.RESULT_ERROR);
+                        popFragmentActivityWithResult(FragmentContainerActivity.RESULT_ERROR);
                     }
 
                     @Override
@@ -87,7 +90,7 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
 
     @Override
     public boolean onBackPressed() {
-        getContainerActivity().popFragment(Activity.RESULT_CANCELED);
+        popFragmentActivityWithResult(Activity.RESULT_CANCELED);
         return true;
     }
 
@@ -117,7 +120,7 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
             @Override
             protected void onSuccessfulResponse(Response<List<InventoryItem>> response) {
                 ((AddEditItemFragmentView)getView()).setLoading(false);
-                getContainerActivity().popFragment(FragmentContainerActivity.RESULT_OK);
+                popFragmentActivityWithResult(FragmentContainerActivity.RESULT_OK);
             }
         };
 

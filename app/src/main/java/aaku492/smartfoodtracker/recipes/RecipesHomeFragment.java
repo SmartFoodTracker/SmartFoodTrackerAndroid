@@ -24,7 +24,9 @@ public class RecipesHomeFragment extends FITFragment implements RecipesHomeFragm
     private int currentPageNumber = 1;
 
     public static FragmentInitInfo getFragmentInitInfo() {
-        return new FragmentInitInfo(false, RecipesHomeFragment.class);
+        return new FragmentInitInfo(RecipesHomeFragment.class)
+                .setIsModal(false)
+                .setIsDetailsScreen(false);
     }
 
     @Override

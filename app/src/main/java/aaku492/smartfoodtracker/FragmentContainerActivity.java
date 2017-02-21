@@ -27,9 +27,11 @@ public class FragmentContainerActivity extends AppCompatActivity {
     private static final String FRAGMENT_NAME = "fragment_name";
     private static final String FRAGMENT_BUNDLE_ARG = "fragment_bundle_arg";
     private static final String IS_MODAL = "is_modal";
+    private static final String IS_DETAILS_SCREEN = "is_details_screen";
     private static final int ACTIVITY_STATUS_REQ_CODE = 0;
     public static final int RESULT_ERROR = 1010101;
     private boolean isModal;
+    private boolean isDetailsScreen;
 
     @BindView(R.id.bottom_navigation)
     protected BottomNavigationView bottomNavigationView;
@@ -37,10 +39,11 @@ public class FragmentContainerActivity extends AppCompatActivity {
     public static Intent createIntent(Context creatingContext, FragmentInitInfo fragmentInitInfo) {
         Intent intent = new Intent(creatingContext, FragmentContainerActivity.class);
         intent.putExtra(FRAGMENT_NAME, fragmentInitInfo.getName());
-        if (fragmentInitInfo.getArgsBundle() != null) {
-            intent.putExtra(FRAGMENT_BUNDLE_ARG, fragmentInitInfo.getArgsBundle());
+        if (fragmentInitInfo.getArgs() != null) {
+            intent.putExtra(FRAGMENT_BUNDLE_ARG, fragmentInitInfo.getArgs());
         }
-        intent.putExtra(IS_MODAL, fragmentInitInfo.isModal());
+        intent.putExtra(IS_MODAL, fragmentInitInfo.getIsModal());
+        intent.putExtra(IS_DETAILS_SCREEN, fragmentInitInfo.getIsDetailsScreen());
         return intent;
     }
 
@@ -55,13 +58,15 @@ public class FragmentContainerActivity extends AppCompatActivity {
             // current fragment can be null if the activity was destroyed because the device ran out of memory.
             loadFragment(getIntent().getStringExtra(FRAGMENT_NAME),
                     getIntent().getBooleanExtra(IS_MODAL, false),
+                    getIntent().getBooleanExtra(IS_DETAILS_SCREEN, false),
                     getIntent().hasExtra(FRAGMENT_BUNDLE_ARG) ? getIntent().getBundleExtra(FRAGMENT_BUNDLE_ARG) : null);
         } else {
             // else, orientation change. No need to re-recreate the fragment. The fragment should've saved it's bundle.
             this.isModal = savedInstanceState.getBoolean(IS_MODAL);
+            this.isDetailsScreen = savedInstanceState.getBoolean(IS_DETAILS_SCREEN);
         }
 
-        if (this.isModal) {
+        if (this.isDetailsScreen || this.isModal) {
             bottomNavigationView.setEnabled(false);
             bottomNavigationView.setVisibility(View.GONE);
         } else {
@@ -90,7 +95,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
                     if (nextFragment.getName().equals(getCurrentFragment().getClass().getName())) {
                         getCurrentFragment().refresh();
                     } else {
-                        loadFragment(nextFragment.getName(), nextFragment.isModal(), nextFragment.getArgsBundle());
+                        loadFragment(nextFragment.getName(), nextFragment.getIsModal(), nextFragment.getIsDetailsScreen(), nextFragment.getArgs());
                     }
                     return true;
                 }
@@ -98,14 +103,15 @@ public class FragmentContainerActivity extends AppCompatActivity {
         }
     }
 
-    private void loadFragment(String fragmentName, boolean isModal, @Nullable Bundle args) {
+    private void loadFragment(String fragmentName, boolean isModal, boolean isDetailsScreen, @Nullable Bundle args) {
         FITFragment fragment = createFragment(fragmentName);
         if (args != null) {
             fragment.setArguments(args);
         }
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view, fragment, fragmentName).commit();
-        if (this.isModal != isModal) {
+        if (this.isModal != isModal || this.isDetailsScreen != isDetailsScreen) {
             this.isModal = isModal;
+            this.isDetailsScreen = isDetailsScreen;
             invalidateOptionsMenu();
         }
     }
@@ -114,6 +120,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
         bundle.putBoolean(IS_MODAL, this.isModal);
+        bundle.putBoolean(IS_DETAILS_SCREEN, this.isDetailsScreen);
     }
 
     @NonNull
@@ -139,13 +146,21 @@ public class FragmentContainerActivity extends AppCompatActivity {
         return (App) super.getApplication();
     }
 
-    public void pushFragment(FragmentInitInfo fragmentInitInfo) {
+    public void pushFragmentActivityForResult(FragmentInitInfo fragmentInitInfo) {
         startActivityForResult(createIntent(this, fragmentInitInfo), ACTIVITY_STATUS_REQ_CODE);
     }
 
-    public void popFragment(int resultCode) {
+    public void pushFragmentActivity(FragmentInitInfo fragmentInitInfo) {
+        startActivity(createIntent(this, fragmentInitInfo));
+    }
+
+    public void popFragmentActivityWithResult(int resultCode) {
         Intent returnIntent = new Intent();
         setResult(resultCode, returnIntent);
+        finish();
+    }
+
+    public void popFragmentActivity() {
         finish();
     }
 
@@ -171,6 +186,10 @@ public class FragmentContainerActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getMenuInflater().inflate(R.menu.menu_modal, menu);
             return true;
+        } else if (isDetailsScreen) {
+            //noinspection ConstantConditions
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            return true;
         } else {
             return super.onCreateOptionsMenu(menu);
         }
@@ -178,7 +197,13 @@ public class FragmentContainerActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (!isModal || !getCurrentFragment().onBackPressed()) {
+        if (!isModal && !isDetailsScreen) {
+            super.onBackPressed();
+            return;
+        }
+
+        boolean backHandledByFragment = getCurrentFragment().onBackPressed();
+        if (!backHandledByFragment) {
             super.onBackPressed();
         }
     }
@@ -191,6 +216,13 @@ public class FragmentContainerActivity extends AppCompatActivity {
                     return getCurrentFragment().onBackPressed();
                 case R.id.accept:
                     return getCurrentFragment().onAcceptPressed();
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
+        } else if (isDetailsScreen) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    return getCurrentFragment().onBackPressed();
                 default:
                     return super.onOptionsItemSelected(item);
             }

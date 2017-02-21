@@ -29,7 +29,9 @@ public class InventoryFragment extends FITFragment implements InventoryAdapter.D
     private Boolean isEditing = null;
 
     public static FragmentInitInfo getFragmentInitInfo() {
-        return new FragmentInitInfo(false, InventoryFragment.class);
+        return new FragmentInitInfo(InventoryFragment.class)
+                .setIsModal(false)
+                .setIsDetailsScreen(false);
     }
 
     @Override
@@ -113,7 +115,7 @@ public class InventoryFragment extends FITFragment implements InventoryAdapter.D
             throw new IllegalStateException("isEditing value should've been consumed.");
         }
         isEditing = true;
-        pushFragment(AddEditItemFragment.getFragmentInitInfo(item.getId()));
+        pushFragmentActivityForResult(AddEditItemFragment.getFragmentInitInfo(item.getId()));
     }
 
     @Override
@@ -128,7 +130,7 @@ public class InventoryFragment extends FITFragment implements InventoryAdapter.D
         }
         isEditing = false;
         //noinspection ConstantConditions
-        pushFragment(AddEditItemFragment.getFragmentInitInfo(null));
+        pushFragmentActivityForResult(AddEditItemFragment.getFragmentInitInfo(null));
     }
 
     @NonNull

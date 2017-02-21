@@ -40,8 +40,20 @@ public class FITFragment extends Fragment {
         return (FragmentContainerActivity) getActivity();
     }
 
-    protected void pushFragment(FragmentInitInfo fragmentInitInfo) {
-        getContainerActivity().pushFragment(fragmentInitInfo);
+    protected void pushFragmentActivityForResult(FragmentInitInfo fragmentInitInfo) {
+        getContainerActivity().pushFragmentActivityForResult(fragmentInitInfo);
+    }
+
+    protected void pushFragmentActivity(FragmentInitInfo fragmentInitInfo) {
+        getContainerActivity().pushFragmentActivity(fragmentInitInfo);
+    }
+
+    protected void popFragmentActivity() {
+        getContainerActivity().popFragmentActivity();
+    }
+
+    protected void popFragmentActivityWithResult(int resultCode) {
+        getContainerActivity().popFragmentActivityWithResult(resultCode);
     }
 
     public boolean handleStatusResult(int resultCode) {
