@@ -10,12 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import aaku492.smartfoodtracker.FITFragment;
 import aaku492.smartfoodtracker.FragmentContainerActivity;
 import aaku492.smartfoodtracker.FragmentInitInfo;
 import aaku492.smartfoodtracker.R;
-import aaku492.smartfoodtracker.FITFragment;
-import retrofit2.Call;
-import retrofit2.Callback;
+import aaku492.smartfoodtracker.common.SimpleErrorHandlingCallback;
 import retrofit2.Response;
 
 /**
@@ -56,28 +55,20 @@ public class InventoryFragment extends FITFragment implements InventoryAdapter.D
     private void fetchInventoryAndRender(final InventoryFragmentView view) {
         view.setRefreshing(true);
         getDataProvider().getInventory(getCurrentDeviceId())
-                .enqueue(new Callback<List<InventoryItem>>() {
+                .enqueue(new SimpleErrorHandlingCallback<List<InventoryItem>>() {
                     @Override
-                    public void onResponse(Call<List<InventoryItem>> call, final Response<List<InventoryItem>> response) {
-                        if (response.isSuccessful()) {
-                            inventoryAdapter.clear();
-                            inventoryAdapter.addAll(response.body());
-                        } else {
-                            onFailure("Got back error response: " + response.code());
-                        }
+                    protected void onFailure(String errorDescription) {
                         view.setRefreshing(false);
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<InventoryItem>> call, Throwable t) {
-                        onFailure("Exception:\n" + t.toString());
-                        view.setRefreshing(false);
-                    }
-
-                    private void onFailure(String logReason) {
-                        Log.e(LOG_TAG, getString(R.string.inventory_fetch_error) + " " + logReason);
+                        Log.e(LOG_TAG, getString(R.string.inventory_fetch_error) + " " + errorDescription);
                         //noinspection ConstantConditions
                         getView().showMessage(getString(R.string.inventory_fetch_error));
+                    }
+
+                    @Override
+                    protected void onSuccessfulResponse(Response<List<InventoryItem>> response) {
+                        view.setRefreshing(false);
+                        inventoryAdapter.clear();
+                        inventoryAdapter.addAll(response.body());
                     }
                 });
     }
@@ -95,27 +86,19 @@ public class InventoryFragment extends FITFragment implements InventoryAdapter.D
             inventoryAdapter.remove(item);
 
             getDataProvider().deleteItem(getCurrentDeviceId(), item.getId())
-                    .enqueue(new Callback<List<InventoryItem>>() {
+                    .enqueue(new SimpleErrorHandlingCallback<List<InventoryItem>>() {
                         @Override
-                        public void onResponse(Call<List<InventoryItem>> call, Response<List<InventoryItem>> response) {
-                            if (response.isSuccessful()) {
-                                inventoryAdapter.clear();
-                                inventoryAdapter.addAll(response.body());
-                                getView().showMessage(getString(R.string.item_consumed_message_formatter, item.getTitle()));
-                            } else {
-                                onFailure("Got back error response: " + response.code());
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<InventoryItem>> call, Throwable t) {
-                            onFailure("Exception:\n" + t.toString());
-                        }
-
-                        private void onFailure(String logReason) {
+                        protected void onFailure(String errorDescription) {
                             inventoryAdapter.add(item);
-                            Log.e(LOG_TAG, getString(R.string.item_delete_failure) + " " + logReason);
+                            Log.e(LOG_TAG, getString(R.string.item_delete_failure) + " " + errorDescription);
                             getView().showMessage(getString(R.string.item_delete_failure));
+                        }
+
+                        @Override
+                        protected void onSuccessfulResponse(Response<List<InventoryItem>> response) {
+                            inventoryAdapter.clear();
+                            inventoryAdapter.addAll(response.body());
+                            getView().showMessage(getString(R.string.item_consumed_message_formatter, item.getTitle()));
                         }
                     });
         } catch (NoSuchElementException e) {

@@ -9,12 +9,12 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import aaku492.smartfoodtracker.FITFragment;
 import aaku492.smartfoodtracker.FragmentContainerActivity;
 import aaku492.smartfoodtracker.FragmentInitInfo;
 import aaku492.smartfoodtracker.R;
-import aaku492.smartfoodtracker.FITFragment;
+import aaku492.smartfoodtracker.common.SimpleErrorHandlingCallback;
 import aaku492.smartfoodtracker.common.ViewUtils;
-import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
@@ -68,26 +68,19 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
     private void fetchItemAndRender(String itemId, final AddEditItemFragmentView view) {
         view.setLoading(true);
         getDataProvider().getItem(getCurrentDeviceId(), itemId)
-                .enqueue(new Callback<InventoryItem>() {
+                .enqueue(new SimpleErrorHandlingCallback<InventoryItem>() {
                     @Override
-                    public void onResponse(Call<InventoryItem> call, Response<InventoryItem> response) {
-                        if (response.isSuccessful()) {
-                            view.render(response.body());
-                            item = response.body();
-                        } else {
-                            onFailure("Got back error response: " + response.code());
-                        }
+                    protected void onFailure(String errorDescription) {
                         view.setLoading(false);
+                        Log.e(LOG_TAG, getString(R.string.item_fetch_error) + " " + errorDescription);
+                        getContainerActivity().popFragment(FragmentContainerActivity.RESULT_ERROR);
                     }
 
                     @Override
-                    public void onFailure(Call<InventoryItem> call, Throwable t) {
-                        onFailure("Exception:\n" + t.toString());
-                    }
-
-                    private void onFailure(String logMessage) {
-                        Log.e(LOG_TAG, getString(R.string.item_fetch_error) + " " + logMessage);
-                        getContainerActivity().popFragment(FragmentContainerActivity.RESULT_ERROR);
+                    protected void onSuccessfulResponse(Response<InventoryItem> response) {
+                        view.render(response.body());
+                        item = response.body();
+                        view.setLoading(false);
                     }
                 });
     }
@@ -108,31 +101,23 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
         ViewUtils.closeKeyboard(getContainerActivity());
         ((AddEditItemFragmentView)getView()).setLoading(true);
 
-        Callback<List<InventoryItem>> callback = new Callback<List<InventoryItem>>() {
+        Callback<List<InventoryItem>> callback = new SimpleErrorHandlingCallback<List<InventoryItem>>() {
             @Override
-            public void onResponse(Call<List<InventoryItem>> call, Response<List<InventoryItem>> response) {
+            protected void onFailure(String errorDescription) {
                 ((AddEditItemFragmentView)getView()).setLoading(false);
-                if (response.isSuccessful()) {
-                    getContainerActivity().popFragment(FragmentContainerActivity.RESULT_OK);
-                } else {
-                    onFailure("Got back error response: " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<InventoryItem>> call, Throwable t) {
-                ((AddEditItemFragmentView)getView()).setLoading(false);
-                onFailure("Exception:\n" + t.toString());
-            }
-
-            private void onFailure(String logMessage) {
                 if (isEditingItem()) {
                     ((AddEditItemFragmentView)getView()).showMessage(getString(R.string.item_edit_error));
-                    Log.e(LOG_TAG, getString(R.string.item_edit_error) + " " + logMessage);
+                    Log.e(LOG_TAG, getString(R.string.item_edit_error) + " " + errorDescription);
                 } else {
                     ((AddEditItemFragmentView)getView()).showMessage(getString(R.string.item_add_error));
-                    Log.e(LOG_TAG, getString(R.string.item_add_error) + " " + logMessage);
+                    Log.e(LOG_TAG, getString(R.string.item_add_error) + " " + errorDescription);
                 }
+            }
+
+            @Override
+            protected void onSuccessfulResponse(Response<List<InventoryItem>> response) {
+                ((AddEditItemFragmentView)getView()).setLoading(false);
+                getContainerActivity().popFragment(FragmentContainerActivity.RESULT_OK);
             }
         };
 
