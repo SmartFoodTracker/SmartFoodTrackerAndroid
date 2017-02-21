@@ -1,10 +1,7 @@
 package aaku492.smartfoodtracker.recipes;
 
-import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -45,41 +42,5 @@ public class RecipesHomeAdapter extends RecyclerView.Adapter<RecipeCardView.Reci
     public void clear() {
         this.recipes.clear();
         notifyDataSetChanged();
-    }
-
-    // Source: http://stackoverflow.com/a/32190325/3817211
-    public static class SpacesItemDecoration extends RecyclerView.ItemDecoration {
-
-        private int space;
-
-        public SpacesItemDecoration(int space) {
-            this.space = space;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            super.getItemOffsets(outRect, view, parent, state);
-
-            outRect.bottom = space;
-            outRect.top = 0;
-
-            outRect.left = space/2;
-            outRect.right = space/2;
-
-            int spanIndex = ((StaggeredGridLayoutManager.LayoutParams) view.getLayoutParams()).getSpanIndex();
-            int spanCount = ((StaggeredGridLayoutManager)parent.getLayoutManager()).getSpanCount();
-
-            if (parent.getChildAdapterPosition(view) / spanCount == 0) {
-                outRect.top = space;
-            }
-
-            if (spanIndex == 0) {
-                outRect.left = space;
-            }
-
-            if (spanIndex == spanCount - 1) {
-                outRect.right = space;
-            }
-        }
     }
 }

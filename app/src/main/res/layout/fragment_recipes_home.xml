@@ -8,7 +8,11 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/recipe_card_margin_half"
+        android:paddingLeft="@dimen/recipe_card_margin_half"
+        android:paddingRight="@dimen/recipe_card_margin_half"
+        android:paddingTop="@dimen/recipe_card_margin_half">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recipes_card_container"

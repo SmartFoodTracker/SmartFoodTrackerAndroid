@@ -1,6 +1,7 @@
 package aaku492.smartfoodtracker.recipes;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -69,8 +70,16 @@ public class RecipesHomeFragmentView extends RelativeLayout {
 
     public void render(RecipesHomeAdapter adapter) {
         recipesCardContainer.setAdapter(adapter);
-        recipesCardContainer.addItemDecoration(new RecipesHomeAdapter.SpacesItemDecoration((int) getContext().getResources().getDimension(R.dimen.recipe_card_margin)));
-
+        recipesCardContainer.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                int space = (int) getContext().getResources().getDimension(R.dimen.recipe_card_margin_half);
+                outRect.left = space;
+                outRect.right = space;
+                outRect.top = space;
+                outRect.bottom = space;
+            }
+        });
     }
 
     public void showMessage(String message) {
