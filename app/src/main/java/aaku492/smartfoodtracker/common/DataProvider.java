@@ -45,4 +45,7 @@ public interface DataProvider {
                                        @Query("cuisine") Cuisine cuisine,
                                        @Query("intolerances") Intolerances intolerances,
                                        @Query("type") RecipeType type);
+
+    @GET("{userId}/recipes")
+    Call<RecipeResponse> getSuggestedRecipes(@Path("userId") String userId, @Query("page") int pageNum);
 }

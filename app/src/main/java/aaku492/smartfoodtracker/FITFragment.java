@@ -28,6 +28,10 @@ public class FITFragment extends Fragment {
         return getContainerActivity().getApp().getCurrentDeviceId();
     }
 
+    protected String getUserId() {
+        return getContainerActivity().getApp().getUserId();
+    }
+
     protected DataProvider getDataProvider() {
         return getContainerActivity().getApp().getDataProvider();
     }

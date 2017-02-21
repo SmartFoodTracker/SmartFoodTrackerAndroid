@@ -45,4 +45,9 @@ public class App extends Application {
         // TODO: implementing this properly is a stretch goal
         return "1";
     }
+
+    public String getUserId() {
+        // TODO: implementing this properly is a stretch goal
+        return "1";
+    }
 }
