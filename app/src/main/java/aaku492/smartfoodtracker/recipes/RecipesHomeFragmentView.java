@@ -1,6 +1,7 @@
 package aaku492.smartfoodtracker.recipes;
 
 import android.content.Context;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
@@ -25,6 +26,9 @@ public class RecipesHomeFragmentView extends RelativeLayout {
     @BindView(R.id.recipes_home_root)
     protected View rootView;
 
+    @BindView(R.id.swipe_container)
+    protected SwipeRefreshLayout swipeContainer;
+
     private Delegate delegate;
 
     public RecipesHomeFragmentView(Context context, AttributeSet attrs) {
@@ -37,8 +41,14 @@ public class RecipesHomeFragmentView extends RelativeLayout {
         return view;
     }
 
-    private void setDelegate(Delegate delegate) {
+    private void setDelegate(final Delegate delegate) {
         this.delegate = delegate;
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                delegate.onRefresh();
+            }
+        });
     }
 
     @Override
@@ -47,26 +57,35 @@ public class RecipesHomeFragmentView extends RelativeLayout {
         ButterKnife.bind(this);
 
         recipesCardContainer.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        recipesCardContainer.addOnScrollListener(new RecipesHomeOnScrollListener((StaggeredGridLayoutManager) recipesCardContainer.getLayoutManager()) {
+            @Override
+            public void onLoadMore() {
+                setRefreshing(true);
+                delegate.onLoadMore();
+            }
+        });
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_dark,
+                android.R.color.holo_red_dark,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_green_dark);
     }
 
     public void render(RecipesHomeAdapter adapter) {
         recipesCardContainer.setAdapter(adapter);
         recipesCardContainer.addItemDecoration(new RecipesHomeAdapter.SpacesItemDecoration((int) getContext().getResources().getDimension(R.dimen.recipe_card_margin)));
-        recipesCardContainer.addOnScrollListener(new RecipesHomeOnScrollListener((StaggeredGridLayoutManager) recipesCardContainer.getLayoutManager()) {
-            @Override
-            public void onLoadMore() {
-                // TODO: setRefreshing(true)
-                delegate.onLoadMore();
-                // TODO: delegate should call setRefreshing(false)
-            }
-        });
+
     }
 
     public void showMessage(String message) {
         ViewUtils.showMessage(message, rootView);
     }
 
+    public void setRefreshing(boolean isRefreshing) {
+        swipeContainer.setRefreshing(isRefreshing);
+    }
+
     public interface Delegate {
         void onLoadMore();
+        void onRefresh();
     }
 }

@@ -1,6 +1,7 @@
 package aaku492.smartfoodtracker.recipes;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -34,35 +35,51 @@ public class RecipesHomeFragment extends FITFragment implements RecipesHomeFragm
 
         getContainerActivity().setTitle(R.string.recipes_fragment_title);
 
-        fetchRecipes();
+        fetchRecipes(view, true);
         return view;
     }
 
-    private void fetchRecipes() {
-        // TODO: view.setRefreshing(true)
+    private void fetchRecipes(final RecipesHomeFragmentView view, final boolean clear) {
+        view.setRefreshing(true);
         getDataProvider().getSuggestedRecipes(getUserId(), currentPageNumber).enqueue(new SimpleErrorHandlingCallback<RecipeResponse>() {
             @Override
             protected void onFailure(String errorDescription) {
-                // TODO: view.setRefreshing(false)
-                //noinspection ConstantConditions
-                ((RecipesHomeFragmentView)getView()).showMessage(getString(R.string.recipes_fetch_error));
+                view.setRefreshing(false);
+                view.showMessage(getString(R.string.recipes_fetch_error));
             }
 
             @Override
             protected void onSuccessfulResponse(Response<RecipeResponse> response) {
                 totalPages = response.body().getTotalPages();
                 currentPageNumber = response.body().getPageNumber();
+                if (clear) {
+                    adapter.clear();
+                }
                 adapter.addAll(response.body().getRecipes());
-                // TODO: view.setRefreshing(false)
+                view.setRefreshing(false);
             }
         });
+    }
+
+    @NonNull
+    public RecipesHomeFragmentView getView() {
+        if (super.getView() == null) {
+            throw new IllegalStateException("View not attached when requested: " + RecipesHomeFragment.class.getName());
+        }
+        return (RecipesHomeFragmentView)super.getView();
     }
 
     @Override
     public void onLoadMore() {
         if (currentPageNumber < totalPages - 1) {
             ++currentPageNumber;
-            fetchRecipes();
+            fetchRecipes(getView(), false);
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        currentPageNumber = 0;
+        fetchRecipes(getView(), true);
     }
 }

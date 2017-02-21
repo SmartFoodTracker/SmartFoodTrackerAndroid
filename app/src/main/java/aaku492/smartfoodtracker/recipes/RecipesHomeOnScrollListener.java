@@ -11,9 +11,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
  */
 public abstract class RecipesHomeOnScrollListener extends RecyclerView.OnScrollListener {
     private final StaggeredGridLayoutManager layoutManager;
-    private boolean loading = true;
-    private int previousTotal;
-    private static final int visibleThreshold = 5;
+    private static final int LOAD_EXTRA = 5;
 
     public RecipesHomeOnScrollListener(StaggeredGridLayoutManager layoutManager) {
         this.layoutManager = layoutManager;
@@ -23,19 +21,14 @@ public abstract class RecipesHomeOnScrollListener extends RecyclerView.OnScrollL
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
 
-        int visibleItemCount = recyclerView.getChildCount();
-        int totalItemCount = layoutManager.getItemCount();
-        int[] firstVisibleItems = layoutManager.findFirstVisibleItemPositions(null);
-
-        if (loading) {
-            if (totalItemCount > previousTotal) {
-                loading = false;
-                previousTotal = totalItemCount;
-            }
+        if (dy < 0) {
+            return;
         }
 
-        if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItems[firstVisibleItems.length - 1] + visibleThreshold)) {
-            loading = true;
+        int[] visibleItems = layoutManager.findFirstVisibleItemPositions(null);
+        int firstRowLastCol = visibleItems[visibleItems.length - 1];
+        int numItemsFetches = layoutManager.getItemCount();
+        if (firstRowLastCol + LOAD_EXTRA >= numItemsFetches) {
             onLoadMore();
         }
     }

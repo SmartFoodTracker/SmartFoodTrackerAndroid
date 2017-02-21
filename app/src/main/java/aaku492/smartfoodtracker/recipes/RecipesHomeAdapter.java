@@ -42,6 +42,11 @@ public class RecipesHomeAdapter extends RecyclerView.Adapter<RecipeCardView.Reci
         notifyDataSetChanged();
     }
 
+    public void clear() {
+        this.recipes.clear();
+        notifyDataSetChanged();
+    }
+
     // Source: http://stackoverflow.com/a/32190325/3817211
     public static class SpacesItemDecoration extends RecyclerView.ItemDecoration {
 
