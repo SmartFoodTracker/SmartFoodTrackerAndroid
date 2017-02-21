@@ -14,14 +14,16 @@ import java.util.List;
 public class RecipesHomeAdapter extends RecyclerView.Adapter<RecipeCardView.RecipeCardViewHolder> {
 
     private final ArrayList<RecipeResponse.Recipe> recipes;
+    private final Delegate delegate;
 
-    public RecipesHomeAdapter(ArrayList<RecipeResponse.Recipe> recipes) {
+    public RecipesHomeAdapter(ArrayList<RecipeResponse.Recipe> recipes, Delegate delegate) {
         this.recipes = recipes;
+        this.delegate = delegate;
     }
 
     @Override
     public RecipeCardView.RecipeCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new RecipeCardView.RecipeCardViewHolder(RecipeCardView.inflate(LayoutInflater.from(parent.getContext()), parent));
+        return new RecipeCardView.RecipeCardViewHolder(RecipeCardView.inflate(LayoutInflater.from(parent.getContext()), parent, delegate));
     }
 
     @Override
@@ -42,5 +44,8 @@ public class RecipesHomeAdapter extends RecyclerView.Adapter<RecipeCardView.Reci
     public void clear() {
         this.recipes.clear();
         notifyDataSetChanged();
+    }
+
+    public interface Delegate extends RecipeCardView.Delegate {
     }
 }

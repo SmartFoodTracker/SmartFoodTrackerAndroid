@@ -29,12 +29,25 @@ public class RecipeCardView extends CardView {
     @BindView(R.id.recipe_title)
     protected TextView recipeTitle;
 
+    private RecipeResponse.Recipe recipe;
+
     public RecipeCardView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public static RecipeCardView inflate(LayoutInflater inflater, ViewGroup container) {
-        return ViewUtils.inflate(R.layout.recipe_card, inflater, container);
+    public static RecipeCardView inflate(LayoutInflater inflater, ViewGroup container, Delegate delegate) {
+        RecipeCardView view = ViewUtils.inflate(R.layout.recipe_card, inflater, container);
+        view.setDelegate(delegate);
+        return view;
+    }
+
+    private void setDelegate(final Delegate delegate) {
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delegate.onRecipeSelected(recipe);
+            }
+        });
     }
 
     @Override
@@ -44,6 +57,7 @@ public class RecipeCardView extends CardView {
     }
 
     public void render(RecipeResponse.Recipe recipe) {
+        this.recipe = recipe;
         recipeTitle.setText(recipe.getTitle());
         Glide.with(getContext())
                 .load(recipe.getImageUrl())
@@ -56,5 +70,9 @@ public class RecipeCardView extends CardView {
         public RecipeCardViewHolder(View itemView) {
             super(itemView);
         }
+    }
+
+    public interface Delegate {
+        void onRecipeSelected(RecipeResponse.Recipe recipe);
     }
 }

@@ -2,6 +2,7 @@ package aaku492.smartfoodtracker.recipes;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -48,7 +49,7 @@ public class RecipeResponse {
         this.recipes = recipes;
     }
 
-    public static class Recipe {
+    public static class Recipe implements Serializable {
 
         @SerializedName("title")
         private String title;

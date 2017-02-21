@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -17,7 +18,7 @@ import retrofit2.Response;
  * Created by Udey Rishi (udeyrishi) on 2017-02-19.
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
  */
-public class RecipesHomeFragment extends FITFragment implements RecipesHomeFragmentView.Delegate {
+public class RecipesHomeFragment extends FITFragment implements RecipesHomeFragmentView.Delegate, RecipesHomeAdapter.Delegate {
 
     private RecipesHomeAdapter adapter;
     private int totalPages;
@@ -31,7 +32,7 @@ public class RecipesHomeFragment extends FITFragment implements RecipesHomeFragm
 
     @Override
     public RecipesHomeFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        adapter = new RecipesHomeAdapter(new ArrayList<RecipeResponse.Recipe>());
+        adapter = new RecipesHomeAdapter(new ArrayList<RecipeResponse.Recipe>(), this);
         RecipesHomeFragmentView view = RecipesHomeFragmentView.inflate(inflater, container, this);
         view.render(adapter);
 
@@ -83,5 +84,10 @@ public class RecipesHomeFragment extends FITFragment implements RecipesHomeFragm
     public void onRefresh() {
         currentPageNumber = 1;
         fetchRecipes(getView(), true);
+    }
+
+    @Override
+    public void onRecipeSelected(RecipeResponse.Recipe recipe) {
+        Toast.makeText(getContext(), "Coming soon!", Toast.LENGTH_LONG).show();
     }
 }
