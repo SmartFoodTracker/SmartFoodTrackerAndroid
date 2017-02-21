@@ -60,10 +60,14 @@ public class RecipeResponse {
         @SerializedName("steps")
         private ArrayList<String> steps;
 
-        public Recipe(String title, String imageUrl, ArrayList<String> steps) {
+        @SerializedName("sourceUrl")
+        private String sourceUrl;
+
+        public Recipe(String title, String imageUrl, ArrayList<String> steps, String sourceUrl) {
             this.title = title;
             this.imageUrl = imageUrl;
             this.steps = steps;
+            this.sourceUrl = sourceUrl;
         }
 
         public String getTitle() {
@@ -88,6 +92,14 @@ public class RecipeResponse {
 
         public void setSteps(ArrayList<String> steps) {
             this.steps = steps;
+        }
+
+        public String getSourceUrl() {
+            return sourceUrl;
+        }
+
+        public void setSourceUrl(String sourceUrl) {
+            this.sourceUrl = sourceUrl;
         }
     }
 }

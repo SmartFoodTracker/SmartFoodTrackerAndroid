@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -88,6 +87,6 @@ public class RecipesHomeFragment extends FITFragment implements RecipesHomeFragm
 
     @Override
     public void onRecipeSelected(RecipeResponse.Recipe recipe) {
-        Toast.makeText(getContext(), "Coming soon!", Toast.LENGTH_LONG).show();
+        pushFragmentActivity(RecipeDetailFragment.getFragmentInitInfo(recipe));
     }
 }

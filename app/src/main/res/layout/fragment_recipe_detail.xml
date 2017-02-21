@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<aaku492.smartfoodtracker.recipes.RecipeDetailFragmentView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/recipe_image"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/recipe_detail_image_height"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="@string/recipe_image_description"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:id="@+id/recipe_title"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/recipe_title_details_space"/>
+
+            <TextView
+                android:id="@+id/recipe_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Body1"/>
+
+            <LinearLayout
+                android:id="@+id/recipe_source_container"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/recipe_source_learn_more"
+                    android:layout_marginEnd="@dimen/recipe_learn_more_title_url_space"
+                    style="@style/TextAppearance.AppCompat.Body2"/>
+
+                <TextView
+                    android:id="@+id/recipe_source"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Body2"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</aaku492.smartfoodtracker.recipes.RecipeDetailFragmentView>

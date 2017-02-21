@@ -7,4 +7,7 @@
     <dimen name="recipe_card_title_margin">2dp</dimen>
     <dimen name="recipe_card_image_height">100dp</dimen>
     <dimen name="recipe_card_margin_half">8dp</dimen>
+    <dimen name="recipe_detail_image_height">300dp</dimen>
+    <dimen name="recipe_title_details_space">12dp</dimen>
+    <dimen name="recipe_learn_more_title_url_space">4dp</dimen>
 </resources>
