@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/chip_padding"
+        android:paddingBottom="@dimen/chip_padding"
+        android:layout_margin="@dimen/chip_padding"
+        android:background="@drawable/chip_background">
+
+        <TextView
+            android:id="@+id/chip_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:saveEnabled="false"/>
+
+    </RelativeLayout>
+
+</merge>

@@ -6,4 +6,6 @@
     <color name="fab_color_normal">@color/colorAccent</color>
     <color name="fab_color_pressed">#F30053</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="chip_unselected">#FFD3D3D3</color>
+    <color name="chip_selected">@color/colorAccent</color>
 </resources>

@@ -11,4 +11,6 @@
     <dimen name="recipe_title_details_space">12dp</dimen>
     <dimen name="recipe_learn_more_title_url_space">4dp</dimen>
     <dimen name="text_size_ultra_small">12sp</dimen>
+    <dimen name="chip_padding">1dp</dimen>
+    <dimen name="chip_radius">7dp</dimen>
 </resources>
