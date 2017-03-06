@@ -104,7 +104,7 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
         ViewUtils.closeKeyboard(getContainerActivity());
         ((AddEditItemFragmentView)getView()).setLoading(true);
 
-        Callback<List<InventoryItem>> callback = new SimpleErrorHandlingCallback<List<InventoryItem>>() {
+        final Callback<List<InventoryItem>> mutationCallback = new SimpleErrorHandlingCallback<List<InventoryItem>>() {
             @Override
             protected void onFailure(String errorDescription) {
                 ((AddEditItemFragmentView)getView()).setLoading(false);
@@ -124,13 +124,38 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
             }
         };
 
-        if (isEditingItem()) {
-            getDataProvider().editItem(getCurrentDeviceId(), item.getId(), item)
-                    .enqueue(callback);
-        } else {
-            getDataProvider().addItem(getCurrentDeviceId(), item)
-                    .enqueue(callback);
-        }
+        getDataProvider().getInventory(getCurrentDeviceId()).enqueue(new SimpleErrorHandlingCallback<List<InventoryItem>>() {
+            @Override
+            protected void onFailure(String errorDescription) {
+                ((AddEditItemFragmentView)getView()).setLoading(false);
+                ((AddEditItemFragmentView)getView()).showMessage(getString(R.string.inventory_fetch_error));
+                Log.e(LOG_TAG, getString(R.string.inventory_fetch_error));
+            }
+
+            @Override
+            protected void onSuccessfulResponse(Response<List<InventoryItem>> response) {
+                boolean duplicate = false;
+                for (InventoryItem item : response.body()) {
+                    if (item.getTitle().toLowerCase().equals(AddEditItemFragment.this.item.getTitle().toLowerCase())) {
+                        duplicate = true;
+                        break;
+                    }
+                }
+
+                if (duplicate) {
+                    ((AddEditItemFragmentView)getView()).setLoading(false);
+                    ((AddEditItemFragmentView)getView()).showMessage(getString(R.string.duplicate_item_error_formatter, item.getTitle()));
+                } else {
+                    if (isEditingItem()) {
+                        getDataProvider().editItem(getCurrentDeviceId(), item.getId(), item)
+                                .enqueue(mutationCallback);
+                    } else {
+                        getDataProvider().addItem(getCurrentDeviceId(), item)
+                                .enqueue(mutationCallback);
+                    }
+                }
+            }
+        });
 
         return true;
     }

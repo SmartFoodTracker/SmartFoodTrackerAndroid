@@ -44,4 +44,5 @@
     <string name="recipe_image_description">Recipe image</string>
     <string name="recipe_source_learn_more">Learn more:</string>
     <string name="recipe_source_url_html_formatter"><![CDATA[<a href=\"%2$s\">%1$s</a>]]></string>
+    <string name="duplicate_item_error_formatter">%1$s already exists; edit that instead.</string>
 </resources>
