@@ -86,6 +86,11 @@ public class RecipesHomeFragment extends FITFragment implements RecipesHomeFragm
     }
 
     @Override
+    public void onSearchPressed() {
+        pushFragmentActivity(RecipeSearchFragment.getFragmentInitInfo());
+    }
+
+    @Override
     public void onRecipeSelected(RecipeResponse.Recipe recipe) {
         pushFragmentActivity(RecipeDetailFragment.getFragmentInitInfo(recipe));
     }

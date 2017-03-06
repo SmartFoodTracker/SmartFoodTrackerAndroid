@@ -2,6 +2,7 @@ package aaku492.smartfoodtracker.recipes;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -32,6 +33,9 @@ public class RecipesHomeFragmentView extends RelativeLayout {
     @BindView(R.id.swipe_container)
     protected SwipeRefreshLayout swipeContainer;
 
+    @BindView(R.id.search_recipes)
+    protected FloatingActionButton searchButton;
+
     private Delegate delegate;
 
     public RecipesHomeFragmentView(Context context, AttributeSet attrs) {
@@ -50,6 +54,12 @@ public class RecipesHomeFragmentView extends RelativeLayout {
             @Override
             public void onRefresh() {
                 delegate.onRefresh();
+            }
+        });
+        searchButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delegate.onSearchPressed();
             }
         });
     }
@@ -93,6 +103,7 @@ public class RecipesHomeFragmentView extends RelativeLayout {
     public interface Delegate {
         void onLoadMore();
         void onRefresh();
+        void onSearchPressed();
     }
 
     private class AutoRefreshingOnScrollListener extends RecyclerView.OnScrollListener {

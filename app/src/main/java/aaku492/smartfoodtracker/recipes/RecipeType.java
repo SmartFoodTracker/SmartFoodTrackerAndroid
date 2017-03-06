@@ -5,6 +5,7 @@ package aaku492.smartfoodtracker.recipes;
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
  */
 public enum RecipeType {
+    Any("Any"),
     MainCourse("main course"),
     SideDish("side dish"),
     Dessert("dessert"),
