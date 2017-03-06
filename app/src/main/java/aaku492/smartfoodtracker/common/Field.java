@@ -13,6 +13,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import aaku492.smartfoodtracker.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +33,7 @@ public class Field extends RelativeLayout {
 
     @BindView(R.id.text_input_layout)
     protected TextInputLayout layout;
+    private final ArrayList<TextWatcher> textWatchers = new ArrayList<>();
 
     public Field(Context context) {
         super(context);
@@ -89,7 +92,15 @@ public class Field extends RelativeLayout {
     }
 
     public void addTextChangedListener(TextWatcher textWatcher) {
+        textWatchers.add(textWatcher);
         editText.addTextChangedListener(textWatcher);
+    }
+
+    public void clearTextChangedListeners() {
+        for (TextWatcher textWatcher : textWatchers) {
+            editText.removeTextChangedListener(textWatcher);
+        }
+        textWatchers.clear();
     }
 
     public boolean validate(TextValidator validator, CharSequence errorMessage) {
