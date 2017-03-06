@@ -46,7 +46,7 @@ public class RecipeSearchFragmentView extends LinearLayout {
         return ViewUtils.inflate(R.layout.fragment_recipe_search, inflater, container);
     }
 
-    public void render(final RecipeSearchFragment.RecipeSearchQuery query) {
+    public void render(final RecipeSearchQuery query) {
         searchField.clearTextChangedListeners();
         cuisine.setOnItemSelectedListener(null);
         recipeType.setOnItemSelectedListener(null);

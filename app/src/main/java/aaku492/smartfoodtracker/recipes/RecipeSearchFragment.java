@@ -5,8 +5,6 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import java.io.Serializable;
-
 import aaku492.smartfoodtracker.FITFragment;
 import aaku492.smartfoodtracker.FragmentInitInfo;
 import aaku492.smartfoodtracker.R;
@@ -65,43 +63,6 @@ public class RecipeSearchFragment extends FITFragment {
             throw new IllegalStateException("View not attached when requested: " + RecipeSearchFragment.class.getName());
         }
         return (RecipeSearchFragmentView) super.getView();
-    }
-
-    public static class RecipeSearchQuery implements Serializable {
-        private String searchQuery;
-        private Cuisine cuisine;
-        private RecipeType recipeType;
-
-        public RecipeSearchQuery() {
-            searchQuery = "";
-            cuisine = Cuisine.Any;
-            recipeType = RecipeType.Any;
-        }
-
-
-        public String getSearchQuery() {
-            return searchQuery;
-        }
-
-        public void setSearchQuery(String searchQuery) {
-            this.searchQuery = searchQuery;
-        }
-
-        public Cuisine getCuisine() {
-            return cuisine;
-        }
-
-        public void setCuisine(Cuisine cuisine) {
-            this.cuisine = cuisine;
-        }
-
-        public RecipeType getRecipeType() {
-            return recipeType;
-        }
-
-        public void setRecipeType(RecipeType recipeType) {
-            this.recipeType = recipeType;
-        }
     }
 
 }

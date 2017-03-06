@@ -25,7 +25,7 @@ public class RecipesListFragment extends FITFragment implements RecipesListFragm
     private int totalPages;
     private int currentPageNumber = 1;
 
-    private RecipeSearchFragment.RecipeSearchQuery query;
+    private RecipeSearchQuery query;
 
     public static FragmentInitInfo getFragmentInitInfo() {
         return new FragmentInitInfo(RecipesListFragment.class)
@@ -33,7 +33,7 @@ public class RecipesListFragment extends FITFragment implements RecipesListFragm
                 .setIsDetailsScreen(false);
     }
 
-    public static FragmentInitInfo getFragmentInitInfo(RecipeSearchFragment.RecipeSearchQuery query) {
+    public static FragmentInitInfo getFragmentInitInfo(RecipeSearchQuery query) {
         Bundle args = new Bundle();
         args.putSerializable(QUERY, query);
         return new FragmentInitInfo(RecipesListFragment.class)
@@ -49,9 +49,9 @@ public class RecipesListFragment extends FITFragment implements RecipesListFragm
 
 
         if (savedInstanceState != null && savedInstanceState.getSerializable(QUERY) != null) {
-            this.query = (RecipeSearchFragment.RecipeSearchQuery) savedInstanceState.getSerializable(QUERY);
+            this.query = (RecipeSearchQuery) savedInstanceState.getSerializable(QUERY);
         } else if (getArguments() != null && getArguments().getSerializable(QUERY) != null) {
-            this.query = (RecipeSearchFragment.RecipeSearchQuery) getArguments().getSerializable(QUERY);
+            this.query = (RecipeSearchQuery) getArguments().getSerializable(QUERY);
         } else {
             this.query = null;
         }
@@ -94,16 +94,7 @@ public class RecipesListFragment extends FITFragment implements RecipesListFragm
         };
 
         if (isInSearchMode()) {
-            String searchQuery = query.getSearchQuery() == null || query.getSearchQuery().trim().equals("") ? null : query.getSearchQuery().trim();
-
-            // TODO
-//            Ingredients ingredients = null;
-//            Intolerances intolerances = null;
-
-            Cuisine cuisine = query.getCuisine() == Cuisine.Any ? null : query.getCuisine();
-            RecipeType recipeType = query.getRecipeType() == RecipeType.Any ? null : query.getRecipeType();
-
-            getDataProvider().searchRecipes(searchQuery, currentPageNumber, null, cuisine, null, recipeType).enqueue(callback);
+            query.makeSearchCall(currentPageNumber, getDataProvider()).enqueue(callback);
         } else {
             getDataProvider().getSuggestedRecipes(getUserId(), currentPageNumber).enqueue(callback);
         }
