@@ -22,4 +22,5 @@ The general MVC architecture of the app is as follows. The "X" is a placeholder 
 * `FragmentInitInfo.java`: A collection of `FITFragment` information needed to properly initialize a fragment.
 * `.common`: Contains all the utility code shared among multiple screens.
 * `.inventory`: Contains the code for the different inventory related screens.
+* `.recipes`: Contains the code for the different recipes related screens.
 
