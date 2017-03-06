@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import aaku492.smartfoodtracker.inventory.InventoryFragment;
-import aaku492.smartfoodtracker.recipes.RecipesHomeFragment;
+import aaku492.smartfoodtracker.recipes.RecipesListFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -81,7 +81,7 @@ public class FragmentContainerActivity extends AppCompatActivity {
                             nextFragment = InventoryFragment.getFragmentInitInfo();
                             break;
                         case R.id.action_recipes:
-                            nextFragment = RecipesHomeFragment.getFragmentInitInfo();
+                            nextFragment = RecipesListFragment.getFragmentInitInfo();
                             break;
                         case R.id.action_settings:
                             Toast.makeText(FragmentContainerActivity.this, "Coming soon!", Toast.LENGTH_LONG).show();

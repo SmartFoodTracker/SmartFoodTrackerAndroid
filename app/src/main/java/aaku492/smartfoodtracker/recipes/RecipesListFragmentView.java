@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
  * Created by Udey Rishi (udeyrishi) on 2017-02-20.
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
  */
-public class RecipesHomeFragmentView extends RelativeLayout {
+public class RecipesListFragmentView extends RelativeLayout {
     private static final int NUM_COLS = 2;
     @BindView(R.id.recipes_card_container)
     protected RecyclerView recipesCardContainer;
@@ -38,12 +38,12 @@ public class RecipesHomeFragmentView extends RelativeLayout {
 
     private Delegate delegate;
 
-    public RecipesHomeFragmentView(Context context, AttributeSet attrs) {
+    public RecipesListFragmentView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public static RecipesHomeFragmentView inflate(LayoutInflater inflater, ViewGroup container, Delegate delegate) {
-        RecipesHomeFragmentView view = ViewUtils.inflate(R.layout.fragment_recipes_home, inflater, container);
+    public static RecipesListFragmentView inflate(LayoutInflater inflater, ViewGroup container, Delegate delegate) {
+        RecipesListFragmentView view = ViewUtils.inflate(R.layout.fragment_recipes_list, inflater, container);
         view.setDelegate(delegate);
         return view;
     }
@@ -112,7 +112,7 @@ public class RecipesHomeFragmentView extends RelativeLayout {
         private Debouncer debouncer = new Debouncer(new Runnable() {
             @Override
             public void run() {
-                RecipesHomeFragmentView.this.post(new Runnable() {
+                RecipesListFragmentView.this.post(new Runnable() {
                     @Override
                     public void run() {
                         setRefreshing(true);
