@@ -10,4 +10,5 @@
     <dimen name="recipe_detail_image_height">300dp</dimen>
     <dimen name="recipe_title_details_space">12dp</dimen>
     <dimen name="recipe_learn_more_title_url_space">4dp</dimen>
+    <dimen name="text_size_ultra_small">12sp</dimen>
 </resources>

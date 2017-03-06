@@ -48,4 +48,6 @@
     <string name="recipe_search_fragment_title">Search recipes</string>
     <string name="recipe_search_field_hint">Query</string>
     <string name="recipe_search_result_title">Search results</string>
+    <string name="cuisine_label">Cuisine</string>
+    <string name="recipe_type_label">Recipe type</string>
 </resources>
