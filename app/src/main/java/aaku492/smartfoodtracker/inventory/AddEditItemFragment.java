@@ -13,10 +13,13 @@ import aaku492.smartfoodtracker.FITFragment;
 import aaku492.smartfoodtracker.FragmentContainerActivity;
 import aaku492.smartfoodtracker.FragmentInitInfo;
 import aaku492.smartfoodtracker.R;
+import aaku492.smartfoodtracker.common.FunctionalUtils;
 import aaku492.smartfoodtracker.common.SimpleErrorHandlingCallback;
 import aaku492.smartfoodtracker.common.ViewUtils;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static aaku492.smartfoodtracker.common.FunctionalUtils.any;
 
 /**
  * Created by Udey Rishi (udeyrishi) on 2017-01-30.
@@ -134,13 +137,12 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
 
             @Override
             protected void onSuccessfulResponse(Response<List<InventoryItem>> response) {
-                boolean duplicate = false;
-                for (InventoryItem item : response.body()) {
-                    if (item.getTitle().toLowerCase().equals(AddEditItemFragment.this.item.getTitle().toLowerCase())) {
-                        duplicate = true;
-                        break;
+                boolean duplicate = any(response.body(), new FunctionalUtils.Predicate<InventoryItem>() {
+                    @Override
+                    public boolean test(InventoryItem in) {
+                        return in.getTitle().toLowerCase().equals(AddEditItemFragment.this.item.getTitle().toLowerCase());
                     }
-                }
+                });
 
                 if (duplicate) {
                     ((AddEditItemFragmentView)getView()).setLoading(false);
