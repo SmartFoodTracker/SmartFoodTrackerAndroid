@@ -54,8 +54,7 @@ public class RecipeSearchFragment extends FITFragment {
 
     @Override
     public boolean onAcceptPressed() {
-        // TODO: search
-        getView().showMessage("Coming soon!");
+        pushFragmentActivity(RecipesListFragment.getFragmentInitInfo(query));
         return true;
     }
 

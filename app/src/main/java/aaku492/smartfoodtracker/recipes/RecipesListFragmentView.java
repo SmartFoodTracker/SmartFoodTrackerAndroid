@@ -78,7 +78,7 @@ public class RecipesListFragmentView extends RelativeLayout {
                 android.R.color.holo_green_dark);
     }
 
-    public void render(RecipesHomeAdapter adapter) {
+    public void render(RecipesHomeAdapter adapter, boolean inSearchMode) {
         recipesCardContainer.setAdapter(adapter);
         recipesCardContainer.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
@@ -90,6 +90,8 @@ public class RecipesListFragmentView extends RelativeLayout {
                 outRect.bottom = space;
             }
         });
+
+        searchButton.setVisibility(inSearchMode ? GONE : VISIBLE);
     }
 
     public void showMessage(String message) {

@@ -47,4 +47,5 @@
     <string name="duplicate_item_error_formatter">%1$s already exists; edit that instead.</string>
     <string name="recipe_search_fragment_title">Search recipes</string>
     <string name="recipe_search_field_hint">Query</string>
+    <string name="recipe_search_result_title">Search results</string>
 </resources>

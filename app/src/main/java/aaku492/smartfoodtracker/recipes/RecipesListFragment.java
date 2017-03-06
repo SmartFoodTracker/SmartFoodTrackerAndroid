@@ -11,6 +11,7 @@ import aaku492.smartfoodtracker.FITFragment;
 import aaku492.smartfoodtracker.FragmentInitInfo;
 import aaku492.smartfoodtracker.R;
 import aaku492.smartfoodtracker.common.SimpleErrorHandlingCallback;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -19,9 +20,12 @@ import retrofit2.Response;
  */
 public class RecipesListFragment extends FITFragment implements RecipesListFragmentView.Delegate, RecipesHomeAdapter.Delegate {
 
+    private static final String QUERY = "query";
     private RecipesHomeAdapter adapter;
     private int totalPages;
     private int currentPageNumber = 1;
+
+    private RecipeSearchFragment.RecipeSearchQuery query;
 
     public static FragmentInitInfo getFragmentInitInfo() {
         return new FragmentInitInfo(RecipesListFragment.class)
@@ -29,21 +33,48 @@ public class RecipesListFragment extends FITFragment implements RecipesListFragm
                 .setIsDetailsScreen(false);
     }
 
+    public static FragmentInitInfo getFragmentInitInfo(RecipeSearchFragment.RecipeSearchQuery query) {
+        Bundle args = new Bundle();
+        args.putSerializable(QUERY, query);
+        return new FragmentInitInfo(RecipesListFragment.class)
+                .setIsModal(false)
+                .setIsDetailsScreen(true)
+                .setArgs(args);
+    }
+
     @Override
     public RecipesListFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         adapter = new RecipesHomeAdapter(new ArrayList<RecipeResponse.Recipe>(), this);
         RecipesListFragmentView view = RecipesListFragmentView.inflate(inflater, container, this);
-        view.render(adapter);
 
-        getContainerActivity().setTitle(R.string.recipes_fragment_title);
+
+        if (savedInstanceState != null && savedInstanceState.getSerializable(QUERY) != null) {
+            this.query = (RecipeSearchFragment.RecipeSearchQuery) savedInstanceState.getSerializable(QUERY);
+        } else if (getArguments() != null && getArguments().getSerializable(QUERY) != null) {
+            this.query = (RecipeSearchFragment.RecipeSearchQuery) getArguments().getSerializable(QUERY);
+        } else {
+            this.query = null;
+        }
+
+        view.render(adapter, isInSearchMode());
+
+        getContainerActivity().setTitle(isInSearchMode() ? R.string.recipe_search_result_title : R.string.recipes_fragment_title);
 
         fetchRecipes(view, true);
         return view;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
+        if (isInSearchMode()) {
+            bundle.putSerializable(QUERY, this.query);
+        }
+    }
+
     private void fetchRecipes(final RecipesListFragmentView view, final boolean clear) {
         view.setRefreshing(true);
-        getDataProvider().getSuggestedRecipes(getUserId(), currentPageNumber).enqueue(new SimpleErrorHandlingCallback<RecipeResponse>() {
+        Callback<RecipeResponse> callback = new SimpleErrorHandlingCallback<RecipeResponse>() {
             @Override
             protected void onFailure(String errorDescription) {
                 view.setRefreshing(false);
@@ -60,7 +91,22 @@ public class RecipesListFragment extends FITFragment implements RecipesListFragm
                 adapter.addAll(response.body().getRecipes());
                 view.setRefreshing(false);
             }
-        });
+        };
+
+        if (isInSearchMode()) {
+            String searchQuery = query.getSearchQuery() == null || query.getSearchQuery().trim().equals("") ? null : query.getSearchQuery().trim();
+
+            // TODO
+//            Ingredients ingredients = null;
+//            Intolerances intolerances = null;
+
+            Cuisine cuisine = query.getCuisine() == Cuisine.Any ? null : query.getCuisine();
+            RecipeType recipeType = query.getRecipeType() == RecipeType.Any ? null : query.getRecipeType();
+
+            getDataProvider().searchRecipes(searchQuery, currentPageNumber, null, cuisine, null, recipeType).enqueue(callback);
+        } else {
+            getDataProvider().getSuggestedRecipes(getUserId(), currentPageNumber).enqueue(callback);
+        }
     }
 
     @NonNull
@@ -87,11 +133,28 @@ public class RecipesListFragment extends FITFragment implements RecipesListFragm
 
     @Override
     public void onSearchPressed() {
+        if (isInSearchMode()) {
+            throw new IllegalStateException("Search button should've been disabled when in search results mode.");
+        }
         pushFragmentActivity(RecipeSearchFragment.getFragmentInitInfo());
     }
 
     @Override
     public void onRecipeSelected(RecipeResponse.Recipe recipe) {
         pushFragmentActivity(RecipeDetailFragment.getFragmentInitInfo(recipe));
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (!isInSearchMode()) {
+            return super.onBackPressed();
+        }
+
+        popFragmentActivity();
+        return true;
+    }
+
+    private boolean isInSearchMode() {
+        return query != null;
     }
 }
