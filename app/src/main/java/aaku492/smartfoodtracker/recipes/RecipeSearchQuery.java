@@ -1,6 +1,7 @@
 package aaku492.smartfoodtracker.recipes;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import aaku492.smartfoodtracker.common.DataProvider;
 import retrofit2.Call;
@@ -13,6 +14,9 @@ public class RecipeSearchQuery implements Serializable {
     private String searchQuery;
     private Cuisine cuisine;
     private RecipeType recipeType;
+    private final Ingredients ingredients = new Ingredients(new ArrayList<String>());
+    private final Intolerances intolerances = new Intolerances(new ArrayList<Intolerances.Intolerance>());
+
 
     public RecipeSearchQuery() {
         searchQuery = "";
@@ -47,14 +51,27 @@ public class RecipeSearchQuery implements Serializable {
 
     public Call<RecipeResponse> makeSearchCall(int pageNumber, DataProvider dataProvider) {
         String searchQuery = this.searchQuery == null || this.searchQuery.trim().equals("") ? null : this.searchQuery.trim();
-
-        // TODO
-//            Ingredients ingredients = null;
-//            Intolerances intolerances = null;
-
+        Ingredients ingredients = this.ingredients.toString().equals("") ? null : this.ingredients;
         Cuisine cuisine = this.cuisine == Cuisine.Any ? null : this.cuisine;
+        Intolerances intolerances = this.intolerances.toString().equals("") ? null : this.intolerances;
         RecipeType recipeType = this.recipeType == RecipeType.Any ? null : this.recipeType;
 
-        return dataProvider.searchRecipes(searchQuery, pageNumber, null, cuisine, null, recipeType);
+        return dataProvider.searchRecipes(searchQuery, pageNumber, ingredients , cuisine, intolerances, recipeType);
+    }
+
+    public Ingredients getIngredients() {
+        return ingredients;
+    }
+
+    public void addIngredients(String ingredient) {
+        this.ingredients.add(ingredient);
+    }
+
+    public Intolerances getIntolerances() {
+        return intolerances;
+    }
+
+    public void addIntolerance(Intolerances.Intolerance intolerance) {
+        this.intolerances.add(intolerance);
     }
 }

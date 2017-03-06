@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Created by Udey Rishi (udeyrishi) on 2017-02-20.
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
  */
-public class RecipeResponse {
+public class RecipeResponse implements Serializable {
     @SerializedName("page")
     private int pageNumber;
 
