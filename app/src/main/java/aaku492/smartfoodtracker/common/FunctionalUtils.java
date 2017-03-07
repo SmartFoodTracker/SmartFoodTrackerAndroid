@@ -1,5 +1,7 @@
 package aaku492.smartfoodtracker.common;
 
+import android.support.v4.util.Pair;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,26 @@ public class FunctionalUtils {
             }
         }
         return false;
+    }
+
+    public static <T> List<T> filter(Iterable<T> in, Predicate<T> predicate) {
+        ArrayList<T> out = new ArrayList<>();
+        for (T i: in) {
+            if (predicate.test(i)) {
+                out.add(i);
+            }
+        }
+        return out;
+    }
+
+    public static <T> List<Pair<Integer, T>> enumerate(Iterable<T> in) {
+        return map(in, new Mapper<T, Pair<Integer, T>>() {
+            private int i = 0;
+            @Override
+            public Pair<Integer, T> map(T in) {
+                return new Pair<>(i++, in);
+            }
+        });
     }
 
     public interface Mapper<T1, T2> {

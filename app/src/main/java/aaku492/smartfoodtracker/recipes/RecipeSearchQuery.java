@@ -15,7 +15,7 @@ public class RecipeSearchQuery implements Serializable {
     private Cuisine cuisine;
     private RecipeType recipeType;
     private final Ingredients ingredients = new Ingredients(new ArrayList<String>());
-    private final Intolerances intolerances = new Intolerances(new ArrayList<Intolerances.Intolerance>());
+    private final Intolerances intolerances = new Intolerances();
 
 
     public RecipeSearchQuery() {
@@ -69,9 +69,5 @@ public class RecipeSearchQuery implements Serializable {
 
     public Intolerances getIntolerances() {
         return intolerances;
-    }
-
-    public void addIntolerance(Intolerances.Intolerance intolerance) {
-        this.intolerances.add(intolerance);
     }
 }

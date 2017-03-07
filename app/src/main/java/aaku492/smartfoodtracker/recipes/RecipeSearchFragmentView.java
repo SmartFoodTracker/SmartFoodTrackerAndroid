@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import java.util.Arrays;
 
 import aaku492.smartfoodtracker.R;
+import aaku492.smartfoodtracker.common.Chip;
 import aaku492.smartfoodtracker.common.Field;
 import aaku492.smartfoodtracker.common.FunctionalUtils;
 import aaku492.smartfoodtracker.common.StringUtils;
@@ -37,6 +38,9 @@ public class RecipeSearchFragmentView extends LinearLayout {
 
     @BindView(R.id.recipe_type)
     protected AppCompatSpinner recipeType;
+
+    @BindView(R.id.intolerances_container)
+    protected ViewGroup intolerancesContainer;
 
     public RecipeSearchFragmentView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -83,6 +87,26 @@ public class RecipeSearchFragmentView extends LinearLayout {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
+        for (int i = 0; i < intolerancesContainer.getChildCount(); ++i) {
+            if (!(intolerancesContainer.getChildAt(i) instanceof Chip)) {
+                throw new IllegalStateException("Intolerances Container's children should only be chips");
+            }
+            final Chip child = (Chip) intolerancesContainer.getChildAt(i);
+            child.setOnSelectionChangedListener(null);
+            child.setSelected(query.getIntolerances().isAdded(Intolerances.Intolerance.values()[i]));
+            final int finalI = i;
+            child.setOnSelectionChangedListener(new Chip.OnSelectionChangedListener() {
+                @Override
+                public void onSelectionChanged(Chip v, boolean selected) {
+                    if (selected) {
+                        query.getIntolerances().add(Intolerances.Intolerance.values()[finalI]);
+                    } else {
+                        query.getIntolerances().remove(Intolerances.Intolerance.values()[finalI]);
+                    }
+                }
+            });
+        }
     }
 
     public void showMessage(String message) {
@@ -113,7 +137,12 @@ public class RecipeSearchFragmentView extends LinearLayout {
                     }
                 })
         ));
+
+        for (Intolerances.Intolerance intolerance : Intolerances.Intolerance.values()) {
+            Chip chip = new Chip(getContext());
+            chip.setLayoutParams(new Chip.LayoutParams(Chip.LayoutParams.WRAP_CONTENT, Chip.LayoutParams.WRAP_CONTENT));
+            chip.setText(StringUtils.titleCase(intolerance.toString()));
+            intolerancesContainer.addView(chip);
+        }
     }
-
-
 }
