@@ -52,6 +52,7 @@ public class RecipeSearchFragment extends FITFragment {
 
     @Override
     public boolean onAcceptPressed() {
+        getView().onAcceptPressed();
         pushFragmentActivity(RecipesListFragment.getFragmentInitInfo(query));
         return true;
     }
@@ -64,5 +65,4 @@ public class RecipeSearchFragment extends FITFragment {
         }
         return (RecipeSearchFragmentView) super.getView();
     }
-
 }

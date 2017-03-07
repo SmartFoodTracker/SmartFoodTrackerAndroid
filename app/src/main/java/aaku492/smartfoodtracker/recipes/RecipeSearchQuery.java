@@ -64,7 +64,7 @@ public class RecipeSearchQuery implements Serializable {
     }
 
     public void addIngredients(String ingredient) {
-        this.ingredients.add(ingredient);
+        this.ingredients.getList().add(ingredient);
     }
 
     public Intolerances getIntolerances() {

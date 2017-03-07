@@ -83,6 +83,10 @@ public class Field extends RelativeLayout {
         editText.setText(text);
     }
 
+    public String getText() {
+        return editText.getText().toString();
+    }
+
     public void setHint(CharSequence hint) {
         layout.setHint(hint);
     }

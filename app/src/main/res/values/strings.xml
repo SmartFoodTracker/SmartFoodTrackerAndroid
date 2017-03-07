@@ -50,4 +50,6 @@
     <string name="recipe_search_result_title">Search results</string>
     <string name="cuisine_label">Cuisine</string>
     <string name="recipe_type_label">Recipe type</string>
+    <string name="add_ingredient_field_hint">Add ingredient</string>
+    <string name="ingredient_already_added_formatter">Ingredient %1$s is already present.</string>
 </resources>

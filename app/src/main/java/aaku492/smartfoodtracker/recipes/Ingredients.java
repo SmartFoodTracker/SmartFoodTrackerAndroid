@@ -16,12 +16,8 @@ public class Ingredients implements Serializable {
         this.ingredients = ingredients;
     }
 
-    public void add(String ingredient) {
-        this.ingredients.add(ingredient);
-    }
-
-    public void remove(String ingredient) {
-        this.ingredients.remove(ingredient);
+    public List<String> getList() {
+        return ingredients;
     }
 
     @Override

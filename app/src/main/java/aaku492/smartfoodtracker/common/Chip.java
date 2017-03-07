@@ -46,8 +46,7 @@ public class Chip extends RelativeLayout {
         super.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                isSelected = !isSelected;
-                setSelected(isSelected);
+                setSelected(!isSelected);
                 if (onSelectionChangedListener != null) {
                     onSelectionChangedListener.onSelectionChanged(Chip.this, isSelected);
                 }
@@ -62,6 +61,12 @@ public class Chip extends RelativeLayout {
 
     public void setOnSelectionChangedListener(@Nullable OnSelectionChangedListener onSelectionChangedListener) {
         this.onSelectionChangedListener = onSelectionChangedListener;
+    }
+
+    @Override
+    public void setSelected(boolean selected) {
+        super.setSelected(selected);
+        this.isSelected = selected;
     }
 
     private void initAttrs(AttributeSet attrs) {

@@ -6,6 +6,10 @@ package aaku492.smartfoodtracker.common;
  */
 public class StringUtils {
     public static String titleCase(String rawString) {
+        rawString = rawString.trim();
+        if (rawString.equals("")) {
+            return "";
+        }
         StringBuilder sb = new StringBuilder(rawString.length());
         for (String part : rawString.split("\\s+")) {
             sb.append(part.substring(0, 1).toUpperCase());
@@ -14,6 +18,6 @@ public class StringUtils {
             }
             sb.append(" ");
         }
-        return sb.toString();
+        return sb.toString().trim();
     }
 }

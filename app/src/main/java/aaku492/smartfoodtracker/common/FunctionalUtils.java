@@ -47,6 +47,17 @@ public class FunctionalUtils {
         });
     }
 
+    public static <T> int indexOf(Iterable<T> in, Predicate<T> predicate) {
+        int i = -1;
+        for (T val : in) {
+            ++i;
+            if (predicate.test(val)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public interface Mapper<T1, T2> {
         T2 map(T1 in);
     }
