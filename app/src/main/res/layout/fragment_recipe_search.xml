@@ -85,6 +85,11 @@
         </LinearLayout>
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/intolerances_title"/>
+
     <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/intolerances_container"
         xmlns:android="http://schemas.android.com/apk/res/android"

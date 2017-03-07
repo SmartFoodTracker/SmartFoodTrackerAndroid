@@ -53,4 +53,5 @@
     <string name="add_ingredient_field_hint">Add ingredient</string>
     <string name="ingredient_already_added_formatter">Ingredient %1$s is already present.</string>
     <string name="empty_recipe_search_form">The search form cannot be empty.</string>
+    <string name="intolerances_title">Intolerances</string>
 </resources>
