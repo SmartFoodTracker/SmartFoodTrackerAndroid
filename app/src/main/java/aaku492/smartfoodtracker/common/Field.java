@@ -2,14 +2,16 @@ package aaku492.smartfoodtracker.common;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Filterable;
+import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,7 +28,7 @@ import butterknife.ButterKnife;
 public class Field extends RelativeLayout {
 
     @BindView(R.id.edit_text)
-    protected TextInputEditText editText;
+    protected AppCompatAutoCompleteTextView editText;
 
     @BindView(R.id.error_field)
     protected TextView errorView;
@@ -105,6 +107,10 @@ public class Field extends RelativeLayout {
             editText.removeTextChangedListener(textWatcher);
         }
         textWatchers.clear();
+    }
+
+    public <T extends ListAdapter & Filterable> void setSuggestionsAdapter(T adapter) {
+        editText.setAdapter(adapter);
     }
 
     public boolean validate(TextValidator validator, CharSequence errorMessage) {

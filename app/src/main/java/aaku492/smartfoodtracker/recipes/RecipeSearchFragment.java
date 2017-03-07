@@ -2,12 +2,18 @@ package aaku492.smartfoodtracker.recipes;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
+import java.util.List;
 
 import aaku492.smartfoodtracker.FITFragment;
 import aaku492.smartfoodtracker.FragmentInitInfo;
 import aaku492.smartfoodtracker.R;
+import aaku492.smartfoodtracker.common.SimpleErrorHandlingCallback;
+import aaku492.smartfoodtracker.inventory.InventoryItem;
+import retrofit2.Response;
 
 /**
  * Created by Udey Rishi (udeyrishi) on 2017-03-05.
@@ -15,6 +21,7 @@ import aaku492.smartfoodtracker.R;
  */
 public class RecipeSearchFragment extends FITFragment {
     private static final String QUERY = "query";
+    private static final String LOG_TAG = RecipeSearchFragment.class.getName();
     private RecipeSearchQuery query;
 
     public static FragmentInitInfo getFragmentInitInfo() {
@@ -26,7 +33,7 @@ public class RecipeSearchFragment extends FITFragment {
     @Override
     public RecipeSearchFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getContainerActivity().setTitle(R.string.recipe_search_fragment_title);
-        RecipeSearchFragmentView view = RecipeSearchFragmentView.inflate(inflater, container);
+        final RecipeSearchFragmentView view = RecipeSearchFragmentView.inflate(inflater, container);
 
         if (savedInstanceState != null && savedInstanceState.getSerializable(QUERY) != null) {
             this.query = (RecipeSearchQuery) savedInstanceState.getSerializable(QUERY);
@@ -34,7 +41,25 @@ public class RecipeSearchFragment extends FITFragment {
             this.query = new RecipeSearchQuery();
         }
 
-        view.render(query);
+        view.setLoading(true);
+
+        getDataProvider().getInventory(getCurrentDeviceId()).enqueue(new SimpleErrorHandlingCallback<List<InventoryItem>>() {
+            @Override
+            protected void onFailure(String errorDescription) {
+                view.setLoading(false);
+                Log.e(LOG_TAG, getString(R.string.inventory_fetch_error) + " " + errorDescription);
+                getView().showMessage(getString(R.string.inventory_fetch_error));
+                view.render(query, null);
+
+            }
+
+            @Override
+            protected void onSuccessfulResponse(Response<List<InventoryItem>> response) {
+                view.setLoading(false);
+                view.render(query, response.body());
+            }
+        });
+
         return view;
     }
 

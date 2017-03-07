@@ -1,5 +1,6 @@
 package aaku492.smartfoodtracker.recipes;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatSpinner;
@@ -15,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 
 import java.util.Arrays;
+import java.util.List;
 
 import aaku492.smartfoodtracker.R;
 import aaku492.smartfoodtracker.common.Chip;
@@ -22,6 +24,7 @@ import aaku492.smartfoodtracker.common.Field;
 import aaku492.smartfoodtracker.common.FunctionalUtils;
 import aaku492.smartfoodtracker.common.StringUtils;
 import aaku492.smartfoodtracker.common.ViewUtils;
+import aaku492.smartfoodtracker.inventory.InventoryItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -51,7 +54,10 @@ public class RecipeSearchFragmentView extends LinearLayout {
 
     @BindView(R.id.ingredients_field)
     protected Field ingredientsField;
+
     private RecipeSearchQuery query;
+
+    private ProgressDialog dialog = null;
 
     public RecipeSearchFragmentView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -61,7 +67,7 @@ public class RecipeSearchFragmentView extends LinearLayout {
         return ViewUtils.inflate(R.layout.fragment_recipe_search, inflater, container);
     }
 
-    public void render(final RecipeSearchQuery query) {
+    public void render(final RecipeSearchQuery query, @Nullable List<InventoryItem> inventory) {
         this.query = query;
         searchField.clearTextChangedListeners();
         cuisine.setOnItemSelectedListener(null);
@@ -136,6 +142,29 @@ public class RecipeSearchFragmentView extends LinearLayout {
                 return false;
             }
         });
+
+        if (inventory != null) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                    getContext(),
+                    android.R.layout.simple_dropdown_item_1line,
+                    map(inventory, new FunctionalUtils.Mapper<InventoryItem, String>() {
+                        @Override
+                        public String map(InventoryItem in) {
+                            return in.getTitle();
+                        }
+                    })
+            );
+            ingredientsField.setSuggestionsAdapter(adapter);
+        }
+    }
+
+    public void setLoading(boolean isLoading) {
+        if (isLoading && dialog == null) {
+            dialog = ViewUtils.createAndShowProgressDialog(getContext());
+        } else if (!isLoading && dialog != null) {
+            dialog.hide();
+            dialog = null;
+        }
     }
 
     public void showMessage(String message) {
