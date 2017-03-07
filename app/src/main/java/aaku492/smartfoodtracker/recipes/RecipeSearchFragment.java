@@ -53,8 +53,17 @@ public class RecipeSearchFragment extends FITFragment {
     @Override
     public boolean onAcceptPressed() {
         getView().onAcceptPressed();
-        pushFragmentActivity(RecipesListFragment.getFragmentInitInfo(query));
+        if (validate()) {
+            pushFragmentActivity(RecipesListFragment.getFragmentInitInfo(query));
+        } else {
+            getView().showMessage(getString(R.string.empty_recipe_search_form));
+        }
         return true;
+    }
+
+    private boolean validate() {
+        return query.getIngredients().getList().size() > 0 || query.getIntolerances().numAdded() > 0 || query.getCuisine() != Cuisine.Any ||
+                query.getRecipeType() != RecipeType.Any || !query.getSearchQuery().trim().equals("");
     }
 
     @NonNull

@@ -35,6 +35,15 @@ public class Intolerances implements Serializable {
         intoleranceAdded.set(intolerance.ordinal(), false);
     }
 
+    public int numAdded() {
+        return filter(intoleranceAdded, new FunctionalUtils.Predicate<Boolean>() {
+            @Override
+            public boolean test(Boolean in) {
+                return in;
+            }
+        }).size();
+    }
+
     @Override
     public String toString() {
         return TextUtils.join(",", map(filter(enumerate(Arrays.asList(Intolerance.values())), new FunctionalUtils.Predicate<Pair<Integer, Intolerance>>() {
