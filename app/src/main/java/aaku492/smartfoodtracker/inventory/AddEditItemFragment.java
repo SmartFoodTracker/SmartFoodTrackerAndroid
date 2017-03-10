@@ -28,9 +28,12 @@ import static aaku492.smartfoodtracker.common.FunctionalUtils.any;
 public class AddEditItemFragment extends FITFragment implements AddEditItemFragmentView.Delegate {
     private static final String ITEM_ID = "item_id";
     private static final String ITEM = "item";
+    private static final String OLD_QUANTITY = "old_quantity";
     private static final String LOG_TAG = AddEditItemFragment.class.getName();
 
     private InventoryItem item;
+    // Only used when editing an item
+    private double oldQuantity = -1;
 
     public static FragmentInitInfo getFragmentInitInfo(@Nullable String itemId) {
         Bundle args = new Bundle();
@@ -48,6 +51,7 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
         if (savedInstanceState != null && savedInstanceState.getSerializable(ITEM) != null) {
             // Left the screen and coming back. Could be either creating or editing, so check the item.id
             item = (InventoryItem) savedInstanceState.getSerializable(ITEM);
+            oldQuantity = savedInstanceState.getDouble(OLD_QUANTITY, -1);
             //noinspection ConstantConditions
             view.render(item);
             getContainerActivity().setTitle(getString(isEditingItem() ? R.string.edit_item : R.string.add_item));
@@ -58,6 +62,8 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
         } else {
             // Creating new item
             item = new InventoryItem(null, null, 0.0, InventoryItem.Unit.values()[0], null, null);
+            // It should not be used
+            oldQuantity = -1;
             view.render(item);
             getContainerActivity().setTitle(getString(R.string.add_item));
         }
@@ -69,6 +75,7 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
     public void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
         bundle.putSerializable(ITEM, item);
+        bundle.putDouble(OLD_QUANTITY, oldQuantity);
     }
 
     private void fetchItemAndRender(String itemId, final AddEditItemFragmentView view) {
@@ -86,6 +93,7 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
                     protected void onSuccessfulResponse(Response<InventoryItem> response) {
                         view.render(response.body());
                         item = response.body();
+                        oldQuantity = item.getQuantity();
                         view.setLoading(false);
                     }
                 });
@@ -140,7 +148,12 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
                 boolean duplicate = any(response.body(), new FunctionalUtils.Predicate<InventoryItem>() {
                     @Override
                     public boolean test(InventoryItem in) {
-                        return in.getTitle().toLowerCase().equals(AddEditItemFragment.this.item.getTitle().toLowerCase());
+                        // Don't mark as duplicate if the two items have the same IDs, because you need to allow editing in the case.
+                        // (This doesn't affect creation, because this.item.getId() will return null, and equality
+                        // will always be false). This will catch item creation with duplicate titles, or item editing
+                        // such that the new title is duplicate to another item.
+                        return !in.getId().equals(AddEditItemFragment.this.item.getId()) &&
+                                in.getTitle().toLowerCase().equals(AddEditItemFragment.this.item.getTitle().toLowerCase());
                     }
                 });
 
@@ -149,6 +162,10 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
                     ((AddEditItemFragmentView)getView()).showMessage(getString(R.string.duplicate_item_error_formatter, item.getTitle()));
                 } else {
                     if (isEditingItem()) {
+                        if (oldQuantity < 0) {
+                            throw new IllegalStateException("Sanity check failed; oldQuantity should've been set");
+                        }
+                        item.setQuantity(item.getQuantity() - oldQuantity);
                         getDataProvider().editItem(getCurrentDeviceId(), item.getId(), item)
                                 .enqueue(mutationCallback);
                     } else {
