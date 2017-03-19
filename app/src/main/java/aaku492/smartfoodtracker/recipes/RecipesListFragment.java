@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import aaku492.smartfoodtracker.FITFragment;
 import aaku492.smartfoodtracker.FragmentInitInfo;
 import aaku492.smartfoodtracker.R;
-import aaku492.smartfoodtracker.common.SimpleErrorHandlingCallback;
 import retrofit2.Callback;
 import retrofit2.Response;
 
@@ -44,6 +43,7 @@ public class RecipesListFragment extends FITFragment implements RecipesListFragm
 
     @Override
     public RecipesListFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         adapter = new RecipesHomeAdapter(new ArrayList<RecipeResponse.Recipe>(), this);
         RecipesListFragmentView view = RecipesListFragmentView.inflate(inflater, container, this);
 
@@ -74,7 +74,7 @@ public class RecipesListFragment extends FITFragment implements RecipesListFragm
 
     private void fetchRecipes(final RecipesListFragmentView view, final boolean clear) {
         view.setRefreshing(true);
-        Callback<RecipeResponse> callback = new SimpleErrorHandlingCallback<RecipeResponse>() {
+        Callback<RecipeResponse> callback = new FITRequestCallback<RecipeResponse>() {
             @Override
             protected void onFailure(String errorDescription) {
                 view.setRefreshing(false);

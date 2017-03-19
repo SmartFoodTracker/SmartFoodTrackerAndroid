@@ -11,7 +11,6 @@ import java.util.List;
 import aaku492.smartfoodtracker.FITFragment;
 import aaku492.smartfoodtracker.FragmentInitInfo;
 import aaku492.smartfoodtracker.R;
-import aaku492.smartfoodtracker.common.SimpleErrorHandlingCallback;
 import aaku492.smartfoodtracker.inventory.InventoryItem;
 import retrofit2.Response;
 
@@ -32,6 +31,7 @@ public class RecipeSearchFragment extends FITFragment {
 
     @Override
     public RecipeSearchFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         getContainerActivity().setTitle(R.string.recipe_search_fragment_title);
         final RecipeSearchFragmentView view = RecipeSearchFragmentView.inflate(inflater, container);
 
@@ -43,7 +43,7 @@ public class RecipeSearchFragment extends FITFragment {
 
         view.setLoading(true);
 
-        getDataProvider().getInventory(getCurrentDeviceId()).enqueue(new SimpleErrorHandlingCallback<List<InventoryItem>>() {
+        getDataProvider().getInventory(getCurrentDeviceId()).enqueue(new FITRequestCallback<List<InventoryItem>>() {
             @Override
             protected void onFailure(String errorDescription) {
                 view.setLoading(false);

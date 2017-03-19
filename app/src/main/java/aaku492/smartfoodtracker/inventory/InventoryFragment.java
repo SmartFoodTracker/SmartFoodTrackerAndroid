@@ -14,7 +14,6 @@ import aaku492.smartfoodtracker.FITFragment;
 import aaku492.smartfoodtracker.FragmentContainerActivity;
 import aaku492.smartfoodtracker.FragmentInitInfo;
 import aaku492.smartfoodtracker.R;
-import aaku492.smartfoodtracker.common.SimpleErrorHandlingCallback;
 import retrofit2.Response;
 
 /**
@@ -36,6 +35,7 @@ public class InventoryFragment extends FITFragment implements InventoryAdapter.D
 
     @Override
     public InventoryFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         inventoryAdapter = new InventoryAdapter(new ArrayList<InventoryItem>(), this);
 
         getContainerActivity().setTitle(R.string.inventory_fragment_title);
@@ -57,7 +57,7 @@ public class InventoryFragment extends FITFragment implements InventoryAdapter.D
     private void fetchInventoryAndRender(final InventoryFragmentView view) {
         view.setRefreshing(true);
         getDataProvider().getInventory(getCurrentDeviceId())
-                .enqueue(new SimpleErrorHandlingCallback<List<InventoryItem>>() {
+                .enqueue(new FITRequestCallback<List<InventoryItem>>() {
                     @Override
                     protected void onFailure(String errorDescription) {
                         view.setRefreshing(false);
@@ -88,7 +88,7 @@ public class InventoryFragment extends FITFragment implements InventoryAdapter.D
             inventoryAdapter.remove(item);
 
             getDataProvider().deleteItem(getCurrentDeviceId(), item.getId())
-                    .enqueue(new SimpleErrorHandlingCallback<List<InventoryItem>>() {
+                    .enqueue(new FITRequestCallback<List<InventoryItem>>() {
                         @Override
                         protected void onFailure(String errorDescription) {
                             inventoryAdapter.add(item);

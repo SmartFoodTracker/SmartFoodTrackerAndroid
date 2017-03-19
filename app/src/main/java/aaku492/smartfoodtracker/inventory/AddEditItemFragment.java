@@ -14,7 +14,6 @@ import aaku492.smartfoodtracker.FragmentContainerActivity;
 import aaku492.smartfoodtracker.FragmentInitInfo;
 import aaku492.smartfoodtracker.R;
 import aaku492.smartfoodtracker.common.FunctionalUtils;
-import aaku492.smartfoodtracker.common.SimpleErrorHandlingCallback;
 import aaku492.smartfoodtracker.common.ViewUtils;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,6 +45,7 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
 
     @Override
     public AddEditItemFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         final AddEditItemFragmentView view = AddEditItemFragmentView.inflate(inflater, container, this);
 
         if (savedInstanceState != null && savedInstanceState.getSerializable(ITEM) != null) {
@@ -81,7 +81,7 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
     private void fetchItemAndRender(String itemId, final AddEditItemFragmentView view) {
         view.setLoading(true);
         getDataProvider().getItem(getCurrentDeviceId(), itemId)
-                .enqueue(new SimpleErrorHandlingCallback<InventoryItem>() {
+                .enqueue(new FITRequestCallback<InventoryItem>() {
                     @Override
                     protected void onFailure(String errorDescription) {
                         view.setLoading(false);
@@ -115,7 +115,7 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
         ViewUtils.closeKeyboard(getContainerActivity());
         ((AddEditItemFragmentView)getView()).setLoading(true);
 
-        final Callback<List<InventoryItem>> mutationCallback = new SimpleErrorHandlingCallback<List<InventoryItem>>() {
+        final Callback<List<InventoryItem>> mutationCallback = new FITRequestCallback<List<InventoryItem>>() {
             @Override
             protected void onFailure(String errorDescription) {
                 ((AddEditItemFragmentView)getView()).setLoading(false);
@@ -135,7 +135,7 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
             }
         };
 
-        getDataProvider().getInventory(getCurrentDeviceId()).enqueue(new SimpleErrorHandlingCallback<List<InventoryItem>>() {
+        getDataProvider().getInventory(getCurrentDeviceId()).enqueue(new FITRequestCallback<List<InventoryItem>>() {
             @Override
             protected void onFailure(String errorDescription) {
                 ((AddEditItemFragmentView)getView()).setLoading(false);
