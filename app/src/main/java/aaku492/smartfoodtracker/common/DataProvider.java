@@ -21,14 +21,12 @@ import retrofit2.http.Query;
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
  */
 public interface DataProvider {
-//    @Headers("Cache-Control: public, max-age=640000, s-maxage=640000 , max-stale=2419200")
     @GET("{deviceId}/inventory")
     Call<List<InventoryItem>> getInventory(@Path("deviceId") String deviceId);
 
     @DELETE("{deviceId}/inventory/{itemId}")
     Call<List<InventoryItem>> deleteItem(@Path("deviceId") String deviceId, @Path("itemId") String itemId);
 
-//    @Headers("Cache-Control: public, max-age=640000, s-maxage=640000 , max-stale=2419200")
     @GET("{deviceId}/inventory/{itemId}")
     Call<InventoryItem> getItem(@Path("deviceId") String deviceId, @Path("itemId") String itemId);
 
