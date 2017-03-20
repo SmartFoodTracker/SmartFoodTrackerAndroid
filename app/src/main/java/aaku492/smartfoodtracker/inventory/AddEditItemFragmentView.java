@@ -88,8 +88,8 @@ public class AddEditItemFragmentView extends LinearLayout {
         this.title.setText(title == null ? "" : title);
     }
 
-    private void renderQuantity(@Nullable Double quantity) {
-        this.quantity.setText(quantity == null ? "0.0" : quantity.toString());
+    private void renderQuantity(@NonNull Double quantity) {
+        this.quantity.setText(quantity.toString());
     }
 
     private void renderExpiryDate(@Nullable Long expiryTime) {
@@ -207,7 +207,8 @@ public class AddEditItemFragmentView extends LinearLayout {
             @Override
             public boolean isValid(CharSequence text) {
                 if (text == null || text.toString().equals("")) {
-                    return false;
+                    // Allow expiry date to be optional
+                    return true;
                 }
 
                 try {
