@@ -45,7 +45,6 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
 
     @Override
     public AddEditItemFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         final AddEditItemFragmentView view = AddEditItemFragmentView.inflate(inflater, container, this);
 
         if (savedInstanceState != null && savedInstanceState.getSerializable(ITEM) != null) {
@@ -57,8 +56,11 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
             getContainerActivity().setTitle(getString(isEditingItem() ? R.string.edit_item : R.string.add_item));
         } else if (getArguments() != null && getArguments().getString(ITEM_ID) != null) {
             // Editing an existing item
-            fetchItemAndRender(getArguments().getString(ITEM_ID), view);
             getContainerActivity().setTitle(getString(R.string.edit_item));
+            item = null;
+            // item = null marks the item fetching as pending. This will be treated as the "edit item"
+            // case in the initial stages of fragment loading.
+            // Don't fetch item/render yet. That'll happen when super class calls onRefresh
         } else {
             // Creating new item
             item = new InventoryItem(null, null, 0.0, InventoryItem.Unit.values()[0], null, null);
@@ -72,13 +74,22 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
     }
 
     @Override
+    protected void onRefresh() {
+        if (isEditingItem()) {
+            fetchItemAndRender(getArguments().getString(ITEM_ID));
+        }
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
         bundle.putSerializable(ITEM, item);
         bundle.putDouble(OLD_QUANTITY, oldQuantity);
     }
 
-    private void fetchItemAndRender(String itemId, final AddEditItemFragmentView view) {
+    @SuppressWarnings("ConstantConditions")
+    private void fetchItemAndRender(String itemId) {
+        final AddEditItemFragmentView view = (AddEditItemFragmentView) getView();
         view.setLoading(true);
         getDataProvider().getItem(getCurrentDeviceId(), itemId)
                 .enqueue(new FITRequestCallback<InventoryItem>() {
@@ -180,7 +191,8 @@ public class AddEditItemFragment extends FITFragment implements AddEditItemFragm
     }
 
     private boolean isEditingItem() {
-        return item.getId() != null;
+        // item can be null if the fetching is not completed
+        return item == null || item.getId() != null;
     }
 
     @Override

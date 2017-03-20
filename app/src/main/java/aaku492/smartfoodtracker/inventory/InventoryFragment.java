@@ -35,14 +35,12 @@ public class InventoryFragment extends FITFragment implements InventoryAdapter.D
 
     @Override
     public InventoryFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         inventoryAdapter = new InventoryAdapter(new ArrayList<InventoryItem>(), this);
 
         getContainerActivity().setTitle(R.string.inventory_fragment_title);
 
         InventoryFragmentView view = InventoryFragmentView.inflate(inflater, container, this);
         view.render(inventoryAdapter);
-        fetchInventoryAndRender(view);
 
         isEditing = savedInstanceState == null ? null : (Boolean) savedInstanceState.getSerializable(IS_EDITING);
         return view;
@@ -54,7 +52,8 @@ public class InventoryFragment extends FITFragment implements InventoryAdapter.D
         bundle.putSerializable(IS_EDITING, isEditing);
     }
 
-    private void fetchInventoryAndRender(final InventoryFragmentView view) {
+    private void fetchInventoryAndRender() {
+        final InventoryFragmentView view = getView();
         view.setRefreshing(true);
         getDataProvider().getInventory(getCurrentDeviceId())
                 .enqueue(new FITRequestCallback<List<InventoryItem>>() {
@@ -120,7 +119,7 @@ public class InventoryFragment extends FITFragment implements InventoryAdapter.D
 
     @Override
     public void onRefresh() {
-        fetchInventoryAndRender(getView());
+        fetchInventoryAndRender();
     }
 
     @Override

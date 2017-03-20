@@ -2,12 +2,8 @@ package aaku492.smartfoodtracker;
 
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,7 +27,7 @@ import retrofit2.http.Query;
  * Created by Udey Rishi (udeyrishi) on 2017-01-30.
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
  */
-public class FITFragment extends Fragment {
+public abstract class FITFragment extends Fragment {
 
     private static final String LOG_TAG = FITFragment.class.getName();
 
@@ -51,22 +47,8 @@ public class FITFragment extends Fragment {
 
     @CallSuper
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        synchronized (cancellingLock) {
-            isCancelling = false;
-            if (!firedCalls.isEmpty()) {
-                throw new IllegalStateException("Sanity check failure; leftover calls from last time.");
-            }
-        }
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-
-    @CallSuper
-    @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         synchronized (cancellingLock) {
             isCancelling = true;
             Iterator<Call<?>> iterator = firedCalls.iterator();
@@ -80,6 +62,21 @@ public class FITFragment extends Fragment {
             }
         }
     }
+
+    @CallSuper
+    @Override
+    public void onResume() {
+        super.onResume();
+        synchronized (cancellingLock) {
+            isCancelling = false;
+            if (!firedCalls.isEmpty()) {
+                throw new IllegalStateException("Sanity check failure; leftover calls from last time.");
+            }
+        }
+        onRefresh();
+    }
+
+    protected abstract void onRefresh();
 
     protected String getCurrentDeviceId() {
         return getContainerActivity().getApp().getCurrentDeviceId();

@@ -31,7 +31,6 @@ public class RecipeSearchFragment extends FITFragment {
 
     @Override
     public RecipeSearchFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         getContainerActivity().setTitle(R.string.recipe_search_fragment_title);
         final RecipeSearchFragmentView view = RecipeSearchFragmentView.inflate(inflater, container);
 
@@ -42,7 +41,12 @@ public class RecipeSearchFragment extends FITFragment {
         }
 
         view.setLoading(true);
+        return view;
+    }
 
+    @Override
+    protected void onRefresh() {
+        final RecipeSearchFragmentView view = getView();
         getDataProvider().getInventory(getCurrentDeviceId()).enqueue(new FITRequestCallback<List<InventoryItem>>() {
             @Override
             protected void onFailure(String errorDescription) {
@@ -50,7 +54,6 @@ public class RecipeSearchFragment extends FITFragment {
                 Log.e(LOG_TAG, getString(R.string.inventory_fetch_error) + " " + errorDescription);
                 getView().showMessage(getString(R.string.inventory_fetch_error));
                 view.render(query, null);
-
             }
 
             @Override
@@ -59,8 +62,6 @@ public class RecipeSearchFragment extends FITFragment {
                 view.render(query, response.body());
             }
         });
-
-        return view;
     }
 
     @Override

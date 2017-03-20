@@ -43,7 +43,6 @@ public class RecipesListFragment extends FITFragment implements RecipesListFragm
 
     @Override
     public RecipesListFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         adapter = new RecipesHomeAdapter(new ArrayList<RecipeResponse.Recipe>(), this);
         RecipesListFragmentView view = RecipesListFragmentView.inflate(inflater, container, this);
 
@@ -60,7 +59,6 @@ public class RecipesListFragment extends FITFragment implements RecipesListFragm
 
         getContainerActivity().setTitle(isInSearchMode() ? R.string.recipe_search_result_title : R.string.recipes_fragment_title);
 
-        fetchRecipes(view, true);
         return view;
     }
 

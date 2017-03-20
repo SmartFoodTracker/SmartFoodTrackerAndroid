@@ -28,7 +28,6 @@ public class RecipeDetailFragment extends FITFragment {
 
     @Override
     public RecipeDetailFragmentView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         getContainerActivity().setTitle(R.string.recipe_detail_fragment_title);
         RecipeDetailFragmentView view = RecipeDetailFragmentView.inflate(inflater, container);
 
@@ -39,6 +38,10 @@ public class RecipeDetailFragment extends FITFragment {
         }
         view.render(this.recipe);
         return view;
+    }
+
+    @Override
+    protected void onRefresh() {
     }
 
     @Override
