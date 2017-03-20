@@ -37,7 +37,7 @@
     <string name="item_title_invalid_error">Title must be present.</string>
     <string name="item_expiry_invalid_error">Expiry date must be a valid date.</string>
     <string name="recipes_fragment_title">Recipes</string>
-    <string name="settings_fragment_title">Settings</string>
+    <string name="about_fragment_title">About</string>
     <string name="recipes_fetch_error">Failed to fetch the recipes.</string>
     <string name="recipe_detail_fragment_title">Recipe</string>
     <string name="recipe_step_formatter">%1$d. %2$s\n</string>
@@ -54,4 +54,23 @@
     <string name="ingredient_already_added_formatter">Ingredient %1$s is already present.</string>
     <string name="empty_recipe_search_form">The search form cannot be empty.</string>
     <string name="intolerances_title">Intolerances</string>
+    <string name="app_description">Thank you for downloading the companion app for Smart Food Tracker.
+        This app was built as part of the Group 2 capstone project for ECE 492 Winter 2017 at the University of Alberta.
+        For any feedback, please visit the project\'s <a href="https://github.com/SmartFoodTracker">GitHub</a> page.</string>
+    <string name="app_credits_title">With \u2764, the SFT team.</string>
+    <string name="udey_name"><a href="https://github.com/udeyrishi">Udey Rishi</a></string>
+    <string name="kyle_name"><a href="https://github.com/kyleoshaughnessy">Kyle O\'Shaughnessy</a></string>
+    <string name="hoskins_name"><a href="https://github.com/ahoskins">Andrew Hoskins</a></string>
+    <string name="bradshaw_name"><a href="https://github.com/bradshawz">Andrew Bradshaw</a></string>
+    <string name="hoskins_image">https://avatars2.githubusercontent.com/u/1527504?v=3&amp;s=400</string>
+    <string name="udey_image">https://avatars1.githubusercontent.com/u/4692593?v=3&amp;s=400</string>
+    <string name="kyle_image">https://avatars0.githubusercontent.com/u/5834110?v=3&amp;s=400</string>
+    <string name="bradshaw_image">https://avatars3.githubusercontent.com/u/6673581?v=3&amp;s=400</string>
+    <string name="app_external_sources_title">Shoutout to these awesome open-source projects that helped build this app!</string>
+    <string name="app_external_sources"> \u2022 <a href="http://jakewharton.github.io/butterknife/">ButterKnife</a>\n\n
+        \u2022 <a href="http://square.github.io/okhttp/">OkHttp</a>\n\n
+        \u2022 <a href="http://square.github.io/retrofit/">Retrofit</a>\n\n
+        \u2022 <a href="https://github.com/bumptech/glide">Glide</a>\n\n
+        \u2022 <a href="https://github.com/google/flexbox-layout">FlexboxLayout</a>
+    </string>
 </resources>

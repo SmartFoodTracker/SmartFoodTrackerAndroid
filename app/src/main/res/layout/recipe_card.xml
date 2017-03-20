@@ -12,7 +12,7 @@
         <ImageView
             android:id="@+id/recipe_thumbnail"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/recipe_card_image_height"/>
+            android:layout_height="@dimen/image_thumbnail_side"/>
 
         <TextView
             android:id="@+id/recipe_title"

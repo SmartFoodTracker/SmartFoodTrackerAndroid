@@ -14,9 +14,9 @@
         android:title="@string/recipes_fragment_title"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_about"
         android:enabled="true"
-        android:icon="@drawable/ic_settings_black"
-        android:title="@string/settings_fragment_title"
+        android:icon="@drawable/ic_info"
+        android:title="@string/about_fragment_title"
         app:showAsAction="ifRoom"/>
 </menu>

@@ -11,8 +11,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
+import aaku492.smartfoodtracker.about.AboutFragment;
 import aaku492.smartfoodtracker.inventory.InventoryFragment;
 import aaku492.smartfoodtracker.recipes.RecipesListFragment;
 import butterknife.BindView;
@@ -83,9 +83,9 @@ public class FragmentContainerActivity extends AppCompatActivity {
                         case R.id.action_recipes:
                             nextFragment = RecipesListFragment.getFragmentInitInfo();
                             break;
-                        case R.id.action_settings:
-                            Toast.makeText(FragmentContainerActivity.this, "Coming soon!", Toast.LENGTH_LONG).show();
-                            return true;
+                        case R.id.action_about:
+                            nextFragment = AboutFragment.getFragmentInfo();
+                            break;
                         default:
                             Log.e(LOG_TAG, "Unknown bottom nav menu item with id: " + item.getItemId());
                             return false;
