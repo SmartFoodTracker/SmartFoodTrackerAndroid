@@ -5,19 +5,30 @@ package aaku492.smartfoodtracker.common;
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
  */
 public class StringUtils {
+
     public static String titleCase(String rawString) {
-        rawString = rawString.trim();
-        if (rawString.equals("")) {
-            return "";
-        }
-        StringBuilder sb = new StringBuilder(rawString.length());
-        for (String part : rawString.split("\\s+")) {
-            sb.append(part.substring(0, 1).toUpperCase());
-            if (part.length() > 1) {
-                sb.append(part.substring(1).toLowerCase());
+        final char LOWER_TO_UPPER_ASCII_DIFF = 'a' - 'A';
+
+        StringBuilder stringBuilder = new StringBuilder(rawString.length());
+
+        boolean firstLetter = true;
+        for (char c : rawString.toCharArray()) {
+            if (c == ' ' || c == '\t' || c == '\n' || c == '\r') {
+                stringBuilder.append(c);
+                firstLetter = true;
+            } else if (firstLetter) {
+                if (c >= 'a' && c <= 'z') {
+                    c = (char) (c - LOWER_TO_UPPER_ASCII_DIFF);
+                }
+                stringBuilder.append(c);
+                firstLetter = false;
+            } else {
+                if (c >= 'A' && c <= 'Z') {
+                    c = (char) (c + LOWER_TO_UPPER_ASCII_DIFF);
+                }
+                stringBuilder.append(c);
             }
-            sb.append(" ");
         }
-        return sb.toString().trim();
+        return stringBuilder.toString();
     }
 }
