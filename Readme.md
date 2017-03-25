@@ -23,6 +23,11 @@ Unfortunately, this won't work if you're working in a Python virtualenv; you'll 
 $ ./gradlew test
 
 # For running the UI screenshot tests
+# This will run the tests and compare the screenshots with the gold images in app/screenshots
+$ ./gradlew verifyMode screenshotTests
+
+# If you added more screenshot tests, and need to record gold images
+$ ./gradlew recordMode screenshotTests
 
 ```
 
