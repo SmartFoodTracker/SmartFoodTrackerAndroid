@@ -20,7 +20,7 @@ import aaku492.smartfoodtracker.R;
 public class InventoryItemViewTest extends BaseScreenshotTest {
 
     @Test
-    public void testRenderItems() throws ParseException {
+    public void testRender() throws ParseException {
         View rootView = getLayoutInflater().inflate(R.layout.test_inventory_item_view, null, false);
         LinearLayout container = (LinearLayout) rootView.findViewById(R.id.inventory_item_view_container);
 
