@@ -8,6 +8,24 @@ This is a standard Android Studio project; so to compile and run the app, downlo
 
 When you first open the project, Android Studio will install all the Gradle dependencies for the app. You should be able to compile and run the app on an actual device/emulator from within the UI.
 
+### Testing
+
+We're using Facebook's Screenshot testing library for running the UI test. These require some Python 2 modules to be installed. Do so via
+
+```sh
+$ python -m pip install -r ./requirements.txt
+```
+
+Unfortunately, this won't work if you're working in a Python virtualenv; you'll need to install the packages in the system level Python. See the related [issue](https://github.com/facebook/screenshot-tests-for-android/issues/41/).
+
+```sh
+# For running the unit tests:
+$ ./gradlew test
+
+# For running the UI screenshot tests
+
+```
+
 ### Code organization
 The general MVC architecture of the app is as follows. The "X" is a placeholder for the major action a screen does:
 
