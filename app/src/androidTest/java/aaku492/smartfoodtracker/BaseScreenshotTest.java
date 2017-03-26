@@ -54,4 +54,11 @@ public abstract class BaseScreenshotTest {
 
         return items;
     }
+
+    protected void runOnMainSync(Runnable runnable) {
+        // This is required for certain inflating/rendering/UI manipulation actions that might only be
+        // supported on the main thread/looper threads (e.g. animations).
+        // See the related issue: https://github.com/facebook/screenshot-tests-for-android/issues/57
+        InstrumentationRegistry.getInstrumentation().runOnMainSync(runnable);
+    }
 }

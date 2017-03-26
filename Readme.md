@@ -10,19 +10,24 @@ When you first open the project, Android Studio will install all the Gradle depe
 
 ### Testing
 
-We're using Facebook's Screenshot testing library for running the UI test. These require some Python 2 modules to be installed. Do so via
+#### Prerequisites
+We're using Facebook's Screenshot testing library for running the UI test. This requires some modules to be installed on the **_system level Python 2_** (this doesn't work with virtualenv; see the [issue](https://github.com/facebook/screenshot-tests-for-android/issues/41/) discussion related stuff). Do so via:
 
 ```sh
 $ python -m pip install -r ./requirements.txt
 ```
 
-Unfortunately, this won't work if you're working in a Python virtualenv; you'll need to install the packages in the system level Python. See the related [issue](https://github.com/facebook/screenshot-tests-for-android/issues/41/).
+**_For preventing any inconsistencies in the tests due to Android animations, make sure that you set window animation, transition animation, and animator duration scales to 0.0 in the developer options settings on your test device/emulator._** Not all views respect these settings, but it's still better than nothing.
 
+
+#### Running tests
 ```sh
 # For running the unit tests:
 $ ./gradlew test
 
-# For running the UI screenshot tests
+# For running the UI screenshot tests. This will output a temporary link containing the generated images
+$ ./gradlew screenshotTests
+
 # This will run the tests and compare the screenshots with the gold images in app/screenshots
 $ ./gradlew verifyMode screenshotTests
 
