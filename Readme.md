@@ -22,6 +22,10 @@ $ python -m pip install -r ./requirements.txt
 
 #### Running tests
 ```sh
+# To run all the tests, i.e., unit tests + screenshot Tests (verifyMode)
+# This should be run before committing a change
+$ ./run_tests.sh
+
 # For running the unit tests:
 $ ./gradlew test
 
@@ -33,7 +37,6 @@ $ ./gradlew verifyMode screenshotTests
 
 # If you added more screenshot tests, and need to record gold images
 $ ./gradlew recordMode screenshotTests
-
 ```
 
 ### Code organization
