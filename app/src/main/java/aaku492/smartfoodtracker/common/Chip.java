@@ -19,7 +19,6 @@ import butterknife.ButterKnife;
 public class Chip extends RelativeLayout {
     @BindView(R.id.chip_text)
     protected TextView chipText;
-    private boolean isSelected = false;
     private OnSelectionChangedListener onSelectionChangedListener = null;
 
     public Chip(Context context) {
@@ -46,10 +45,7 @@ public class Chip extends RelativeLayout {
         super.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                setSelected(!isSelected);
-                if (onSelectionChangedListener != null) {
-                    onSelectionChangedListener.onSelectionChanged(Chip.this, isSelected);
-                }
+                setSelected(!isSelected());
             }
         });
     }
@@ -65,8 +61,13 @@ public class Chip extends RelativeLayout {
 
     @Override
     public void setSelected(boolean selected) {
+        if (isSelected() == selected) {
+            return;
+        }
         super.setSelected(selected);
-        this.isSelected = selected;
+        if (onSelectionChangedListener != null) {
+            onSelectionChangedListener.onSelectionChanged(Chip.this, isSelected());
+        }
     }
 
     private void initAttrs(AttributeSet attrs) {
