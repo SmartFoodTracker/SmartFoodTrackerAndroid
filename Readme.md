@@ -20,6 +20,9 @@ $ python -m pip install -r ./requirements.txt
 **_For preventing any inconsistencies in the tests due to Android animations, make sure that you set window animation, transition animation, and animator duration scales to 0.0 in the developer options settings on your test device/emulator._** Not all views respect these settings, but it's still better than nothing.
 
 
+Before continuing, ensure that your `ANDROID_SDK` and `ANDROID_HOME` environment variables are set properly. If you installed Android Studio through the installer, chances are these variables weren't added to your .bashrc (or equivalent). Both of these should point to the location of your Android SDK. For me (on macOS Sierra), it was `/Users/<username>/Library/Android/sdk`. Another common location is `/Applications/adt-bundle-mac-x86_64-<version_number>/sdk`.
+
+
 #### Running tests
 ```sh
 # To run all the tests, i.e., unit tests + screenshot Tests (verifyMode)
