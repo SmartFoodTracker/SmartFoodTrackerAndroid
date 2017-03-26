@@ -37,7 +37,7 @@ public class RecipeSearchFragment extends FITFragment {
         if (savedInstanceState != null && savedInstanceState.getSerializable(QUERY) != null) {
             this.query = (RecipeSearchQuery) savedInstanceState.getSerializable(QUERY);
         } else {
-            this.query = new RecipeSearchQuery();
+            this.query = new RecipeSearchQuery(getUserId());
         }
 
         view.setLoading(true);

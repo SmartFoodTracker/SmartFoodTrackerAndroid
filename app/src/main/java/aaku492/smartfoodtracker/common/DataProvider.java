@@ -36,8 +36,9 @@ public interface DataProvider {
     @PUT("{deviceId}/inventory/{itemId}")
     Call<List<InventoryItem>> editItem(@Path("deviceId") String deviceId, @Path("itemId") String itemId, @Body InventoryItem item);
 
-    @GET("/recipes")
-    Call<RecipeResponse> searchRecipes(@Query("query") String searchQuery,
+    @GET("{userId}/recipes")
+    Call<RecipeResponse> searchRecipes(@Path("userId") String userId,
+                                       @Query("query") String searchQuery,
                                        @Query("page") int pageNum,
                                        @Query("ingredients") Ingredients ingredients,
                                        @Query("cuisine") Cuisine cuisine,

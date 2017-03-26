@@ -1,5 +1,7 @@
 package aaku492.smartfoodtracker.recipes;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -11,6 +13,7 @@ import retrofit2.Call;
  * Copyright © 2017 ECE 492 Group 2 (Winter 2017), University of Alberta. All rights reserved.
  */
 public class RecipeSearchQuery implements Serializable {
+    private final String userId;
     private String searchQuery;
     private Cuisine cuisine;
     private RecipeType recipeType;
@@ -18,7 +21,8 @@ public class RecipeSearchQuery implements Serializable {
     private final Intolerances intolerances = new Intolerances();
 
 
-    public RecipeSearchQuery() {
+    public RecipeSearchQuery(@NonNull String userId) {
+        this.userId = userId;
         searchQuery = "";
         cuisine = Cuisine.Any;
         recipeType = RecipeType.Any;
@@ -56,7 +60,7 @@ public class RecipeSearchQuery implements Serializable {
         Intolerances intolerances = this.intolerances.toString().equals("") ? null : this.intolerances;
         RecipeType recipeType = this.recipeType == RecipeType.Any ? null : this.recipeType;
 
-        return dataProvider.searchRecipes(searchQuery, pageNumber, ingredients , cuisine, intolerances, recipeType);
+        return dataProvider.searchRecipes(userId, searchQuery, pageNumber, ingredients , cuisine, intolerances, recipeType);
     }
 
     public Ingredients getIngredients() {

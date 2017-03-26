@@ -167,8 +167,8 @@ public abstract class FITFragment extends Fragment {
         }
 
         @Override
-        public Call<RecipeResponse> searchRecipes(@Query("query") String searchQuery, @Query("page") int pageNum, @Query("ingredients") Ingredients ingredients, @Query("cuisine") Cuisine cuisine, @Query("intolerances") Intolerances intolerances, @Query("type") RecipeType type) {
-            Call<RecipeResponse> call = getContainerActivity().getApp().getDataProvider().searchRecipes(searchQuery, pageNum, ingredients, cuisine, intolerances, type);
+        public Call<RecipeResponse> searchRecipes(@Path("userId") String userId, @Query("query") String searchQuery, @Query("page") int pageNum, @Query("ingredients") Ingredients ingredients, @Query("cuisine") Cuisine cuisine, @Query("intolerances") Intolerances intolerances, @Query("type") RecipeType type) {
+            Call<RecipeResponse> call = getContainerActivity().getApp().getDataProvider().searchRecipes(userId, searchQuery, pageNum, ingredients, cuisine, intolerances, type);
             firedCalls.add(call);
             return call;
         }
