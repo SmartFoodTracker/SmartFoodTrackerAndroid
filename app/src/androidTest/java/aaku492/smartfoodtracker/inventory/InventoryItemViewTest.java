@@ -3,9 +3,6 @@ package aaku492.smartfoodtracker.inventory;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.facebook.testing.screenshot.Screenshot;
-import com.facebook.testing.screenshot.ViewHelpers;
-
 import org.junit.Test;
 
 import java.text.ParseException;
@@ -32,11 +29,6 @@ public class InventoryItemViewTest extends BaseScreenshotTest {
             container.addView(view);
         }
 
-        ViewHelpers.setupView(container)
-                .setExactWidthDp(300)
-                .layout();
-
-        Screenshot.snap(container)
-                .record();
+        takeScreenshot(container, 300);
     }
 }

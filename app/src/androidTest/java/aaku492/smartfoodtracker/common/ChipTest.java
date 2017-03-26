@@ -3,9 +3,6 @@ package aaku492.smartfoodtracker.common;
 import android.annotation.SuppressLint;
 import android.view.View;
 
-import com.facebook.testing.screenshot.Screenshot;
-import com.facebook.testing.screenshot.ViewHelpers;
-
 import org.junit.Test;
 
 import aaku492.smartfoodtracker.BaseScreenshotTest;
@@ -43,12 +40,7 @@ public class ChipTest extends BaseScreenshotTest {
         assertTrue(chip3.isSelected());
         assertTrue(chip4.isSelected());
 
-        ViewHelpers.setupView(view)
-                .setExactWidthDp(300)
-                .layout();
-
-        Screenshot.snap(view)
-                .record();
+        takeScreenshot(view, 300);
     }
 
     @Test
@@ -100,11 +92,6 @@ public class ChipTest extends BaseScreenshotTest {
         assertEquals(chip3, lastSelectedChip[0]);
         assertFalse(lastSelection[0]);
 
-        ViewHelpers.setupView(view)
-                .setExactWidthDp(300)
-                .layout();
-
-        Screenshot.snap(view)
-                .record();
+        takeScreenshot(view, 300);
     }
 }

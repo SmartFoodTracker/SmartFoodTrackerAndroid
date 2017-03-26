@@ -1,8 +1,13 @@
 package aaku492.smartfoodtracker;
 
+import android.support.annotation.Nullable;
 import android.support.test.InstrumentationRegistry;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.View;
+
+import com.facebook.testing.screenshot.Screenshot;
+import com.facebook.testing.screenshot.ViewHelpers;
 
 /**
  * Created by Udey Rishi (udeyrishi) on 2017-03-25.
@@ -25,5 +30,27 @@ public abstract class BaseScreenshotTest {
         // supported on the main thread/looper threads (e.g. animations).
         // See the related issue: https://github.com/facebook/screenshot-tests-for-android/issues/57
         InstrumentationRegistry.getInstrumentation().runOnMainSync(runnable);
+    }
+
+    protected void takeScreenshot(View view) {
+        takeScreenshot(view, null, null);
+    }
+
+    protected void takeScreenshot(View view, Integer widthDp) {
+        takeScreenshot(view, widthDp, null);
+    }
+
+    protected void takeScreenshot(View view, @Nullable Integer widthDp, @Nullable Integer heightDp) {
+        ViewHelpers helpers = ViewHelpers.setupView(view);
+        if (widthDp != null) {
+            helpers = helpers.setExactWidthDp(widthDp);
+        }
+        if (heightDp != null) {
+            helpers = helpers.setExactHeightDp(heightDp);
+        }
+        helpers.layout();
+
+        Screenshot.snap(view)
+                .record();
     }
 }

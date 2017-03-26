@@ -1,8 +1,5 @@
 package aaku492.smartfoodtracker.inventory;
 
-import com.facebook.testing.screenshot.Screenshot;
-import com.facebook.testing.screenshot.ViewHelpers;
-
 import org.junit.Test;
 
 import java.text.ParseException;
@@ -22,12 +19,6 @@ public class InventoryFragmentViewTest extends BaseScreenshotTest {
         InventoryAdapter adapter = new InventoryAdapter(getInventoryItems(), null);
         view.render(adapter);
         adapter.notifyDataSetChanged();
-        ViewHelpers.setupView(view)
-                .setExactWidthDp(300)
-                .setExactHeightDp(400)
-                .layout();
-
-        Screenshot.snap(view)
-                .record();
+        takeScreenshot(view, 300, 400);
     }
 }

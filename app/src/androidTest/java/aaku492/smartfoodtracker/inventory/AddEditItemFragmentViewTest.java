@@ -1,8 +1,5 @@
 package aaku492.smartfoodtracker.inventory;
 
-import com.facebook.testing.screenshot.Screenshot;
-import com.facebook.testing.screenshot.ViewHelpers;
-
 import org.junit.Test;
 
 import java.text.ParseException;
@@ -30,12 +27,8 @@ public class AddEditItemFragmentViewTest extends BaseScreenshotTest {
                 }
             }
         });
-        ViewHelpers.setupView(view)
-                .setExactWidthDp(300)
-                .layout();
 
-        Screenshot.snap(view)
-                .record();
+        takeScreenshot(view, 300);
     }
 
     @Test
@@ -55,11 +48,6 @@ public class AddEditItemFragmentViewTest extends BaseScreenshotTest {
                 }
             }
         });
-        ViewHelpers.setupView(view)
-                .setExactWidthDp(300)
-                .layout();
-
-        Screenshot.snap(view)
-                .record();
+        takeScreenshot(view, 300);
     }
 }
