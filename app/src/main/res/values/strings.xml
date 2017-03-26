@@ -40,7 +40,9 @@
     <string name="about_fragment_title">About</string>
     <string name="recipes_fetch_error">Failed to fetch the recipes.</string>
     <string name="recipe_detail_fragment_title">Recipe</string>
-    <string name="recipe_step_formatter">%1$d. %2$s\n</string>
+    <string name="recipe_step_formatter">%1$d. %2$s</string>
+    <string name="recipe_unsatisfied_ingredient_formatter">\u2022 %s</string>
+    <string name="recipe_satisfied_ingredient_formatter">\u2022 %s \u2713</string>
     <string name="recipe_image_description">Recipe image</string>
     <string name="recipe_source_learn_more">Learn more:</string>
     <string name="recipe_source_url_html_formatter"><![CDATA[<a href=\"%2$s\">%1$s</a>]]></string>
@@ -73,4 +75,6 @@
         \u2022 <a href="https://github.com/bumptech/glide">Glide</a>\n\n
         \u2022 <a href="https://github.com/google/flexbox-layout">FlexboxLayout</a>
     </string>
+    <string name="recipe_ingredients">Ingredients</string>
+    <string name="recipe_steps">Steps</string>
 </resources>

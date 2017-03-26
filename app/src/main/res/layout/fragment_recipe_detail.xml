@@ -28,13 +28,34 @@
 
             <TextView
                 android:id="@+id/recipe_title"
-                style="@style/TextAppearance.AppCompat.Subhead"
+                style="@style/TextAppearance.AppCompat.Headline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/recipe_title_details_space"/>
 
             <TextView
-                android:id="@+id/recipe_details"
+                style="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/recipe_title_details_space"
+                android:text="@string/recipe_ingredients"/>
+
+            <TextView
+                android:id="@+id/recipe_ingredients"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_marginBottom="@dimen/recipe_title_details_space"/>
+
+            <TextView
+                style="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/recipe_title_details_space"
+                android:text="@string/recipe_steps"/>
+
+            <TextView
+                android:id="@+id/recipe_steps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/TextAppearance.AppCompat.Body1"/>

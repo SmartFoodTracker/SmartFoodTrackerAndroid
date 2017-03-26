@@ -2,6 +2,8 @@ package aaku492.smartfoodtracker.recipes;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
@@ -18,6 +20,8 @@ import com.bumptech.glide.Glide;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import aaku492.smartfoodtracker.R;
 import aaku492.smartfoodtracker.common.ViewUtils;
@@ -36,8 +40,11 @@ public class RecipeDetailFragmentView extends ScrollView {
     @BindView(R.id.recipe_title)
     protected TextView recipeTitle;
 
-    @BindView(R.id.recipe_details)
-    protected TextView recipeDetails;
+    @BindView(R.id.recipe_steps)
+    protected TextView recipeSteps;
+
+    @BindView(R.id.recipe_ingredients)
+    protected TextView recipeIngredients;
 
     @BindView(R.id.recipe_source_container)
     protected View recipeSourceContainer;
@@ -62,12 +69,22 @@ public class RecipeDetailFragmentView extends ScrollView {
     public void render(RecipeResponse.Recipe recipe) {
         recipeTitle.setText(recipe.getTitle());
 
-        if (recipe.getSteps() == null || recipe.getSteps().isEmpty()) {
-            recipeDetails.setText("");
-            recipeDetails.setVisibility(GONE);
+        String ingredients = buildIngredientsList(recipe.getSatisfiedIngredients(), recipe.getUnsatisfiedIngredients());
+        if (ingredients.equals("")) {
+            recipeIngredients.setText("");
+            recipeIngredients.setVisibility(GONE);
         } else {
-            recipeDetails.setText(buildNumberedSteps(recipe.getSteps()));
-            recipeDetails.setVisibility(VISIBLE);
+            recipeIngredients.setText(ingredients);
+            recipeIngredients.setVisibility(VISIBLE);
+        }
+
+        String steps = buildNumberedSteps(recipe.getSteps());
+        if (steps.equals("")) {
+            recipeSteps.setText("");
+            recipeSteps.setVisibility(GONE);
+        } else {
+            recipeSteps.setText(steps);
+            recipeSteps.setVisibility(VISIBLE);
         }
 
         if (recipe.getSourceUrl() == null || recipe.getSourceUrl().isEmpty()) {
@@ -97,6 +114,33 @@ public class RecipeDetailFragmentView extends ScrollView {
         }
     }
 
+    @NonNull
+    private String buildIngredientsList(@Nullable List<String> satisfiedIngredients, @Nullable List<String> unsatisfiedIngredients) {
+        if ((satisfiedIngredients == null || satisfiedIngredients.isEmpty()) &&
+                (unsatisfiedIngredients == null || unsatisfiedIngredients.isEmpty())) {
+            return "";
+        }
+
+        satisfiedIngredients = satisfiedIngredients == null ? new ArrayList<String>() : satisfiedIngredients;
+        unsatisfiedIngredients = unsatisfiedIngredients == null ? new ArrayList<String>() : unsatisfiedIngredients;
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < satisfiedIngredients.size(); ++i) {
+            sb.append(getContext().getString(R.string.recipe_satisfied_ingredient_formatter, satisfiedIngredients.get(i)));
+            if (i < satisfiedIngredients.size() - 1 || !unsatisfiedIngredients.isEmpty()) {
+                sb.append("\n");
+            }
+        }
+        for (int i = 0; i < unsatisfiedIngredients.size(); ++i) {
+            sb.append(getContext().getString(R.string.recipe_unsatisfied_ingredient_formatter, unsatisfiedIngredients.get(i)));
+            if (i < unsatisfiedIngredients.size() - 1) {
+                sb.append("\n");
+            }
+        }
+        return sb.toString();
+    }
+
+    @NonNull
     private Spanned buildSourceText(String sourceUrl) throws MalformedURLException {
         String linkText = getContext().getString(R.string.recipe_source_url_html_formatter, new URL(sourceUrl).getHost(), sourceUrl);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -107,11 +151,18 @@ public class RecipeDetailFragmentView extends ScrollView {
         }
     }
 
-    private String buildNumberedSteps(Iterable<String> steps) {
-        int i = 1;
+    @NonNull
+    private String buildNumberedSteps(@Nullable List<String> steps) {
+        if (steps == null || steps.isEmpty()) {
+            return "";
+        }
+
         StringBuilder sb = new StringBuilder();
-        for (String s : steps) {
-            sb.append(getContext().getString(R.string.recipe_step_formatter, i++, s));
+        for (int i = 0; i < steps.size(); ++i) {
+            sb.append(getContext().getString(R.string.recipe_step_formatter, i + 1, steps.get(i)));
+            if (i < steps.size() - 1) {
+                sb.append("\n");
+            }
         }
         return sb.toString();
     }

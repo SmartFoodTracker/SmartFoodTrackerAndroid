@@ -29,24 +29,12 @@ public class RecipeResponse implements Serializable {
         return pageNumber;
     }
 
-    public void setPageNumber(int pageNumber) {
-        this.pageNumber = pageNumber;
-    }
-
     public int getTotalPages() {
         return totalPages;
     }
 
-    public void setTotalPages(int totalPages) {
-        this.totalPages = totalPages;
-    }
-
     public ArrayList<Recipe> getRecipes() {
         return recipes;
-    }
-
-    public void setRecipes(ArrayList<Recipe> recipes) {
-        this.recipes = recipes;
     }
 
     public static class Recipe implements Serializable {
@@ -63,43 +51,44 @@ public class RecipeResponse implements Serializable {
         @SerializedName("sourceUrl")
         private String sourceUrl;
 
-        public Recipe(String title, String imageUrl, ArrayList<String> steps, String sourceUrl) {
+        @SerializedName("satisfiedIngredients")
+        private ArrayList<String> satisfiedIngredients;
+
+        @SerializedName("unsatisfiedIngredients")
+        private ArrayList<String> unsatisfiedIngredients;
+
+        public Recipe(String title, String imageUrl, ArrayList<String> steps, String sourceUrl,
+                      ArrayList<String> satisfiedIngredients, ArrayList<String> unsatisfiedIngredients) {
             this.title = title;
             this.imageUrl = imageUrl;
             this.steps = steps;
             this.sourceUrl = sourceUrl;
+            this.satisfiedIngredients = satisfiedIngredients;
+            this.unsatisfiedIngredients = unsatisfiedIngredients;
         }
 
         public String getTitle() {
             return title;
         }
 
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
         public String getImageUrl() {
             return imageUrl;
-        }
-
-        public void setImageUrl(String imageUrl) {
-            this.imageUrl = imageUrl;
         }
 
         public ArrayList<String> getSteps() {
             return steps;
         }
 
-        public void setSteps(ArrayList<String> steps) {
-            this.steps = steps;
-        }
-
         public String getSourceUrl() {
             return sourceUrl;
         }
 
-        public void setSourceUrl(String sourceUrl) {
-            this.sourceUrl = sourceUrl;
+        public ArrayList<String> getSatisfiedIngredients() {
+            return satisfiedIngredients;
+        }
+
+        public ArrayList<String> getUnsatisfiedIngredients() {
+            return unsatisfiedIngredients;
         }
     }
 }
