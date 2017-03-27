@@ -19,6 +19,8 @@ public class InventoryFragmentViewTest extends BaseScreenshotTest {
         InventoryAdapter adapter = new InventoryAdapter(getInventoryItems(), null);
         view.render(adapter);
         adapter.notifyDataSetChanged();
-        takeScreenshot(view, 300, 400);
+        // Need to manually specify the height because RecyclerView fits as much space as provided.
+        // If nothing is specified, it keeps the height to 0 + (height of other siblings)
+        takeScreenshot(view, DEFAULT_SCREENSHOT_WIDTH_DP, 400);
     }
 }

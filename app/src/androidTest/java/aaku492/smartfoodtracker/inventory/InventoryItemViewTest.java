@@ -29,6 +29,6 @@ public class InventoryItemViewTest extends BaseScreenshotTest {
             container.addView(view);
         }
 
-        takeScreenshot(container, 300);
+        takeScreenshot(container);
     }
 }

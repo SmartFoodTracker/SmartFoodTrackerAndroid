@@ -28,7 +28,7 @@ public class AddEditItemFragmentViewTest extends BaseScreenshotTest {
             }
         });
 
-        takeScreenshot(view, 300);
+        takeScreenshot(view);
     }
 
     @Test
@@ -40,6 +40,6 @@ public class AddEditItemFragmentViewTest extends BaseScreenshotTest {
                 view.render(new InventoryItem(null, null, 1.00, InventoryItem.Unit.values()[0], null, null));
             }
         });
-        takeScreenshot(view, 300);
+        takeScreenshot(view);
     }
 }

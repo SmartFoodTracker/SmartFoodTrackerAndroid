@@ -48,7 +48,7 @@ public class FieldTest extends BaseScreenshotTest {
         assertEquals("A hint", textHintField.getHint());
         assertEquals("Some Text", textHintField.getText());
 
-        takeScreenshot(view[0], 300);
+        takeScreenshot(view[0]);
     }
 
     @Test
@@ -139,7 +139,7 @@ public class FieldTest extends BaseScreenshotTest {
         });
         assertEquals(6, numCalls[0]);
 
-        takeScreenshot(field[0], 300);
+        takeScreenshot(field[0]);
     }
 
     @Test
@@ -181,7 +181,7 @@ public class FieldTest extends BaseScreenshotTest {
             }
         });
 
-        takeScreenshot(view[0], 300);
+        takeScreenshot(view[0]);
     }
 
     // Can't test suggestions in an automated way, because they don't show up in the screenshots for some reason.

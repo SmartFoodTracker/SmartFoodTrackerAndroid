@@ -40,7 +40,7 @@ public class ChipTest extends BaseScreenshotTest {
         assertTrue(chip3.isSelected());
         assertTrue(chip4.isSelected());
 
-        takeScreenshot(view, 300);
+        takeScreenshot(view);
     }
 
     @Test
@@ -92,6 +92,6 @@ public class ChipTest extends BaseScreenshotTest {
         assertEquals(chip3, lastSelectedChip[0]);
         assertFalse(lastSelection[0]);
 
-        takeScreenshot(view, 300);
+        takeScreenshot(view);
     }
 }

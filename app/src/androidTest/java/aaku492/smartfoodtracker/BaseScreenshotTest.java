@@ -16,6 +16,7 @@ import com.facebook.testing.screenshot.ViewHelpers;
  */
 public abstract class BaseScreenshotTest {
     private final ContextThemeWrapper context;
+    protected static final int DEFAULT_SCREENSHOT_WIDTH_DP = 300;
 
     public BaseScreenshotTest() {
         this.context = new ContextThemeWrapper(InstrumentationRegistry.getTargetContext(), R.style.AppTheme);
@@ -40,11 +41,8 @@ public abstract class BaseScreenshotTest {
     }
 
     protected void takeScreenshot(View view) {
-        takeScreenshot(view, null, null);
-    }
-
-    protected void takeScreenshot(View view, Integer widthDp) {
-        takeScreenshot(view, widthDp, null);
+        // The default that works for most cases
+        takeScreenshot(view, DEFAULT_SCREENSHOT_WIDTH_DP, null);
     }
 
     protected void takeScreenshot(View view, @Nullable Integer widthDp, @Nullable Integer heightDp) {
