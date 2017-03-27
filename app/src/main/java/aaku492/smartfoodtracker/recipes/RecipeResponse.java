@@ -13,24 +13,16 @@ public class RecipeResponse implements Serializable {
     @SerializedName("page")
     private int pageNumber;
 
-    @SerializedName("totalPages")
-    private int totalPages;
-
     @SerializedName("data")
     private ArrayList<Recipe> recipes;
 
-    public RecipeResponse(int pageNumber, int totalPages, ArrayList<Recipe> recipes) {
+    public RecipeResponse(int pageNumber, ArrayList<Recipe> recipes) {
         this.pageNumber = pageNumber;
-        this.totalPages = totalPages;
         this.recipes = recipes;
     }
 
     public int getPageNumber() {
         return pageNumber;
-    }
-
-    public int getTotalPages() {
-        return totalPages;
     }
 
     public ArrayList<Recipe> getRecipes() {

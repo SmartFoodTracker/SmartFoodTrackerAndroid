@@ -20,11 +20,12 @@ import retrofit2.Response;
 public class RecipesListFragment extends FITFragment implements RecipesListFragmentView.Delegate, RecipesHomeAdapter.Delegate {
 
     private static final String QUERY = "query";
+    private static final String REACHED_END = "reached_end";
     private RecipesHomeAdapter adapter;
-    private int totalPages;
     private int currentPageNumber = 1;
 
     private RecipeSearchQuery query;
+    private boolean reachedEnd;
 
     public static FragmentInitInfo getFragmentInitInfo() {
         return new FragmentInitInfo(RecipesListFragment.class)
@@ -46,7 +47,6 @@ public class RecipesListFragment extends FITFragment implements RecipesListFragm
         adapter = new RecipesHomeAdapter(new ArrayList<RecipeResponse.Recipe>(), this);
         RecipesListFragmentView view = RecipesListFragmentView.inflate(inflater, container, this);
 
-
         if (savedInstanceState != null && savedInstanceState.getSerializable(QUERY) != null) {
             this.query = (RecipeSearchQuery) savedInstanceState.getSerializable(QUERY);
         } else if (getArguments() != null && getArguments().getSerializable(QUERY) != null) {
@@ -54,6 +54,8 @@ public class RecipesListFragment extends FITFragment implements RecipesListFragm
         } else {
             this.query = null;
         }
+
+        this.reachedEnd = savedInstanceState != null && savedInstanceState.getBoolean(REACHED_END, false);
 
         view.render(adapter, isInSearchMode());
 
@@ -68,9 +70,13 @@ public class RecipesListFragment extends FITFragment implements RecipesListFragm
         if (isInSearchMode()) {
             bundle.putSerializable(QUERY, this.query);
         }
+        bundle.putBoolean(REACHED_END, reachedEnd);
     }
 
     private void fetchRecipes(final RecipesListFragmentView view, final boolean clear) {
+        // if this is called, that means that the caller deemed that more recipes are available
+        reachedEnd = false;
+
         view.setRefreshing(true);
         Callback<RecipeResponse> callback = new FITRequestCallback<RecipeResponse>() {
             @Override
@@ -81,11 +87,17 @@ public class RecipesListFragment extends FITFragment implements RecipesListFragm
 
             @Override
             protected void onSuccessfulResponse(Response<RecipeResponse> response) {
-                totalPages = response.body().getTotalPages();
-                currentPageNumber = response.body().getPageNumber();
+                if (currentPageNumber < response.body().getPageNumber()) {
+                    // currentPageNumber can be greater than the response if multiple requests are queued up.
+                    // These are equal when the last response comes back.
+                    // But currentPageNumber can never be smaller.
+                    throw new IllegalStateException("Requested page number is different from the page number in the response.");
+                }
                 if (clear) {
                     adapter.clear();
                 }
+
+                reachedEnd = response.body().getRecipes().isEmpty();
                 adapter.addAll(response.body().getRecipes());
                 view.setRefreshing(false);
             }
@@ -108,7 +120,7 @@ public class RecipesListFragment extends FITFragment implements RecipesListFragm
 
     @Override
     public void onLoadMore() {
-        if (currentPageNumber < totalPages) {
+        if (!reachedEnd) {
             ++currentPageNumber;
             fetchRecipes(getView(), false);
         }
