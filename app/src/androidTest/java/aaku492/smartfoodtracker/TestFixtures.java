@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 
 import aaku492.smartfoodtracker.inventory.InventoryItem;
+import aaku492.smartfoodtracker.recipes.RecipeResponse;
 
 /**
  * Created by Udey Rishi (udeyrishi) on 2017-03-26.
@@ -42,5 +43,32 @@ public class TestFixtures {
                 null));
 
         return items;
+    }
+
+    public static ArrayList<RecipeResponse.Recipe> getRecipes() {
+        ArrayList<RecipeResponse.Recipe> recipes = new ArrayList<>(5);
+
+        recipes.add(
+                new RecipeResponse.Recipe(
+                        "Apple pie ",
+                        "https://food.com",
+                        new ArrayList<String>(){{ add("first"); add("then"); add("finally"); }},
+                        "https://image.com",
+                        new ArrayList<String>(){{ add("apple"); }},
+                        new ArrayList<String>(){{ add("butter"); }}
+                )
+        );
+        recipes.add(
+                new RecipeResponse.Recipe(
+                        "Clam chowder ",
+                        "https://food.com",
+                        new ArrayList<String>(){{ add("ok"); add("so"); add("yeah"); }},
+                        "https://image.com",
+                        new ArrayList<String>(){{ add("clams"); }},
+                        new ArrayList<String>(){{ add("chowder"); }}
+                )
+        );
+
+        return recipes;
     }
 }
