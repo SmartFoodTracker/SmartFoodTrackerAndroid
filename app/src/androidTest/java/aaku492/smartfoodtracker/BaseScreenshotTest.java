@@ -70,6 +70,7 @@ public abstract class BaseScreenshotTest {
         private final View view;
         @Nullable
         private Integer delayMilliseconds = null;
+        private boolean layoutDone = false;
 
         public ScreenshotTaker(@NonNull View view) {
             this.helpers = ViewHelpers.setupView(view);
@@ -117,10 +118,14 @@ public abstract class BaseScreenshotTest {
             }
 
             helpers.layout();
+            layoutDone = true;
             return this;
         }
 
         public void record() {
+            if (!layoutDone) {
+                throw new IllegalStateException("Call layout() before calling record()");
+            }
             Screenshot.snap(view).record();
         }
     }
