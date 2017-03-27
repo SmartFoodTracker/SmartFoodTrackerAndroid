@@ -64,7 +64,7 @@ public abstract class BaseScreenshotTest {
 
     public static class ScreenshotTaker {
         public static final int DEFAULT_SCREENSHOT_WIDTH_DP = 300;
-        public static final int DEFAULT_DELAY_MS = 100;
+        public static final int DEFAULT_DELAY_MS = 200;
 
         private final ViewHelpers helpers;
         private final View view;
