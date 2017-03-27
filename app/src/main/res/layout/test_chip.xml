@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:ignore="HardcodedText">
 
     <aaku492.smartfoodtracker.common.Chip
         android:id="@+id/test_chip1"
@@ -15,22 +16,19 @@
         android:id="@+id/test_chip2"
         android:text="A really really long string"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:ignore="HardcodedText" />
+        android:layout_height="wrap_content"/>
 
     <aaku492.smartfoodtracker.common.Chip
         android:id="@+id/test_chip3"
         android:text="Small"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:ignore="HardcodedText" />
+        android:layout_height="wrap_content"/>
 
 
     <aaku492.smartfoodtracker.common.Chip
         android:id="@+id/test_chip4"
         android:text="A really really long string"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:ignore="HardcodedText" />
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>
