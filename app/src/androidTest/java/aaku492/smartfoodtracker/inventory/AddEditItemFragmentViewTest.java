@@ -38,14 +38,6 @@ public class AddEditItemFragmentViewTest extends BaseScreenshotTest {
             @Override
             public void run() {
                 view.render(new InventoryItem(null, null, 1.00, InventoryItem.Unit.values()[0], null, null));
-
-                // Hack to fix a timing issue with the animations.
-                // See: https://github.com/facebook/screenshot-tests-for-android/issues/60
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
             }
         });
         takeScreenshot(view, 300);
