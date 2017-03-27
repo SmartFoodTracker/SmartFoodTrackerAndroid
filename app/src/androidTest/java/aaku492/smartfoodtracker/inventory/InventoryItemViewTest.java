@@ -5,8 +5,6 @@ import android.widget.LinearLayout;
 
 import org.junit.Test;
 
-import java.text.ParseException;
-
 import aaku492.smartfoodtracker.BaseScreenshotTest;
 import aaku492.smartfoodtracker.R;
 
@@ -19,7 +17,7 @@ import static aaku492.smartfoodtracker.TestFixtures.getInventoryItems;
 public class InventoryItemViewTest extends BaseScreenshotTest {
 
     @Test
-    public void testRender() throws ParseException {
+    public void testRender() {
         View rootView = getLayoutInflater().inflate(R.layout.test_inventory_item_view, null, false);
         LinearLayout container = (LinearLayout) rootView.findViewById(R.id.inventory_item_view_container);
 

@@ -2,8 +2,6 @@ package aaku492.smartfoodtracker.inventory;
 
 import org.junit.Test;
 
-import java.text.ParseException;
-
 import aaku492.smartfoodtracker.BaseScreenshotTest;
 
 import static aaku492.smartfoodtracker.TestFixtures.getInventoryItems;
@@ -14,7 +12,7 @@ import static aaku492.smartfoodtracker.TestFixtures.getInventoryItems;
  */
 public class InventoryFragmentViewTest extends BaseScreenshotTest {
     @Test
-    public void testRender() throws ParseException {
+    public void testRender() {
         InventoryFragmentView view = InventoryFragmentView.inflate(getLayoutInflater(), null, null);
         InventoryAdapter adapter = new InventoryAdapter(getInventoryItems(), null);
         view.render(adapter);

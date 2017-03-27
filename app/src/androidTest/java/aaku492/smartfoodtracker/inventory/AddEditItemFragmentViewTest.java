@@ -2,8 +2,6 @@ package aaku492.smartfoodtracker.inventory;
 
 import org.junit.Test;
 
-import java.text.ParseException;
-
 import aaku492.smartfoodtracker.BaseScreenshotTest;
 
 import static aaku492.smartfoodtracker.TestFixtures.getInventoryItems;
@@ -20,11 +18,7 @@ public class AddEditItemFragmentViewTest extends BaseScreenshotTest {
         runOnMainSync(new Runnable() {
             @Override
             public void run() {
-                try {
-                    view.render(getInventoryItems().get(0));
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
+                view.render(getInventoryItems().get(0));
             }
         });
 
