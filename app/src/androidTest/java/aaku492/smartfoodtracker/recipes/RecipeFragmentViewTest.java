@@ -13,17 +13,17 @@ import static aaku492.smartfoodtracker.TestFixtures.getRecipes;
 public class RecipeFragmentViewTest  extends BaseScreenshotTest {
     @Test
     public void testRender() {
-        final RecipesListFragmentView view = RecipesListFragmentView.inflate(getLayoutInflater(), null, null);
-        final RecipesHomeAdapter adapter = new RecipesHomeAdapter(getRecipes(), null);
-        adapter.notifyDataSetChanged();
 
         runOnMainSync(new Runnable() {
             @Override
             public void run() {
+                final RecipesListFragmentView view = RecipesListFragmentView.inflate(getLayoutInflater(), null, null);
+                final RecipesHomeAdapter adapter = new RecipesHomeAdapter(getRecipes(), null);
+                adapter.notifyDataSetChanged();
                 view.render(adapter, false);
+
+                takeScreenshot(view, DEFAULT_SCREENSHOT_WIDTH_DP, 400);
             }
         });
-
-        takeScreenshot(view, DEFAULT_SCREENSHOT_WIDTH_DP, 400);
     }
 }
