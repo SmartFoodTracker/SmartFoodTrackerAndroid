@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import aaku492.smartfoodtracker.common.CollectionUtils;
 import aaku492.smartfoodtracker.inventory.InventoryItem;
 import aaku492.smartfoodtracker.recipes.RecipeResponse;
 
@@ -51,21 +52,21 @@ public class TestFixtures {
         recipes.add(
                 new RecipeResponse.Recipe(
                         "Apple pie ",
-                        "https://food.com",
-                        new ArrayList<String>(){{ add("first"); add("then"); add("finally"); }},
                         "https://image.com",
-                        new ArrayList<String>(){{ add("apple"); }},
-                        new ArrayList<String>(){{ add("butter"); }}
+                        CollectionUtils.createArrayList("first", "then", "finally"),
+                        "https://food.com",
+                        CollectionUtils.createArrayList("apple"),
+                        CollectionUtils.createArrayList("butter")
                 )
         );
         recipes.add(
                 new RecipeResponse.Recipe(
                         "Clam chowder ",
-                        "https://food.com",
-                        new ArrayList<String>(){{ add("ok"); add("so"); add("yeah"); }},
                         "https://image.com",
-                        new ArrayList<String>(){{ add("clams"); }},
-                        new ArrayList<String>(){{ add("chowder"); }}
+                        CollectionUtils.createArrayList("ok", "so", "yeah"),
+                        "https://food.com",
+                        CollectionUtils.createArrayList("clams"),
+                        CollectionUtils.createArrayList("chowder")
                 )
         );
 

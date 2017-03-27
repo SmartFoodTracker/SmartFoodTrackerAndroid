@@ -48,6 +48,7 @@
                 android:layout_marginBottom="@dimen/recipe_title_details_space"/>
 
             <TextView
+                android:id="@+id/recipe_steps_label"
                 style="@style/Base.TextAppearance.AppCompat.Subhead"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

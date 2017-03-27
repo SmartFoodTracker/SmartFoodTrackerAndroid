@@ -43,6 +43,9 @@ public class RecipeDetailFragmentView extends ScrollView {
     @BindView(R.id.recipe_steps)
     protected TextView recipeSteps;
 
+    @BindView(R.id.recipe_steps_label)
+    protected TextView recipeStepsLabel;
+
     @BindView(R.id.recipe_ingredients)
     protected TextView recipeIngredients;
 
@@ -82,9 +85,11 @@ public class RecipeDetailFragmentView extends ScrollView {
         if (steps.equals("")) {
             recipeSteps.setText("");
             recipeSteps.setVisibility(GONE);
+            recipeStepsLabel.setVisibility(GONE);
         } else {
             recipeSteps.setText(steps);
             recipeSteps.setVisibility(VISIBLE);
+            recipeStepsLabel.setVisibility(VISIBLE);
         }
 
         if (recipe.getSourceUrl() == null || recipe.getSourceUrl().isEmpty()) {
