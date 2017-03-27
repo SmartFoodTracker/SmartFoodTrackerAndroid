@@ -2,6 +2,7 @@ package aaku492.smartfoodtracker.common;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.text.InputType;
@@ -81,6 +82,11 @@ public class Field extends RelativeLayout {
 
     public String getText() {
         return editText.getText().toString();
+    }
+
+    @Nullable
+    public String getHint() {
+        return layout.getHint() == null ? null : layout.getHint().toString();
     }
 
     public void setHint(CharSequence hint) {
