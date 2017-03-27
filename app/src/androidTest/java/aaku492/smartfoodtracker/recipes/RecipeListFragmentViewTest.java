@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import aaku492.smartfoodtracker.BaseScreenshotTest;
 
 import static aaku492.smartfoodtracker.BaseScreenshotTest.ScreenshotTaker.DEFAULT_DELAY_MS;
-import static aaku492.smartfoodtracker.BaseScreenshotTest.ScreenshotTaker.DEFAULT_SCREENSHOT_WIDTH_DP;
+import static aaku492.smartfoodtracker.BaseScreenshotTest.ScreenshotTaker.DEFAULT_SCREENSHOT_WIDTH_PX;
 import static aaku492.smartfoodtracker.TestFixtures.getRecipes;
 
 /**
@@ -40,8 +40,8 @@ public class RecipeListFragmentViewTest extends BaseScreenshotTest {
         // Can't call takeScreenshot directly, because we need to layout on main thread.
         // Glide doesn't do its rendering until the layout stage
         new ScreenshotTaker(view[0])
-                .setWidthDp(DEFAULT_SCREENSHOT_WIDTH_DP)
-                .setHeightDp(400)
+                .setWidthPx(DEFAULT_SCREENSHOT_WIDTH_PX)
+                .setHeightPx(1200)
                 .setDelay(DEFAULT_DELAY_MS)
                 .layout(true)
                 .record();

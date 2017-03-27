@@ -42,16 +42,16 @@ public abstract class BaseScreenshotTest {
 
     protected void takeScreenshot(@NonNull View view) {
         // The default that works for most cases
-        takeScreenshot(view, ScreenshotTaker.DEFAULT_SCREENSHOT_WIDTH_DP, null);
+        takeScreenshot(view, ScreenshotTaker.DEFAULT_SCREENSHOT_WIDTH_PX, null);
     }
 
-    protected void takeScreenshot(@NonNull View view, @Nullable Integer widthDp, @Nullable Integer heightDp) {
+    protected void takeScreenshot(@NonNull View view, @Nullable Integer widthPx, @Nullable Integer heightPx) {
         ScreenshotTaker screenshotTaker = new ScreenshotTaker(view);
-        if (widthDp != null) {
-            screenshotTaker.setWidthDp(widthDp);
+        if (widthPx != null) {
+            screenshotTaker.setWidthPx(widthPx);
         }
-        if (heightDp != null) {
-            screenshotTaker.setHeightDp(heightDp);
+        if (heightPx != null) {
+            screenshotTaker.setHeightPx(heightPx);
         }
         screenshotTaker.setDelay(ScreenshotTaker.DEFAULT_DELAY_MS)
                 .layout()
@@ -63,7 +63,7 @@ public abstract class BaseScreenshotTest {
     }
 
     public static class ScreenshotTaker {
-        public static final int DEFAULT_SCREENSHOT_WIDTH_DP = 300;
+        public static final int DEFAULT_SCREENSHOT_WIDTH_PX = 900;
         public static final int DEFAULT_DELAY_MS = 200;
 
         private final ViewHelpers helpers;
@@ -77,13 +77,13 @@ public abstract class BaseScreenshotTest {
             this.view = view;
         }
 
-        public ScreenshotTaker setWidthDp(@NonNull Integer widthDp) {
-            helpers.setExactWidthDp(widthDp);
+        public ScreenshotTaker setWidthPx(@NonNull Integer widthPx) {
+            helpers.setExactWidthPx(widthPx);
             return this;
         }
 
-        public ScreenshotTaker setHeightDp(@NonNull Integer heightDp) {
-            helpers.setExactHeightDp(heightDp);
+        public ScreenshotTaker setHeightPx(@NonNull Integer heightPx) {
+            helpers.setExactHeightPx(heightPx);
             return this;
         }
 
