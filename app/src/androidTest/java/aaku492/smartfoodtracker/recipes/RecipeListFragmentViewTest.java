@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import aaku492.smartfoodtracker.BaseScreenshotTest;
 
+import static aaku492.smartfoodtracker.BaseScreenshotTest.ScreenshotTaker.DEFAULT_DELAY_MS;
+import static aaku492.smartfoodtracker.BaseScreenshotTest.ScreenshotTaker.DEFAULT_SCREENSHOT_WIDTH_DP;
 import static aaku492.smartfoodtracker.TestFixtures.getRecipes;
 
 /**
@@ -14,19 +16,24 @@ public class RecipeListFragmentViewTest  extends BaseScreenshotTest {
     @Test
     public void testRender() {
         final RecipesListFragmentView[] view = new RecipesListFragmentView[1];
+        final RecipesHomeAdapter adapter = new RecipesHomeAdapter(getRecipes(), null);
 
         runOnMainSync(new Runnable() {
             @Override
             public void run() {
                 view[0] = RecipesListFragmentView.inflate(getLayoutInflater(), null, null);
-
-                final RecipesHomeAdapter adapter = new RecipesHomeAdapter(getRecipes(), null);
                 adapter.notifyDataSetChanged();
-
                 view[0].render(adapter, false);
             }
         });
 
-        takeScreenshot(view[0], DEFAULT_SCREENSHOT_WIDTH_DP, 400);
+        // Can't call takeScreenshot directly, because we need to layout on main thread.
+        // Glide doesn't do its rendering until the layout stage
+        new ScreenshotTaker(view[0])
+                .setWidthDp(DEFAULT_SCREENSHOT_WIDTH_DP)
+                .setHeightDp(400)
+                .setDelay(DEFAULT_DELAY_MS)
+                .layout(true)
+                .record();
     }
 }

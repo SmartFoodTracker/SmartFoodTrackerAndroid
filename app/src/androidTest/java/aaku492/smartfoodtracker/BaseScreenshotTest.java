@@ -1,6 +1,7 @@
 package aaku492.smartfoodtracker;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.test.InstrumentationRegistry;
 import android.view.ContextThemeWrapper;
@@ -16,7 +17,6 @@ import com.facebook.testing.screenshot.ViewHelpers;
  */
 public abstract class BaseScreenshotTest {
     private final ContextThemeWrapper context;
-    protected static final int DEFAULT_SCREENSHOT_WIDTH_DP = 300;
 
     public BaseScreenshotTest() {
         this.context = new ContextThemeWrapper(InstrumentationRegistry.getTargetContext(), R.style.AppTheme);
@@ -33,41 +33,95 @@ public abstract class BaseScreenshotTest {
         }
     }
 
-    protected void runOnMainSync(Runnable runnable) {
+    protected static void runOnMainSync(Runnable runnable) {
         // This is required for certain inflating/rendering/UI manipulation actions that might only be
         // supported on the main thread/looper threads (e.g. animations).
         // See the related issue: https://github.com/facebook/screenshot-tests-for-android/issues/57
         InstrumentationRegistry.getInstrumentation().runOnMainSync(runnable);
     }
 
-    protected void takeScreenshot(View view) {
+    protected void takeScreenshot(@NonNull View view) {
         // The default that works for most cases
-        takeScreenshot(view, DEFAULT_SCREENSHOT_WIDTH_DP, null);
+        takeScreenshot(view, ScreenshotTaker.DEFAULT_SCREENSHOT_WIDTH_DP, null);
     }
 
-    protected void takeScreenshot(View view, @Nullable Integer widthDp, @Nullable Integer heightDp) {
-        // Hack to fix a timing issue with the animations.
-        // See: https://github.com/facebook/screenshot-tests-for-android/issues/60
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        ViewHelpers helpers = ViewHelpers.setupView(view);
+    protected void takeScreenshot(@NonNull View view, @Nullable Integer widthDp, @Nullable Integer heightDp) {
+        ScreenshotTaker screenshotTaker = new ScreenshotTaker(view);
         if (widthDp != null) {
-            helpers = helpers.setExactWidthDp(widthDp);
+            screenshotTaker.setWidthDp(widthDp);
         }
         if (heightDp != null) {
-            helpers = helpers.setExactHeightDp(heightDp);
+            screenshotTaker.setHeightDp(heightDp);
         }
-        helpers.layout();
-
-        Screenshot.snap(view)
+        screenshotTaker.setDelay(ScreenshotTaker.DEFAULT_DELAY_MS)
+                .layout()
                 .record();
     }
 
     protected Context getContext() {
         return context;
+    }
+
+    public static class ScreenshotTaker {
+        public static final int DEFAULT_SCREENSHOT_WIDTH_DP = 300;
+        public static final int DEFAULT_DELAY_MS = 100;
+
+        private final ViewHelpers helpers;
+        private final View view;
+        @Nullable
+        private Integer delayMilliseconds = null;
+
+        public ScreenshotTaker(@NonNull View view) {
+            this.helpers = ViewHelpers.setupView(view);
+            this.view = view;
+        }
+
+        public ScreenshotTaker setWidthDp(@NonNull Integer widthDp) {
+            helpers.setExactWidthDp(widthDp);
+            return this;
+        }
+
+        public ScreenshotTaker setHeightDp(@NonNull Integer heightDp) {
+            helpers.setExactHeightDp(heightDp);
+            return this;
+        }
+
+        public ScreenshotTaker setDelay(@Nullable Integer delayMilliseconds) {
+            this.delayMilliseconds = delayMilliseconds;
+            return this;
+        }
+
+        public ScreenshotTaker layout(boolean onMainThread) {
+            if (onMainThread) {
+                runOnMainSync(new Runnable() {
+                    @Override
+                    public void run() {
+                        layout();
+                    }
+                });
+                return this;
+            } else {
+                return layout();
+            }
+        }
+
+        public ScreenshotTaker layout() {
+            if (delayMilliseconds != null) {
+                // Hack to fix a timing issue with the animations.
+                // See: https://github.com/facebook/screenshot-tests-for-android/issues/60
+                try {
+                    Thread.sleep(delayMilliseconds);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            helpers.layout();
+            return this;
+        }
+
+        public void record() {
+            Screenshot.snap(view).record();
+        }
     }
 }

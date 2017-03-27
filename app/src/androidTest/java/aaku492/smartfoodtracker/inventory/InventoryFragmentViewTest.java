@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import aaku492.smartfoodtracker.BaseScreenshotTest;
 
+import static aaku492.smartfoodtracker.BaseScreenshotTest.ScreenshotTaker.DEFAULT_SCREENSHOT_WIDTH_DP;
 import static aaku492.smartfoodtracker.TestFixtures.getInventoryItems;
 
 /**
