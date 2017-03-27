@@ -71,9 +71,8 @@ public class Chip extends RelativeLayout {
     }
 
     private void initAttrs(AttributeSet attrs) {
-        int[] set = { android.R.attr.text };
-        TypedArray a = getContext().obtainStyledAttributes(attrs, set);
-        String text = a.getString(0);
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.Chip);
+        String text = a.getString(R.styleable.Chip_android_text);
         setText(text);
         a.recycle();
     }

@@ -56,18 +56,12 @@ public class Field extends RelativeLayout {
 
     @SuppressWarnings("ResourceType")
     private void initAttrs(AttributeSet attrs) {
-        int[] set = {
-                android.R.attr.hint,
-                android.R.attr.inputType,
-                android.R.attr.text,
-                android.R.attr.imeOptions
-        };
-        TypedArray a = getContext().obtainStyledAttributes(attrs, set);
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.Field);
 
-        String hint = a.getString(0);
-        int inputType = a.getInt(1, InputType.TYPE_NULL);
-        String text = a.getString(2);
-        int imeOptions = a.getInt(3, EditorInfo.TYPE_NULL);
+        String text = a.getString(R.styleable.Field_android_text);
+        String hint = a.getString(R.styleable.Field_android_hint);
+        int inputType = a.getInt(R.styleable.Field_android_inputType, InputType.TYPE_NULL);
+        int imeOptions = a.getInt(R.styleable.Field_android_imeOptions, EditorInfo.TYPE_NULL);
         editText.setInputType(inputType);
         setHint(hint);
         setText(text);
