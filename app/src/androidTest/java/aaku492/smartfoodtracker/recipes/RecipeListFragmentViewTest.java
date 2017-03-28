@@ -39,6 +39,8 @@ public class RecipeListFragmentViewTest extends BaseScreenshotTest {
         new ScreenshotTaker(view[0])
                 .setWidthDp(ScreenshotTaker.DEFAULT_SCREENSHOT_WIDTH_DP)
                 .setHeightDp(ScreenshotTaker.DEFAULT_SCREENSHOT_HEIGHT_DP)
+                .setWidthPx(ScreenshotTaker.DEFAULT_SCREENSHOT_WIDTH_PX)
+                .setHeightPx(ScreenshotTaker.DEFAULT_SCREENSHOT_HEIGHT_PX)
                 .setDelay(ScreenshotTaker.DEFAULT_DELAY_MS)
                 .layout(true)
                 .record();
