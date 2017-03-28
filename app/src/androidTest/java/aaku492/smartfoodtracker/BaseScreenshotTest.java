@@ -42,8 +42,8 @@ public abstract class BaseScreenshotTest {
 
     protected void takeScreenshot(@NonNull View view) {
         new ScreenshotTaker(view)
-                .setWidthPx(ScreenshotTaker.DEFAULT_SCREENSHOT_WIDTH_PX)
-                .setHeightPx(ScreenshotTaker.DEFAULT_SCREENSHOT_HEIGHT_PX)
+                .setWidthDp(ScreenshotTaker.DEFAULT_SCREENSHOT_WIDTH_DP)
+                .setHeightDp(ScreenshotTaker.DEFAULT_SCREENSHOT_HEIGHT_DP)
                 .setDelay(ScreenshotTaker.DEFAULT_DELAY_MS)
                 .layout()
                 .record();
@@ -55,8 +55,8 @@ public abstract class BaseScreenshotTest {
 
     public static class ScreenshotTaker {
         public static final int DEFAULT_DELAY_MS = 200;
-        public static final int DEFAULT_SCREENSHOT_WIDTH_PX = 1080;
-        public static final int DEFAULT_SCREENSHOT_HEIGHT_PX = 1920;
+        public static final int DEFAULT_SCREENSHOT_WIDTH_DP = 360;
+        public static final int DEFAULT_SCREENSHOT_HEIGHT_DP = 640;
 
         private final ViewHelpers helpers;
         private final View view;
@@ -69,13 +69,13 @@ public abstract class BaseScreenshotTest {
             this.view = view;
         }
 
-        public ScreenshotTaker setWidthPx(@NonNull Integer widthPx) {
-            helpers.setExactWidthPx(widthPx);
+        public ScreenshotTaker setWidthDp(int widthDp) {
+            helpers.setExactWidthDp(widthDp);
             return this;
         }
 
-        public ScreenshotTaker setHeightPx(@NonNull Integer heightPx) {
-            helpers.setExactHeightPx(heightPx);
+        public ScreenshotTaker setHeightDp(int heightDp) {
+            helpers.setExactHeightDp(heightDp);
             return this;
         }
 
