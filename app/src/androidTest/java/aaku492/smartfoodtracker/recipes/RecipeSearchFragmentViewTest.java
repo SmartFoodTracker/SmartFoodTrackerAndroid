@@ -1,6 +1,5 @@
 package aaku492.smartfoodtracker.recipes;
 
-import android.support.test.espresso.core.deps.guava.util.concurrent.AbstractScheduledService;
 import android.widget.Spinner;
 
 import com.google.android.flexbox.FlexboxLayout;

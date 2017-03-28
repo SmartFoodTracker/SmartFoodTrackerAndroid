@@ -41,19 +41,10 @@ public abstract class BaseScreenshotTest {
     }
 
     protected void takeScreenshot(@NonNull View view) {
-        // The default that works for most cases
-        takeScreenshot(view, ScreenshotTaker.DEFAULT_SCREENSHOT_WIDTH_PX, null);
-    }
-
-    protected void takeScreenshot(@NonNull View view, @Nullable Integer widthPx, @Nullable Integer heightPx) {
-        ScreenshotTaker screenshotTaker = new ScreenshotTaker(view);
-        if (widthPx != null) {
-            screenshotTaker.setWidthPx(widthPx);
-        }
-        if (heightPx != null) {
-            screenshotTaker.setHeightPx(heightPx);
-        }
-        screenshotTaker.setDelay(ScreenshotTaker.DEFAULT_DELAY_MS)
+        new ScreenshotTaker(view)
+                .setWidthPx(ScreenshotTaker.DEFAULT_SCREENSHOT_WIDTH_PX)
+                .setHeightPx(ScreenshotTaker.DEFAULT_SCREENSHOT_HEIGHT_PX)
+                .setDelay(ScreenshotTaker.DEFAULT_DELAY_MS)
                 .layout()
                 .record();
     }
@@ -63,8 +54,9 @@ public abstract class BaseScreenshotTest {
     }
 
     public static class ScreenshotTaker {
-        public static final int DEFAULT_SCREENSHOT_WIDTH_PX = 900;
         public static final int DEFAULT_DELAY_MS = 200;
+        public static final int DEFAULT_SCREENSHOT_WIDTH_PX = 1080;
+        public static final int DEFAULT_SCREENSHOT_HEIGHT_PX = 1920;
 
         private final ViewHelpers helpers;
         private final View view;
