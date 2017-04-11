@@ -146,19 +146,6 @@
                 </LinearLayout>
 
             </RelativeLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Base.TextAppearance.AppCompat.Subhead"
-                android:text="@string/app_external_sources_title"/>
-            
-            <TextView
-                android:id="@+id/app_sources"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_external_sources"/>
-
         </LinearLayout>
     </ScrollView>
 

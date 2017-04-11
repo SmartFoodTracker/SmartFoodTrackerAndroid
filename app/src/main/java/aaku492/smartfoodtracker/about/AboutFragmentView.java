@@ -25,9 +25,6 @@ public class AboutFragmentView extends LinearLayout {
     @BindView(R.id.app_description)
     protected TextView appDescription;
 
-    @BindView(R.id.app_sources)
-    protected TextView appSources;
-
     @BindView(R.id.udey_image)
     protected ImageView udeyImage;
 
@@ -70,7 +67,6 @@ public class AboutFragmentView extends LinearLayout {
         ButterKnife.bind(this);
 
         appDescription.setMovementMethod(LinkMovementMethod.getInstance());
-        appSources.setMovementMethod(LinkMovementMethod.getInstance());
         udeyName.setMovementMethod(LinkMovementMethod.getInstance());
         kyleName.setMovementMethod(LinkMovementMethod.getInstance());
         hoskinsName.setMovementMethod(LinkMovementMethod.getInstance());
